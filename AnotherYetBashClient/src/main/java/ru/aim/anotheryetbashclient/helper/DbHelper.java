@@ -11,7 +11,7 @@ import java.util.Random;
 public class DbHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "quote_db";
-    public static final String QUOTE_TABLE = "qoutes";
+    public static final String QUOTE_TABLE = "quotes";
     public static final String QUOTE_ID = "_id";
     public static final String QUOTE_PUBLIC_ID = "quote_public_id";
     public static final String QUOTE_DATE = "quote_date";

@@ -2,6 +2,7 @@ package ru.aim.anotheryetbashclient;
 
 import java.io.Serializable;
 
+@SuppressWarnings("unused")
 public class Quote implements Serializable {
 
     public final String date;

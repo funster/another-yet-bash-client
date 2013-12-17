@@ -28,7 +28,7 @@ public class BashRandomRequest implements QuiteRequest {
     public void doRequest(SQLiteDatabase database, AndroidHttpClient httpClient) throws IOException {
         HttpGet httpRequest = new HttpGet(URL);
         HttpResponse httpResponse = httpClient.execute(httpRequest);
-        Document document = Jsoup.parse(httpResponse.getEntity().getContent(), "UTF-8", URL);
+        Document document = Jsoup.parse(httpResponse.getEntity().getContent(), WINDOWS_1215, URL);
         Elements quotesElements = document.select("div[class=quote]");
         for (Element e : quotesElements) {
             Elements idElements = e.select("a[class=id]");

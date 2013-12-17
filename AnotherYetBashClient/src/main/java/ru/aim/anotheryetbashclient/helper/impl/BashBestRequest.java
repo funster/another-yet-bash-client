@@ -4,18 +4,16 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.http.AndroidHttpClient;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import java.io.IOException;
-
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.helper.QuiteRequest;
+
+import java.io.IOException;
 
 import static ru.aim.anotheryetbashclient.helper.DbHelper.QUOTE_PUBLIC_ID;
 import static ru.aim.anotheryetbashclient.helper.DbHelper.QUOTE_TABLE;
@@ -28,7 +26,7 @@ public class BashBestRequest implements QuiteRequest {
     public void doRequest(SQLiteDatabase database, AndroidHttpClient httpClient) throws IOException {
         HttpGet httpRequest = new HttpGet(URL);
         HttpResponse httpResponse = httpClient.execute(httpRequest);
-        Document document = Jsoup.parse(httpResponse.getEntity().getContent(), "UTF-8", URL);
+        Document document = Jsoup.parse(httpResponse.getEntity().getContent(), UTF_8, URL);
         Elements quotesElements = document.select("div[class=quote]");
         for (Element e : quotesElements) {
             Elements idElements = e.select("a[class=id]");
