@@ -1,30 +1,21 @@
 package ru.aim.anotheryetbashclient;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.app.AlertDialog;
+import android.content.*;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.Html;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CursorAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-
+import android.view.*;
+import android.widget.*;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.helper.QuoteService;
 
-public class MainActivity extends Activity implements AdapterView.OnItemClickListener {
+import static ru.aim.anotheryetbashclient.ActionsAndIntents.*;
+
+public class MainActivity extends Activity implements AdapterView.OnItemClickListener,
+        AdapterView.OnItemLongClickListener {
 
     DbHelper dbHelper;
     ListView mListView;
@@ -38,6 +29,12 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
             setProgressBarIndeterminateVisibility(false);
         }
     };
+    BroadcastReceiver notifyBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(MainActivity.this, intent.getStringExtra(ActionsAndIntents.MESSAGE), Toast.LENGTH_LONG).show();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +42,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
         mListView = (ListView) findViewById(android.R.id.list);
+        mListView.setOnItemLongClickListener(this);
         mTypesListView = (ListView) findViewById(R.id.types);
         mTypesListView.setAdapter(new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.types)));
@@ -53,11 +51,13 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         IntentFilter intentFilter = new IntentFilter(ActionsAndIntents.REFRESH);
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
         localBroadcastManager.registerReceiver(refreshQuotesReceiver, intentFilter);
+        IntentFilter intentFilter1 = new IntentFilter(ActionsAndIntents.NOTIFY);
+        localBroadcastManager.registerReceiver(notifyBroadcastReceiver, intentFilter1);
         refreshing();
     }
 
     public void refreshing() {
-        startService(new Intent(this, QuoteService.class).putExtra(ActionsAndIntents.TYPE_ID, currentTypeId));
+        startService(new Intent(this, QuoteService.class).putExtra(TYPE_ID, currentTypeId));
         setProgressBarIndeterminateVisibility(true);
     }
 
@@ -66,6 +66,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         super.onDestroy();
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
         localBroadcastManager.unregisterReceiver(refreshQuotesReceiver);
+        localBroadcastManager.unregisterReceiver(notifyBroadcastReceiver);
         dbHelper.close();
     }
 
@@ -123,6 +124,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
             viewHolder.date.setText(date);
             viewHolder.id.setText(id);
             viewHolder.text.setText(Html.fromHtml(text));
+            viewHolder.publicId = id;
             mDbHelper.markRead(cursor.getLong(cursor.getColumnIndex(DbHelper.QUOTE_ID)));
         }
 
@@ -130,6 +132,32 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
             TextView date;
             TextView id;
             TextView text;
+            String publicId;
         }
+    }
+
+    @Override
+    public boolean onItemLongClick(final AdapterView<?> parent, final View view, int position, long id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        String[] items = getResources().getStringArray(R.array.item_menu);
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                QuotesAdapter.ViewHolder viewHolder = (QuotesAdapter.ViewHolder) view.getTag();
+                if (viewHolder != null) {
+                    if (which == 0) {
+                        startService(new Intent(MainActivity.this, QuoteService.class).
+                                putExtra(TYPE_ID, RULEZ).putExtra(ActionsAndIntents.QUOTE_ID, viewHolder.publicId));
+                    } else if (which == 1) {
+                        startService(new Intent(MainActivity.this, QuoteService.class).
+                                putExtra(TYPE_ID, SUX).putExtra(ActionsAndIntents.QUOTE_ID, viewHolder.publicId));
+                    } else {
+                        Toast.makeText(MainActivity.this, "Skip", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
+        builder.show();
+        return true;
     }
 }

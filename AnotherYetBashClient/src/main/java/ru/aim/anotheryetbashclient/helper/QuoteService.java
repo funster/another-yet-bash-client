@@ -5,12 +5,10 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.http.AndroidHttpClient;
 import android.support.v4.content.LocalBroadcastManager;
-
-import java.io.IOException;
-
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
+import ru.aim.anotheryetbashclient.helper.f.Action;
 
-import static ru.aim.anotheryetbashclient.helper.QuiteRequestFactory.getQuiteRequest;
+import static ru.aim.anotheryetbashclient.helper.ActionRequestFactory.getQuiteRequest;
 import static ru.aim.anotheryetbashclient.helper.Utils.isNetworkAvailable;
 
 @SuppressWarnings("unused")
@@ -27,7 +25,7 @@ public class QuoteService extends IntentService {
         if (httpClient == null) {
             synchronized (QuoteService.class) {
                 if (httpClient == null) {
-                    httpClient = AndroidHttpClient.newInstance("Android");
+                    httpClient = AndroidHttpClient.newInstance(System.getProperty("http.agent", "Android"));
                 }
             }
         }
@@ -41,13 +39,23 @@ public class QuoteService extends IntentService {
         if (isNetworkAvailable(this)) {
             try {
                 checkIfClientNotCreated();
-                dbHelper = new DbHelper(this);
-                database = dbHelper.getWritableDatabase();
-                QuiteRequest quiteRequest = getQuiteRequest(intent);
-                quiteRequest.doRequest(database, httpClient);
-                localBroadcastManager.sendBroadcast(new Intent(ActionsAndIntents.REFRESH));
-            } catch (IOException e) {
-                L.d(TAG, "Error while getting new quotes", e);
+                Action action = getQuiteRequest(intent);
+                if (action instanceof HttpAware) {
+                    ((HttpAware) action).setHttpClient(httpClient);
+                }
+                if (action instanceof SqlDbAware) {
+                    dbHelper = new DbHelper(this);
+                    database = dbHelper.getWritableDatabase();
+                    ((SqlDbAware) action).setSqlDb(database);
+                }
+                if (action instanceof ContextAware) {
+                    ((ContextAware) action).setContext(this);
+                }
+                // action.doRequest(database, httpClient);
+                action.apply();
+                if (action instanceof SqlDbAware) {
+                    localBroadcastManager.sendBroadcast(new Intent(ActionsAndIntents.REFRESH));
+                }
             } catch (Exception e) {
                 L.d(TAG, "Error while getting new quotes", e);
             } finally {

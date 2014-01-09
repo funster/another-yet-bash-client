@@ -27,4 +27,10 @@ public final class L {
             Log.e(tag, text, throwable);
         }
     }
+
+    public static void w(String tag, String text) {
+        if (DEBUG) {
+            Log.w(tag, text);
+        }
+    }
 }

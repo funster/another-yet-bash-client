@@ -10,4 +10,13 @@
         <item>Лучшие</item>
     </string-array>
 
+    <string-array name="item_menu">
+        <item>Нравится</item>
+        <item>Не нравится</item>
+        <item>В избранное</item>
+    </string-array>
+
+    <string name="rulez_confirm">Вам %1$s понравилась цитата %2$s</string>
+    <string name="no">не</string>
+
 </resources>
