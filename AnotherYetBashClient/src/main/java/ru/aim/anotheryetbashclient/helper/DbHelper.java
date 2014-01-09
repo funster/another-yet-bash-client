@@ -1,5 +1,6 @@
 package ru.aim.anotheryetbashclient.helper;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -106,5 +107,47 @@ public class DbHelper extends SQLiteOpenHelper {
         } else {
             return cursor;
         }
+    }
+
+    public boolean exists(String id) {
+        SQLiteDatabase db = getReadableDatabase();
+        assert db != null;
+        Cursor cursor = db.rawQuery("select count(*) from " + QUOTE_TABLE + " where " +
+                QUOTE_PUBLIC_ID + " = ?", new String[]{id});
+        cursor.moveToFirst();
+        long count = cursor.getLong(0);
+        return count != 0;
+    }
+
+    public boolean notExists(String id) {
+        return !exists(id);
+    }
+
+    public void addNewQuote(ContentValues values) {
+        SQLiteDatabase db = getWritableDatabase();
+        assert db != null;
+        db.insert(QUOTE_TABLE, null, values);
+    }
+
+    static String makePlaceholders(int len) {
+        if (len < 1) {
+            // It will lead to an invalid query anyway ..
+            throw new RuntimeException("No placeholders");
+        } else {
+            StringBuilder sb = new StringBuilder(len * 2 - 1);
+            sb.append("?");
+            for (int i = 1; i < len; i++) {
+                sb.append(",?");
+            }
+            return sb.toString();
+        }
+    }
+
+    public Cursor getQuotes(String... quotes) {
+        SQLiteDatabase db = getReadableDatabase();
+        assert db != null;
+        String sql = "select * from " + QUOTE_TABLE + " where " + QUOTE_PUBLIC_ID + " in (" +
+                makePlaceholders(quotes.length) + ")";
+        return db.rawQuery(sql, quotes);
     }
 }

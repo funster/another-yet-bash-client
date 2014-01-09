@@ -1,20 +1,24 @@
 package ru.aim.anotheryetbashclient;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.*;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.Html;
 import android.view.*;
 import android.widget.*;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
+import ru.aim.anotheryetbashclient.helper.ObjectSerializer;
 import ru.aim.anotheryetbashclient.helper.QuoteService;
+
+import java.util.ArrayList;
 
 import static ru.aim.anotheryetbashclient.ActionsAndIntents.*;
 
-public class MainActivity extends Activity implements AdapterView.OnItemClickListener,
+public class MainActivity extends FragmentActivity implements AdapterView.OnItemClickListener,
         AdapterView.OnItemLongClickListener {
 
     DbHelper dbHelper;
@@ -25,7 +29,9 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
     BroadcastReceiver refreshQuotesReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            mListView.setAdapter(new QuotesAdapter(dbHelper, context, dbHelper.getUnread()));
+            Cursor cursor = dbHelper.getUnread();
+            saveCurrentCursor(cursor);
+            mListView.setAdapter(new QuotesAdapter(dbHelper, context, cursor));
             setProgressBarIndeterminateVisibility(false);
         }
     };
@@ -35,6 +41,29 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
             Toast.makeText(MainActivity.this, intent.getStringExtra(ActionsAndIntents.MESSAGE), Toast.LENGTH_LONG).show();
         }
     };
+
+    void saveCurrentCursor(Cursor cursor) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        ArrayList<String> list = new ArrayList<String>();
+        while (cursor.moveToNext()) {
+            list.add(cursor.getString(cursor.getColumnIndex(DbHelper.QUOTE_PUBLIC_ID)));
+        }
+        String bin = ObjectSerializer.serialize(list);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(CURRENT_QUOTES, bin);
+        editor.commit();
+    }
+
+    boolean savedCursorExists() {
+        return PreferenceManager.getDefaultSharedPreferences(this).getString(CURRENT_QUOTES, null) == null;
+    }
+
+    @SuppressWarnings("unchecked")
+    String[] getSavedCursor() {
+        String bin = PreferenceManager.getDefaultSharedPreferences(this).getString(CURRENT_QUOTES, null);
+        ArrayList<String> list = (ArrayList<String>) ObjectSerializer.deserialize(bin);
+        return list.toArray(new String[list.size()]);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,15 +77,19 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.types)));
         mTypesListView.setOnItemClickListener(this);
         dbHelper = new DbHelper(this);
+        if (savedCursorExists()) {
+            callRefresh();
+        } else {
+            mListView.setAdapter(new QuotesAdapter(dbHelper, this, dbHelper.getQuotes(getSavedCursor())));
+        }
         IntentFilter intentFilter = new IntentFilter(ActionsAndIntents.REFRESH);
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
         localBroadcastManager.registerReceiver(refreshQuotesReceiver, intentFilter);
         IntentFilter intentFilter1 = new IntentFilter(ActionsAndIntents.NOTIFY);
         localBroadcastManager.registerReceiver(notifyBroadcastReceiver, intentFilter1);
-        refreshing();
     }
 
-    public void refreshing() {
+    public void callRefresh() {
         startService(new Intent(this, QuoteService.class).putExtra(TYPE_ID, currentTypeId));
         setProgressBarIndeterminateVisibility(true);
     }
@@ -79,7 +112,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         if (item.getItemId() == R.id.action_refresh) {
-            refreshing();
+            callRefresh();
             return true;
         } else if (item.getItemId() == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
@@ -91,7 +124,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         currentTypeId = position;
-        refreshing();
+        callRefresh();
     }
 
     static class QuotesAdapter extends CursorAdapter {

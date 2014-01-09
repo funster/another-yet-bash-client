@@ -51,6 +51,9 @@ public class QuoteService extends IntentService {
                 if (action instanceof ContextAware) {
                     ((ContextAware) action).setContext(this);
                 }
+                if (action instanceof DbHelperAware) {
+                    ((DbHelperAware) action).setDbHelper(dbHelper);
+                }
                 // action.doRequest(database, httpClient);
                 action.apply();
                 if (action instanceof SqlDbAware) {

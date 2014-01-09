@@ -7,6 +7,8 @@ import ru.aim.anotheryetbashclient.helper.impl.BashBestAction;
 import ru.aim.anotheryetbashclient.helper.impl.BashRandomAction;
 import ru.aim.anotheryetbashclient.helper.impl.BashRulezAction;
 
+import static ru.aim.anotheryetbashclient.helper.Preconditions.notNull;
+
 public final class ActionRequestFactory {
 
     private ActionRequestFactory() {
@@ -22,8 +24,10 @@ public final class ActionRequestFactory {
             case 1:
                 return new BashBestAction();
             case 2:
+                notNull(quoteId);
                 return new BashRulezAction(BashRulezAction.Type.RULEZ, quoteId);
             case 3:
+                notNull(quoteId);
                 return new BashRulezAction(BashRulezAction.Type.SUX, quoteId);
             default:
                 throw new AssertionError();
