@@ -18,8 +18,10 @@ public class ActionsAndIntents {
     public static final String MESSAGE = "MESSAGE";
 
 
-    public static final int RULEZ = 2;
-    public static final int SUX = 3;
+    public static final int TYPE_RANDOM = 0;
+    public static final int TYPE_BEST = 1;
+    public static final int TYPE_RULEZ = 2;
+    public static final int TYPE_SUX = 3;
 
     /**
      * Preferences
