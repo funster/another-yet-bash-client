@@ -6,9 +6,17 @@
     <string name="action_refresh">Refresh</string>
     <string name="hello_world">Hello world!</string>
     <string-array name="types">
+        <item>Новые</item>
         <item>Случайные</item>
         <item>Лучшие</item>
+        <item>По рейтингу</item>
+        <item>Бездна</item>
+        <item>Топ Бездны</item>
+        <item>Лучшее Бездны</item>
+        <item>Оффлайн</item>
     </string-array>
+
+    <!--новые случайные лучшие по рейтингу Бездна топ Бездны лучшее Бездны-->
 
     <string-array name="item_menu">
         <item>Нравится</item>
@@ -18,5 +26,8 @@
 
     <string name="rulez_confirm">Вам %1$s понравилась цитата %2$s</string>
     <string name="no">не</string>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 
 </resources>

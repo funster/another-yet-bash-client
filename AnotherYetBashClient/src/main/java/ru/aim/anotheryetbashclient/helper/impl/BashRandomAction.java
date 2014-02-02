@@ -1,12 +1,15 @@
 package ru.aim.anotheryetbashclient.helper.impl;
 
 import android.content.ContentValues;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.helper.BaseAction;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.helper.f.Block;
@@ -44,6 +47,8 @@ public class BashRandomAction extends BaseAction {
                         }
                     }
                 }
+                LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
+                localBroadcastManager.sendBroadcast(new Intent(ActionsAndIntents.REFRESH));
             }
         });
     }

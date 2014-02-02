@@ -12,6 +12,7 @@
             android:layout_height="match_parent">
 
         <fragment
+                android:id="@+id/main_fragment"
                 class="ru.aim.anotheryetbashclient.QuotesFragment"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"/>

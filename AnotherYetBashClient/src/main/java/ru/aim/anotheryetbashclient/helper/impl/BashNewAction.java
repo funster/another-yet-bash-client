@@ -14,16 +14,15 @@ import ru.aim.anotheryetbashclient.helper.BaseAction;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.helper.f.Block;
 
+import java.util.ArrayList;
+
 import static ru.aim.anotheryetbashclient.helper.DbHelper.QUOTE_PUBLIC_ID;
-import static ru.aim.anotheryetbashclient.helper.Utils.UTF_8;
+import static ru.aim.anotheryetbashclient.helper.Utils.WINDOWS_1215;
 import static ru.aim.anotheryetbashclient.helper.Utils.rethrowWithRuntime;
 
-@SuppressWarnings("unused")
-public class BashBestAction extends BaseAction {
+public class BashNewAction extends BaseAction {
 
-    public static final String TAG = "BashBestAction";
-
-    static final String URL = "http://bash.im/best";
+    static final String URL = "http://bash.im/";
 
     @Override
     public void apply() {
@@ -32,14 +31,16 @@ public class BashBestAction extends BaseAction {
             public void apply() throws Exception {
                 HttpGet httpRequest = new HttpGet(URL);
                 HttpResponse httpResponse = httpClient.execute(httpRequest);
-                Document document = Jsoup.parse(httpResponse.getEntity().getContent(), UTF_8, URL);
+                Document document = Jsoup.parse(httpResponse.getEntity().getContent(), WINDOWS_1215, URL);
                 Elements quotesElements = document.select("div[class=quote]");
+                ArrayList<String> list = new ArrayList<String>();
                 for (Element e : quotesElements) {
                     Elements idElements = e.select("a[class=id]");
                     Elements dateElements = e.select("span[class=date]");
                     Elements textElements = e.select("div[class=text]");
                     if (!textElements.isEmpty()) {
                         String id = idElements.html();
+                        list.add(id);
                         if (dbHelper.notExists(id)) {
                             ContentValues values = new ContentValues();
                             values.put(QUOTE_PUBLIC_ID, idElements.html());
@@ -51,7 +52,9 @@ public class BashBestAction extends BaseAction {
                     }
                 }
                 LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
-                localBroadcastManager.sendBroadcast(new Intent(ActionsAndIntents.REFRESH));
+                Intent intent = new Intent(ActionsAndIntents.REFRESH);
+                intent.putStringArrayListExtra(ActionsAndIntents.IDS, list);
+                localBroadcastManager.sendBroadcast(intent);
             }
         });
     }

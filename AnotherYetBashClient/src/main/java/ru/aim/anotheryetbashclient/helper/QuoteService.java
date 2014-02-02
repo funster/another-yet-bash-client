@@ -54,11 +54,10 @@ public class QuoteService extends IntentService {
                 if (action instanceof DbHelperAware) {
                     ((DbHelperAware) action).setDbHelper(dbHelper);
                 }
-                // action.doRequest(database, httpClient);
-                action.apply();
-                if (action instanceof SqlDbAware) {
-                    localBroadcastManager.sendBroadcast(new Intent(ActionsAndIntents.REFRESH));
+                if (action instanceof IntentAware) {
+                    ((IntentAware) action).setIntent(intent);
                 }
+                action.apply();
             } catch (Exception e) {
                 L.d(TAG, "Error while getting new quotes", e);
             } finally {
