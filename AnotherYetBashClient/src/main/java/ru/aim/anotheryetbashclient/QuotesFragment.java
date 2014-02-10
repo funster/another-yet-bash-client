@@ -23,6 +23,8 @@ import static ru.aim.anotheryetbashclient.ActionsAndIntents.*;
 public class QuotesFragment extends Fragment implements AdapterView.OnItemLongClickListener {
 
     DbHelper dbHelper;
+    ListView listView;
+    private int currentPage;
     BroadcastReceiver refreshQuotesReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -35,22 +37,28 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
             } else {
                 cursor = dbHelper.getUnread();
             }
+            if (intent.hasExtra(ActionsAndIntents.CURRENT_PAGE)) {
+                currentPage = intent.getIntExtra(ActionsAndIntents.CURRENT_PAGE, 0);
+            }
             saveCurrentCursor(cursor);
             listView.setAdapter(new QuotesAdapter(dbHelper, context, cursor));
             getActivity().setProgressBarIndeterminateVisibility(false);
         }
     };
-    ListView listView;
+    private int currentType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            currentPage = savedInstanceState.getInt(ActionsAndIntents.CURRENT_PAGE);
+        }
         View result = inflater.inflate(R.layout.fragment_list, null);
         assert result != null;
         listView = (ListView) result.findViewById(android.R.id.list);
         listView.setOnItemLongClickListener(this);
         dbHelper = new DbHelper(getActivity());
         if (isSavedCursorExists()) {
-            callRefresh();
+            callRefresh(currentType);
         } else {
             listView.setAdapter(new QuotesAdapter(dbHelper, getActivity(), dbHelper.getQuotes(getSavedCursor())));
         }
@@ -61,9 +69,19 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
         return result;
     }
 
-    public void callRefresh() {
-        getActivity().startService(new Intent(getActivity(), QuoteService.class).putExtra(TYPE_ID, ActionsAndIntents.TYPE_NEW));
+    public void callRefresh(int currentType) {
+        this.currentType = currentType;
+        Intent intent = new Intent(getActivity(), QuoteService.class);
+        intent.putExtra(TYPE_ID, currentType);
+        if (currentPage > 0) {
+            intent.putExtra(ActionsAndIntents.CURRENT_PAGE, currentPage);
+        }
+        getActivity().startService(intent);
         getActivity().setProgressBarIndeterminateVisibility(true);
+    }
+
+    public void setCurrentType(int currentType) {
+        this.currentType = currentType;
     }
 
     void saveCurrentCursor(Cursor cursor) {
@@ -95,6 +113,12 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getActivity());
         localBroadcastManager.unregisterReceiver(refreshQuotesReceiver);
         super.onDestroyView();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(ActionsAndIntents.CURRENT_PAGE, currentPage);
     }
 
     @Override

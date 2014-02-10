@@ -11,6 +11,7 @@ import ru.aim.anotheryetbashclient.R;
 import ru.aim.anotheryetbashclient.helper.ContextAware;
 import ru.aim.anotheryetbashclient.helper.HttpAware;
 import ru.aim.anotheryetbashclient.helper.L;
+import ru.aim.anotheryetbashclient.helper.Utils;
 import ru.aim.anotheryetbashclient.helper.f.Action;
 import ru.aim.anotheryetbashclient.helper.f.Block;
 import ru.aim.anotheryetbashclient.helper.multipart.MultipartEntity;
@@ -53,8 +54,7 @@ public class BashRulezAction implements HttpAware, ContextAware, Action {
                 if ("OK".equalsIgnoreCase(result)) {
                     String text = context.getString(R.string.rulez_confirm, type == Type.RULEZ ? ""
                             : context.getString(R.string.no), quoteId);
-                    LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
-                    localBroadcastManager.sendBroadcast(new Intent(ActionsAndIntents.NOTIFY).putExtra(ActionsAndIntents.MESSAGE, text));
+                    Utils.sendMessageIntent(context, text);
                 } else {
                     L.w(TAG, "Like result returns: " + result);
                 }

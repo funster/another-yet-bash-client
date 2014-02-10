@@ -1,11 +1,14 @@
 package ru.aim.anotheryetbashclient.helper;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.http.AndroidHttpClient;
 import android.os.Build;
+import android.support.v4.content.LocalBroadcastManager;
 import org.apache.http.client.methods.HttpGet;
+import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.helper.f.Block;
 
 import java.io.BufferedReader;
@@ -17,10 +20,9 @@ import java.util.List;
 @SuppressWarnings("unused")
 public final class Utils {
 
-    static final String TAG = "Utils";
-
     public static final String UTF_8 = "UTF-8";
     public static final String WINDOWS_1215 = "windows-1251";
+    static final String TAG = "Utils";
 
     private Utils() {
         throw new AssertionError();
@@ -88,5 +90,10 @@ public final class Utils {
             result[i] = list.get(i);
         }
         return result;
+    }
+
+    public static void sendMessageIntent(Context context, String message) {
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
+        localBroadcastManager.sendBroadcast(new Intent(ActionsAndIntents.NOTIFY).putExtra(ActionsAndIntents.MESSAGE, message));
     }
 }

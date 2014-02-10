@@ -20,9 +20,12 @@ public class ActionsAndIntents {
     public static final String QUOTE_ID = "QUOTE_ID";
     public static final String MESSAGE = "MESSAGE";
     public static final String IDS = "IDS";
+    public static final String CURRENT_PAGE = "CURRENT_PAGE";
 
 
-
+    /**
+     * Request types
+     */
     public static final int TYPE_NEW = 0;
     public static final int TYPE_RANDOM = 1;
     public static final int TYPE_BEST = 2;

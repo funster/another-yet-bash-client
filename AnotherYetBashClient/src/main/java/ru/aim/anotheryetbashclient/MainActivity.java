@@ -21,12 +21,15 @@ import android.widget.Toast;
 import ru.aim.anotheryetbashclient.helper.QuoteService;
 
 import static ru.aim.anotheryetbashclient.ActionsAndIntents.TYPE_ID;
+import static ru.aim.anotheryetbashclient.SettingsHelper.loadType;
+import static ru.aim.anotheryetbashclient.SettingsHelper.saveType;
 
 public class MainActivity extends FragmentActivity implements AdapterView.OnItemClickListener {
 
     ListView mTypesListView;
     DrawerLayout mDrawerLayout;
     ActionBarDrawerToggle mDrawerToggle;
+    QuotesFragment quotesFragment;
 
     int currentTypeId;
 
@@ -40,6 +43,7 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        currentTypeId = loadType(this);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
 
@@ -67,6 +71,8 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
         mTypesListView.setAdapter(new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.types)));
         mTypesListView.setOnItemClickListener(this);
+        mTypesListView.setSelection(currentTypeId);
+
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter1 = new IntentFilter(ActionsAndIntents.NOTIFY);
         localBroadcastManager.registerReceiver(notifyBroadcastReceiver, intentFilter1);
@@ -74,11 +80,13 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
         assert getActionBar() != null;
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
+
+        quotesFragment = (QuotesFragment) getSupportFragmentManager().findFragmentById(R.id.main_fragment);
+        quotesFragment.setCurrentType(currentTypeId);
     }
 
     public void callRefresh() {
-        startService(new Intent(this, QuoteService.class).putExtra(TYPE_ID, currentTypeId));
-        setProgressBarIndeterminateVisibility(true);
+        quotesFragment.callRefresh(currentTypeId);
     }
 
     @Override
@@ -109,6 +117,7 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         currentTypeId = position;
+        saveType(this, currentTypeId);
         callRefresh();
         mDrawerLayout.closeDrawers();
     }
@@ -133,5 +142,4 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
-
 }

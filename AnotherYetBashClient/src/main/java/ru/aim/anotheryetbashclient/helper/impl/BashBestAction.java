@@ -31,7 +31,7 @@ public class BashBestAction extends BaseAction {
             @Override
             public void apply() throws Exception {
                 HttpGet httpRequest = new HttpGet(URL);
-                HttpResponse httpResponse = httpClient.execute(httpRequest);
+                HttpResponse httpResponse = getHttpClient().execute(httpRequest);
                 Document document = Jsoup.parse(httpResponse.getEntity().getContent(), UTF_8, URL);
                 Elements quotesElements = document.select("div[class=quote]");
                 for (Element e : quotesElements) {
@@ -40,17 +40,17 @@ public class BashBestAction extends BaseAction {
                     Elements textElements = e.select("div[class=text]");
                     if (!textElements.isEmpty()) {
                         String id = idElements.html();
-                        if (dbHelper.notExists(id)) {
+                        if (getDbHelper().notExists(id)) {
                             ContentValues values = new ContentValues();
                             values.put(QUOTE_PUBLIC_ID, idElements.html());
                             values.put(DbHelper.QUOTE_DATE, dateElements.html());
                             values.put(DbHelper.QUOTE_IS_NEW, 1);
                             values.put(DbHelper.QUOTE_TEXT, textElements.html().trim());
-                            dbHelper.addNewQuote(values);
+                            getDbHelper().addNewQuote(values);
                         }
                     }
                 }
-                LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
+                LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getContext());
                 localBroadcastManager.sendBroadcast(new Intent(ActionsAndIntents.REFRESH));
             }
         });
