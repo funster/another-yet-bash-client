@@ -12,4 +12,8 @@ public final class Preconditions {
             throw new NullPointerException("Should be not null");
         }
     }
+
+    public static void notImplemented() {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
 }

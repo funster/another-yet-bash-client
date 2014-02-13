@@ -1,5 +1,6 @@
 package ru.aim.anotheryetbashclient;
 
+@SuppressWarnings("unused")
 public class ActionsAndIntents {
 
     /**
@@ -29,8 +30,12 @@ public class ActionsAndIntents {
     public static final int TYPE_NEW = 0;
     public static final int TYPE_RANDOM = 1;
     public static final int TYPE_BEST = 2;
-    public static final int TYPE_RULEZ = 3;
-    public static final int TYPE_SUX = 4;
+    public static final int TYPE_BY_RATING = 3;
+    public static final int TYPE_ABYSS = 4;
+    public static final int TYPE_TOP_ABYSS = 5;
+    public static final int TYPE_BEST_ABYSS = 6;
+    public static final int TYPE_RULEZ = 10;
+    public static final int TYPE_SUX = 11;
 
     /**
      * Preferences

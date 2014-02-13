@@ -18,18 +18,24 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-import ru.aim.anotheryetbashclient.helper.QuoteService;
 
-import static ru.aim.anotheryetbashclient.ActionsAndIntents.TYPE_ID;
 import static ru.aim.anotheryetbashclient.SettingsHelper.loadType;
 import static ru.aim.anotheryetbashclient.SettingsHelper.saveType;
 
+/**
+ * In progress:
+ * <p/>
+ * 1. *** Save currentType when orientation changed.
+ * 2. *** Highlight selected menu item in main menu. Restore it.
+ * 3.
+ */
 public class MainActivity extends FragmentActivity implements AdapterView.OnItemClickListener {
 
     ListView mTypesListView;
     DrawerLayout mDrawerLayout;
     ActionBarDrawerToggle mDrawerToggle;
     QuotesFragment quotesFragment;
+    MenuItemsAdapter adapter;
 
     int currentTypeId;
 
@@ -68,10 +74,16 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         mTypesListView = (ListView) findViewById(R.id.types);
-        mTypesListView.setAdapter(new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.types)));
+        adapter = new MenuItemsAdapter(this, getResources().getStringArray(R.array.types));
+        mTypesListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1,
+                getResources().getStringArray(R.array.types)));
         mTypesListView.setOnItemClickListener(this);
-        mTypesListView.setSelection(currentTypeId);
+        mTypesListView.post(new Runnable() {
+            @Override
+            public void run() {
+                mTypesListView.setItemChecked(currentTypeId, true);
+            }
+        });
 
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter1 = new IntentFilter(ActionsAndIntents.NOTIFY);
@@ -116,14 +128,17 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        currentTypeId = position;
-        saveType(this, currentTypeId);
-        callRefresh();
+        if (position != currentTypeId) {
+            currentTypeId = position;
+            saveType(this, currentTypeId);
+            callRefresh();
+        }
         mDrawerLayout.closeDrawers();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        //noinspection SimplifiableIfStatement
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }

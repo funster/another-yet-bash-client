@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.http.AndroidHttpClient;
 import android.support.v4.content.LocalBroadcastManager;
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
+import ru.aim.anotheryetbashclient.R;
 import ru.aim.anotheryetbashclient.helper.f.Action;
 
 import static ru.aim.anotheryetbashclient.helper.ActionRequestFactory.getQuiteRequest;
@@ -60,6 +61,8 @@ public class QuoteService extends IntentService {
                 action.apply();
             } catch (Exception e) {
                 L.d(TAG, "Error while getting new quotes", e);
+                Utils.sendMessageIntent(this, getString(R.string.updating_fail));
+                localBroadcastManager.sendBroadcast(new Intent(ActionsAndIntents.REFRESH));
             } finally {
                 if (database != null) {
                     database.close();

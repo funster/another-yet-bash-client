@@ -62,6 +62,7 @@ public final class Utils {
         try {
             block.apply();
         } catch (Exception e) {
+            L.e(TAG, "Unexpected exception", e);
             throw new RuntimeException(e);
         }
     }

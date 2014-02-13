@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 /**
  *
@@ -15,9 +16,9 @@ public class MenuItemsAdapter extends BaseAdapter {
 
     int selected;
 
-    public MenuItemsAdapter(Context context) {
+    public MenuItemsAdapter(Context context, String[] arr) {
         this.context = context;
-        arr = context.getResources().getStringArray(R.array.item_menu);
+        this.arr = arr;
     }
 
     @Override
@@ -37,7 +38,17 @@ public class MenuItemsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
+        if (convertView == null) {
+            convertView = View.inflate(context, android.R.layout.simple_list_item_activated_1, null);
+        }
+        TextView textView = (TextView) convertView;
+        textView.setText(arr[position]);
+        //if (position == selected) {
+        //    textView.setBackgroundResource(android.R.color.holo_green_dark);
+        //} else {
+            textView.setBackgroundResource(0);
+        //}
+        return convertView;
     }
 
     public void setItemSelected(int position) {

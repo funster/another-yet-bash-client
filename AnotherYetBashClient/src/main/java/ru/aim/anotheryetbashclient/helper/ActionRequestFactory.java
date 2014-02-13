@@ -3,10 +3,7 @@ package ru.aim.anotheryetbashclient.helper;
 import android.content.Intent;
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.helper.f.Action;
-import ru.aim.anotheryetbashclient.helper.impl.BashBestAction;
-import ru.aim.anotheryetbashclient.helper.impl.BashNewAction;
-import ru.aim.anotheryetbashclient.helper.impl.BashRandomAction;
-import ru.aim.anotheryetbashclient.helper.impl.BashRulezAction;
+import ru.aim.anotheryetbashclient.helper.impl.*;
 
 import static ru.aim.anotheryetbashclient.helper.Preconditions.notNull;
 
@@ -20,20 +17,30 @@ public final class ActionRequestFactory {
         int typeId = intent.getIntExtra(ActionsAndIntents.TYPE_ID, 0);
         String quoteId = intent.getStringExtra(ActionsAndIntents.QUOTE_ID);
         switch (typeId) {
-            case 0:
+            case ActionsAndIntents.TYPE_NEW:
                 return new BashNewAction();
-            case 1:
+            case ActionsAndIntents.TYPE_RANDOM:
                 return new BashRandomAction();
-            case 2:
+            case ActionsAndIntents.TYPE_BEST:
                 return new BashBestAction();
-            case 3:
+            case ActionsAndIntents.TYPE_BY_RATING:
+                return new BashByRating();
+            case ActionsAndIntents.TYPE_ABYSS:
+                Preconditions.notImplemented();
+                break;
+            case ActionsAndIntents.TYPE_BEST_ABYSS:
+                Preconditions.notImplemented();
+                break;
+            case ActionsAndIntents.TYPE_TOP_ABYSS:
+                Preconditions.notImplemented();
+                break;
+            case ActionsAndIntents.TYPE_RULEZ:
                 notNull(quoteId);
                 return new BashRulezAction(BashRulezAction.Type.RULEZ, quoteId);
-            case 4:
+            case ActionsAndIntents.TYPE_SUX:
                 notNull(quoteId);
                 return new BashRulezAction(BashRulezAction.Type.SUX, quoteId);
-            default:
-                throw new AssertionError();
         }
+        throw new AssertionError();
     }
 }
