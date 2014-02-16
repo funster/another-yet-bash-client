@@ -28,19 +28,23 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
     BroadcastReceiver refreshQuotesReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Cursor cursor;
+            Cursor cursor = null;
             if (intent.hasExtra(ActionsAndIntents.IDS)) {
                 ArrayList<String> list = intent.getStringArrayListExtra(ActionsAndIntents.IDS);
                 assert list != null;
-                String[] arr = list.toArray(new String[list.size()]);
-                cursor = dbHelper.getQuotes(arr);
+                if (!list.isEmpty()) {
+                    String[] arr = list.toArray(new String[list.size()]);
+                    cursor = dbHelper.getQuotes(arr);
+                }
             } else {
                 cursor = dbHelper.getUnread();
             }
             if (intent.hasExtra(ActionsAndIntents.CURRENT_PAGE)) {
                 currentPage = intent.getIntExtra(ActionsAndIntents.CURRENT_PAGE, 0);
             }
-            saveCurrentCursor(cursor);
+            if (cursor != null) {
+                saveCurrentCursor(cursor);
+            }
             listView.setAdapter(new QuotesAdapter(dbHelper, context, cursor));
             getActivity().setProgressBarIndeterminateVisibility(false);
         }

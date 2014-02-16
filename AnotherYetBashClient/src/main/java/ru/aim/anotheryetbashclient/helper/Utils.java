@@ -164,6 +164,7 @@ public final class Utils {
         theIntrinsic.setInput(tmpIn);
         theIntrinsic.forEach(tmpOut);
         tmpOut.copyTo(output);
+        rs.destroy();
         return output;
     }
 
