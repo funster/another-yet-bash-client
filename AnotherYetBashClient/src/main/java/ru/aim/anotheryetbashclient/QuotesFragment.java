@@ -55,6 +55,7 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
         View result = inflater.inflate(R.layout.fragment_list, null);
         assert result != null;
         listView = (ListView) result.findViewById(android.R.id.list);
+        listView.setEmptyView(result.findViewById(android.R.id.text1));
         listView.setOnItemLongClickListener(this);
         dbHelper = new DbHelper(getActivity());
         if (isSavedCursorExists()) {
@@ -136,8 +137,9 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
                     } else if (which == 1) {
                         getActivity().startService(new Intent(getActivity(), QuoteService.class).
                                 putExtra(TYPE_ID, TYPE_SUX).putExtra(ActionsAndIntents.QUOTE_ID, viewHolder.publicId));
-                    } else {
-                        Toast.makeText(getActivity(), "Skip", Toast.LENGTH_LONG).show();
+                    } else if (which == 2) {
+                        dbHelper.addToFavorite(viewHolder.innerId);
+                        Toast.makeText(getActivity(), R.string.added_to_favorites, Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -177,7 +179,8 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
             viewHolder.id.setText(id);
             viewHolder.text.setText(Html.fromHtml(text));
             viewHolder.publicId = id;
-            mDbHelper.markRead(cursor.getLong(cursor.getColumnIndex(DbHelper.QUOTE_ID)));
+            viewHolder.innerId = cursor.getLong(cursor.getColumnIndex(DbHelper.QUOTE_ID));
+            mDbHelper.markRead(viewHolder.innerId);
         }
 
         static class ViewHolder {
@@ -185,6 +188,7 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
             TextView id;
             TextView text;
             String publicId;
+            long innerId;
         }
     }
 }

@@ -17,10 +17,25 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String QUOTE_PUBLIC_ID = "quote_public_id";
     public static final String QUOTE_DATE = "quote_date";
     public static final String QUOTE_IS_NEW = "quote_is_new";
+    public static final String QUOTE_IS_FAVORITE = "quote_is_favorite";
     public static final String QUOTE_TEXT = "quote_text";
 
     public DbHelper(Context context) {
         super(context, DB_NAME, null, 1);
+    }
+
+    static String makePlaceholders(int len) {
+        if (len < 1) {
+            // It will lead to an invalid query anyway ..
+            throw new RuntimeException("No placeholders");
+        } else {
+            StringBuilder sb = new StringBuilder(len * 2 - 1);
+            sb.append("?");
+            for (int i = 1; i < len; i++) {
+                sb.append(",?");
+            }
+            return sb.toString();
+        }
     }
 
     @Override
@@ -28,7 +43,7 @@ public class DbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("CREATE TABLE " + QUOTE_TABLE +
                 " (" + QUOTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 QUOTE_PUBLIC_ID + " TEXT, " + QUOTE_DATE + " TEXT, " +
-                QUOTE_IS_NEW + " INTEGER, " +
+                QUOTE_IS_NEW + " INTEGER, " + QUOTE_IS_FAVORITE + " INTEGER," +
                 QUOTE_TEXT + " TEXT)");
     }
 
@@ -40,6 +55,26 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         assert db != null;
         db.execSQL("update " + QUOTE_TABLE + " set " + QUOTE_IS_NEW + " = 0 where " + QUOTE_ID + " = " + innerId);
+    }
+
+    public void addToFavorite(long innerId) {
+        doFavorite(innerId, 1);
+    }
+
+    public void removeFromFavorite(long innerId) {
+        doFavorite(innerId, 0);
+    }
+
+    void doFavorite(long innerId, int value) {
+        SQLiteDatabase db = getWritableDatabase();
+        assert db != null;
+        db.execSQL("update " + QUOTE_TABLE + " set " + QUOTE_IS_FAVORITE + " = " + value + " where " + QUOTE_ID + " = " + innerId);
+    }
+
+    public Cursor getFavorites() {
+        SQLiteDatabase db = getReadableDatabase();
+        assert db != null;
+        return db.rawQuery("select " + QUOTE_PUBLIC_ID + "  from " + QUOTE_TABLE + " where " + QUOTE_IS_FAVORITE + " = 1", null);
     }
 
     public Cursor getUnread() {
@@ -127,20 +162,6 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         assert db != null;
         db.insert(QUOTE_TABLE, null, values);
-    }
-
-    static String makePlaceholders(int len) {
-        if (len < 1) {
-            // It will lead to an invalid query anyway ..
-            throw new RuntimeException("No placeholders");
-        } else {
-            StringBuilder sb = new StringBuilder(len * 2 - 1);
-            sb.append("?");
-            for (int i = 1; i < len; i++) {
-                sb.append(",?");
-            }
-            return sb.toString();
-        }
     }
 
     public Cursor getQuotes(String... quotes) {

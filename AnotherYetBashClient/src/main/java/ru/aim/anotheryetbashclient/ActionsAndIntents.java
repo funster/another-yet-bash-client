@@ -34,6 +34,8 @@ public class ActionsAndIntents {
     public static final int TYPE_ABYSS = 4;
     public static final int TYPE_TOP_ABYSS = 5;
     public static final int TYPE_BEST_ABYSS = 6;
+    public static final int TYPE_OFFLINE = 7;
+    public static final int TYPE_FAVORITES = 8;
     public static final int TYPE_RULEZ = 10;
     public static final int TYPE_SUX = 11;
 

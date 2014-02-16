@@ -34,6 +34,10 @@ public final class ActionRequestFactory {
             case ActionsAndIntents.TYPE_TOP_ABYSS:
                 Preconditions.notImplemented();
                 break;
+            case ActionsAndIntents.TYPE_OFFLINE:
+                return new OfflineAction();
+            case ActionsAndIntents.TYPE_FAVORITES:
+                return new FavoritesAction();
             case ActionsAndIntents.TYPE_RULEZ:
                 notNull(quoteId);
                 return new BashRulezAction(BashRulezAction.Type.RULEZ, quoteId);

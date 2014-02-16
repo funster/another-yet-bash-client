@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
@@ -14,10 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.*;
+import ru.aim.anotheryetbashclient.helper.Utils;
 
 import static ru.aim.anotheryetbashclient.SettingsHelper.loadType;
 import static ru.aim.anotheryetbashclient.SettingsHelper.saveType;
@@ -31,11 +30,15 @@ import static ru.aim.anotheryetbashclient.SettingsHelper.saveType;
  */
 public class MainActivity extends FragmentActivity implements AdapterView.OnItemClickListener {
 
+    public static final int BLUR_DURATION = 500;
+
+    FrameLayout mainFrame;
     ListView mTypesListView;
     DrawerLayout mDrawerLayout;
     ActionBarDrawerToggle mDrawerToggle;
     QuotesFragment quotesFragment;
     MenuItemsAdapter adapter;
+    TransitionDrawable cache;
 
     int currentTypeId;
 
@@ -51,8 +54,9 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
         super.onCreate(savedInstanceState);
         currentTypeId = loadType(this);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setContentView(R.layout.activity_main);
 
+        setContentView(R.layout.activity_main);
+        mainFrame = (FrameLayout) findViewById(R.id.main_frame);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(this,
                 mDrawerLayout,
@@ -62,11 +66,24 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
 
             @Override
             public void onDrawerClosed(View drawerView) {
+                cache.reverseTransition(BLUR_DURATION / 2);
+                quotesFragment.getView().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mainFrame.setForeground(null);
+                        quotesFragment.getView().setVisibility(View.VISIBLE);
+                    }
+                }, BLUR_DURATION);
                 super.onDrawerClosed(drawerView);
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
+                quotesFragment.getView().setVisibility(View.INVISIBLE);
+                cache = Utils.makeTransition(MainActivity.this, quotesFragment.getView());
+                cache.setCrossFadeEnabled(true);
+                mainFrame.setForeground(cache);
+                cache.startTransition(BLUR_DURATION);
                 super.onDrawerOpened(drawerView);
             }
         };
