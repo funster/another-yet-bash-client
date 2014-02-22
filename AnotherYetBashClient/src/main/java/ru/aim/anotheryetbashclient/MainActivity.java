@@ -15,9 +15,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.FrameLayout;
+import android.widget.ListView;
+import android.widget.Toast;
 import ru.aim.anotheryetbashclient.helper.Utils;
 
+import static ru.aim.anotheryetbashclient.Package.updateHeader;
 import static ru.aim.anotheryetbashclient.SettingsHelper.loadType;
 import static ru.aim.anotheryetbashclient.SettingsHelper.saveType;
 
@@ -52,8 +56,10 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentTypeId = loadType(this);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
+        currentTypeId = loadType(this);
+        updateHeader(this, currentTypeId);
 
         setContentView(R.layout.activity_main);
         mainFrame = (FrameLayout) findViewById(R.id.main_frame);
@@ -91,9 +97,9 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         mTypesListView = (ListView) findViewById(R.id.types);
-        adapter = new MenuItemsAdapter(this, getResources().getStringArray(R.array.types));
-        mTypesListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1,
-                getResources().getStringArray(R.array.types)));
+        adapter = new MenuItemsAdapter(this, android.R.layout.simple_list_item_activated_1,
+                getResources().getStringArray(R.array.types));
+        mTypesListView.setAdapter(adapter);
         mTypesListView.setOnItemClickListener(this);
         mTypesListView.post(new Runnable() {
             @Override

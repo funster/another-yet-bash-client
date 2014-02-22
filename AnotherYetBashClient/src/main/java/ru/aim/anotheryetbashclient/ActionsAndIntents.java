@@ -22,6 +22,7 @@ public class ActionsAndIntents {
     public static final String MESSAGE = "MESSAGE";
     public static final String IDS = "IDS";
     public static final String CURRENT_PAGE = "CURRENT_PAGE";
+    public static final String SEARCH_QUERY = "SEARCH_QUERY";
 
 
     /**
@@ -38,6 +39,7 @@ public class ActionsAndIntents {
     public static final int TYPE_FAVORITES = 8;
     public static final int TYPE_RULEZ = 10;
     public static final int TYPE_SUX = 11;
+    public static final int TYPE_SEARCH = 12;
 
     /**
      * Preferences

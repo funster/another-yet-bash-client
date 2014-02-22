@@ -1,8 +1,9 @@
-package ru.aim.anotheryetbashclient.helper.impl;
+package ru.aim.anotheryetbashclient.helper.actions;
 
 import android.content.ContentValues;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.jsoup.Jsoup;
@@ -14,32 +15,57 @@ import ru.aim.anotheryetbashclient.helper.BaseAction;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.helper.f.Block;
 
+import java.util.ArrayList;
+
 import static ru.aim.anotheryetbashclient.helper.DbHelper.QUOTE_PUBLIC_ID;
-import static ru.aim.anotheryetbashclient.helper.Utils.UTF_8;
+import static ru.aim.anotheryetbashclient.helper.Utils.WINDOWS_1215;
 import static ru.aim.anotheryetbashclient.helper.Utils.rethrowWithRuntime;
 
-@SuppressWarnings("unused")
-public class BashBestAction extends BaseAction {
+public class BashNewAction extends BaseAction {
 
-    public static final String TAG = "BashBestAction";
-
-    static final String URL = "http://bash.im/best";
+    static final String ROOT_PAGE = "http://bash.im/";
+    static final String NEXT_PAGE = "http://bash.im/index/%s";
 
     @Override
     public void apply() {
         rethrowWithRuntime(new Block() {
             @Override
             public void apply() throws Exception {
-                HttpGet httpRequest = new HttpGet(URL);
+                LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getContext());
+                Intent intent = new Intent(ActionsAndIntents.REFRESH);
+                int currentPage = 0;
+                String uri;
+                if (getIntent().hasExtra(ActionsAndIntents.CURRENT_PAGE)) {
+                    currentPage = getIntent().getIntExtra(ActionsAndIntents.CURRENT_PAGE, 0);
+                    uri = String.format(NEXT_PAGE, currentPage - 1);
+                } else {
+                    uri = ROOT_PAGE;
+                }
+                HttpGet httpRequest = new HttpGet(uri);
                 HttpResponse httpResponse = getHttpClient().execute(httpRequest);
-                Document document = Jsoup.parse(httpResponse.getEntity().getContent(), UTF_8, URL);
+                Document document = Jsoup.parse(httpResponse.getEntity().getContent(), WINDOWS_1215, uri);
+                if (!getIntent().hasExtra(ActionsAndIntents.CURRENT_PAGE)) {
+                    Elements elements = document.select("input[class=page]");
+                    String page = null;
+                    for (Element e : elements) {
+                        page = e.attr("value");
+                    }
+                    if (!TextUtils.isEmpty(page)) {
+                        assert page != null;
+                        currentPage = Integer.parseInt(page);
+                    }
+                } else {
+                    currentPage -= 1;
+                }
                 Elements quotesElements = document.select("div[class=quote]");
+                ArrayList<String> list = new ArrayList<String>();
                 for (Element e : quotesElements) {
                     Elements idElements = e.select("a[class=id]");
                     Elements dateElements = e.select("span[class=date]");
                     Elements textElements = e.select("div[class=text]");
                     if (!textElements.isEmpty()) {
                         String id = idElements.html();
+                        list.add(id);
                         if (getDbHelper().notExists(id)) {
                             ContentValues values = new ContentValues();
                             values.put(QUOTE_PUBLIC_ID, idElements.html());
@@ -50,8 +76,9 @@ public class BashBestAction extends BaseAction {
                         }
                     }
                 }
-                LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getContext());
-                localBroadcastManager.sendBroadcast(new Intent(ActionsAndIntents.REFRESH));
+                intent.putStringArrayListExtra(ActionsAndIntents.IDS, list);
+                intent.putExtra(ActionsAndIntents.CURRENT_PAGE, currentPage);
+                localBroadcastManager.sendBroadcast(intent);
             }
         });
     }

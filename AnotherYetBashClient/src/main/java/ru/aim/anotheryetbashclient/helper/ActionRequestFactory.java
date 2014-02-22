@@ -3,7 +3,7 @@ package ru.aim.anotheryetbashclient.helper;
 import android.content.Intent;
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.helper.f.Action;
-import ru.aim.anotheryetbashclient.helper.impl.*;
+import ru.aim.anotheryetbashclient.helper.actions.*;
 
 import static ru.aim.anotheryetbashclient.helper.Preconditions.notNull;
 
@@ -44,6 +44,8 @@ public final class ActionRequestFactory {
             case ActionsAndIntents.TYPE_SUX:
                 notNull(quoteId);
                 return new BashRulezAction(BashRulezAction.Type.SUX, quoteId);
+            case ActionsAndIntents.TYPE_SEARCH:
+                return new BashSearchAction();
         }
         throw new AssertionError();
     }

@@ -1,5 +1,7 @@
 package ru.aim.anotheryetbashclient;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.*;
 import android.database.Cursor;
@@ -19,12 +21,13 @@ import ru.aim.anotheryetbashclient.helper.QuoteService;
 import java.util.ArrayList;
 
 import static ru.aim.anotheryetbashclient.ActionsAndIntents.*;
+import static ru.aim.anotheryetbashclient.Package.updateHeader;
 
 public class QuotesFragment extends Fragment implements AdapterView.OnItemLongClickListener {
 
     DbHelper dbHelper;
     ListView listView;
-    private int currentPage;
+    int currentPage;
     BroadcastReceiver refreshQuotesReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -42,14 +45,12 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
             if (intent.hasExtra(ActionsAndIntents.CURRENT_PAGE)) {
                 currentPage = intent.getIntExtra(ActionsAndIntents.CURRENT_PAGE, 0);
             }
-            if (cursor != null) {
-                saveCurrentCursor(cursor);
-            }
+            saveCurrentCursor(cursor);
             listView.setAdapter(new QuotesAdapter(dbHelper, context, cursor));
             getActivity().setProgressBarIndeterminateVisibility(false);
         }
     };
-    private int currentType;
+    int currentType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,6 +77,7 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
 
     public void callRefresh(int currentType) {
         this.currentType = currentType;
+        updateHeader(getActivity(), currentType, currentPage);
         Intent intent = new Intent(getActivity(), QuoteService.class);
         intent.putExtra(TYPE_ID, currentType);
         if (currentPage > 0) {
@@ -91,14 +93,18 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
 
     void saveCurrentCursor(Cursor cursor) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        ArrayList<String> list = new ArrayList<String>();
-        while (cursor.moveToNext()) {
-            list.add(cursor.getString(cursor.getColumnIndex(DbHelper.QUOTE_PUBLIC_ID)));
+        if (cursor == null) {
+            preferences.edit().remove(CURRENT_QUOTES).commit();
+        } else {
+            ArrayList<String> list = new ArrayList<String>();
+            while (cursor.moveToNext()) {
+                list.add(cursor.getString(cursor.getColumnIndex(DbHelper.QUOTE_PUBLIC_ID)));
+            }
+            String bin = ObjectSerializer.serialize(list);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(CURRENT_QUOTES, bin);
+            editor.commit();
         }
-        String bin = ObjectSerializer.serialize(list);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(CURRENT_QUOTES, bin);
-        editor.commit();
     }
 
     boolean isSavedCursorExists() {
@@ -152,8 +158,11 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
         return true;
     }
 
+
+
     static class QuotesAdapter extends CursorAdapter {
 
+        int animatedPosition = -1;
         DbHelper mDbHelper;
 
         public QuotesAdapter(DbHelper dbHelper, Context context, Cursor c) {
@@ -185,6 +194,21 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
             viewHolder.publicId = id;
             viewHolder.innerId = cursor.getLong(cursor.getColumnIndex(DbHelper.QUOTE_ID));
             mDbHelper.markRead(viewHolder.innerId);
+            if (animatedPosition < cursor.getPosition()) {
+                AnimatorSet animatorSet = new AnimatorSet();
+                ObjectAnimator alpha = ObjectAnimator.ofFloat(view, "alpha", 0f, 1f);
+                ObjectAnimator translate = ObjectAnimator.ofFloat(view, "x", -300f, 0f);
+                animatorSet.playTogether(alpha, translate);
+                animatorSet.setDuration(1000);
+                animatorSet.start();
+                animatedPosition = cursor.getPosition();
+            }
+        }
+
+        @Override
+        public void notifyDataSetChanged() {
+            animatedPosition = 0;
+            super.notifyDataSetChanged();
         }
 
         static class ViewHolder {

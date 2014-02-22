@@ -1,12 +1,9 @@
-package ru.aim.anotheryetbashclient.helper.impl;
+package ru.aim.anotheryetbashclient.helper.actions;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.http.AndroidHttpClient;
-import android.support.v4.content.LocalBroadcastManager;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
-import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.R;
 import ru.aim.anotheryetbashclient.helper.ContextAware;
 import ru.aim.anotheryetbashclient.helper.HttpAware;

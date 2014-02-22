@@ -11,6 +11,7 @@ import ru.aim.anotheryetbashclient.helper.f.Action;
 
 import static ru.aim.anotheryetbashclient.helper.ActionRequestFactory.getQuiteRequest;
 import static ru.aim.anotheryetbashclient.helper.Utils.isNetworkAvailable;
+import static ru.aim.anotheryetbashclient.helper.Utils.sendMessageIntent;
 
 @SuppressWarnings("unused")
 public class QuoteService extends IntentService {
@@ -61,7 +62,7 @@ public class QuoteService extends IntentService {
                 action.apply();
             } catch (Exception e) {
                 L.d(TAG, "Error while getting new quotes", e);
-                Utils.sendMessageIntent(this, getString(R.string.updating_fail));
+                sendMessageIntent(this, getString(R.string.updating_fail));
                 localBroadcastManager.sendBroadcast(new Intent(ActionsAndIntents.REFRESH));
             } finally {
                 if (database != null) {
