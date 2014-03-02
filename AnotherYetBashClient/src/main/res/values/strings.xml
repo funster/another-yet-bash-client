@@ -2,8 +2,8 @@
 <resources>
 
     <string name="app_name">Bash.im</string>
-    <string name="app_name_with_type">Bash.im :: %s</string>
-    <string name="app_name_with_type_and_page">Bash.im :: %1$s (%2$s)</string>
+    <string name="app_name_with_type">%s</string>
+    <string name="app_name_with_type_and_page">%1$s (%2$s)</string>
     <string name="action_settings">Settings</string>
     <string name="action_refresh">Refresh</string>
     <string-array name="types">
@@ -26,13 +26,19 @@
         <item>Add to favorites</item>
     </string-array>
 
+    <string-array name="item_menu_favorites">
+        <item>Remove from favorites</item>
+    </string-array>
+
     <string name="rulez_confirm">Вам %1$s понравилась цитата %2$s</string>
     <string name="no">no</string>
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    <string name="updating_fail">Не удалось обновить список цитат.</string>
-    <string name="added_to_favorites">Цитата добавлена в избранное</string>
-    <string name="empty_list">Список пуст</string>
+    <string name="updating_fail">Error occurred while updating</string>
+    <string name="added_to_favorites">Quote added to favorites</string>
+    <string name="empty_list">Empty</string>
+    <string name="search_action">Search</string>
+    <string name="search_hint">Текст или номер цитаты</string>
 
 </resources>

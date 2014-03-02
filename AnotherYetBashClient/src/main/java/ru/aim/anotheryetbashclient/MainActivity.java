@@ -15,10 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.FrameLayout;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.*;
+import ru.aim.anotheryetbashclient.helper.QuoteService;
 import ru.aim.anotheryetbashclient.helper.Utils;
 
 import static ru.aim.anotheryetbashclient.Package.updateHeader;
@@ -97,7 +95,7 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         mTypesListView = (ListView) findViewById(R.id.types);
-        adapter = new MenuItemsAdapter(this, android.R.layout.simple_list_item_activated_1,
+        adapter = new MenuItemsAdapter(this, R.layout.menu_item,
                 getResources().getStringArray(R.array.types));
         mTypesListView.setAdapter(adapter);
         mTypesListView.setOnItemClickListener(this);
@@ -132,12 +130,6 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         if (item.getItemId() == R.id.action_refresh) {
             callRefresh();
@@ -147,6 +139,32 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
             return true;
         }
         return super.onMenuItemSelected(featureId, item);
+    }
+
+    @Override
+    @SuppressWarnings("ConstantConditions")
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+
+        final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setQueryHint(getString(R.string.search_hint));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Intent intent = new Intent(MainActivity.this, QuoteService.class);
+                intent.putExtra(ActionsAndIntents.SEARCH_QUERY, query);
+                intent.putExtra(ActionsAndIntents.TYPE_ID, ActionsAndIntents.TYPE_SEARCH);
+                startService(intent);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        return true;
     }
 
     @Override

@@ -10,9 +10,7 @@ import ru.aim.anotheryetbashclient.helper.f.Block;
 import ru.aim.anotheryetbashclient.helper.f.Function1;
 
 import static ru.aim.anotheryetbashclient.helper.Utils.rethrowWithRuntime;
-import static ru.aim.anotheryetbashclient.helper.actions.Package.ElementWrapper;
-import static ru.aim.anotheryetbashclient.helper.actions.Package.parseDocument;
-import static ru.aim.anotheryetbashclient.helper.actions.Package.storeInDb;
+import static ru.aim.anotheryetbashclient.helper.actions.Package.*;
 
 @SuppressWarnings("unused")
 public class BashBestAction extends BaseAction {
@@ -28,7 +26,8 @@ public class BashBestAction extends BaseAction {
             public void apply() throws Exception {
                 HttpGet httpRequest = new HttpGet(URL);
                 HttpResponse httpResponse = getHttpClient().execute(httpRequest);
-                parseDocument(httpResponse.getEntity().getContent(), URL, new Function1<ElementWrapper, Void>() {
+                String encoding = getCharsetFromResponse(httpResponse);
+                parseDocument(httpResponse.getEntity().getContent(), encoding, new Function1<ElementWrapper, Void>() {
                     @Override
                     public Void apply(ElementWrapper arg0) {
                         storeInDb(getDbHelper(), arg0);

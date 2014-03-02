@@ -4,7 +4,7 @@ import android.util.Log;
 
 public final class L {
 
-    static final boolean DEBUG = true;
+    public static final boolean DEBUG = true;
 
     private L() {
         throw new AssertionError();

@@ -1,10 +1,11 @@
 package ru.aim.anotheryetbashclient.helper;
 
 import android.content.Intent;
-import ru.aim.anotheryetbashclient.ActionsAndIntents;
-import ru.aim.anotheryetbashclient.helper.f.Action;
 import ru.aim.anotheryetbashclient.helper.actions.*;
+import ru.aim.anotheryetbashclient.helper.f.Action;
 
+import static ru.aim.anotheryetbashclient.ActionsAndIntents.*;
+import static ru.aim.anotheryetbashclient.helper.Preconditions.notImplemented;
 import static ru.aim.anotheryetbashclient.helper.Preconditions.notNull;
 
 public final class ActionRequestFactory {
@@ -14,37 +15,36 @@ public final class ActionRequestFactory {
     }
 
     public static Action getQuiteRequest(Intent intent) {
-        int typeId = intent.getIntExtra(ActionsAndIntents.TYPE_ID, 0);
-        String quoteId = intent.getStringExtra(ActionsAndIntents.QUOTE_ID);
+        int typeId = intent.getIntExtra(TYPE_ID, 0);
+        String quoteId = intent.getStringExtra(QUOTE_ID);
         switch (typeId) {
-            case ActionsAndIntents.TYPE_NEW:
+            case TYPE_NEW:
                 return new BashNewAction();
-            case ActionsAndIntents.TYPE_RANDOM:
+            case TYPE_RANDOM:
                 return new BashRandomAction();
-            case ActionsAndIntents.TYPE_BEST:
+            case TYPE_BEST:
                 return new BashBestAction();
-            case ActionsAndIntents.TYPE_BY_RATING:
+            case TYPE_BY_RATING:
                 return new BashByRating();
-            case ActionsAndIntents.TYPE_ABYSS:
-                Preconditions.notImplemented();
+            case TYPE_ABYSS:
+                return new AbyssAction();
+            case TYPE_BEST_ABYSS:
+                notImplemented();
                 break;
-            case ActionsAndIntents.TYPE_BEST_ABYSS:
-                Preconditions.notImplemented();
+            case TYPE_TOP_ABYSS:
+                notImplemented();
                 break;
-            case ActionsAndIntents.TYPE_TOP_ABYSS:
-                Preconditions.notImplemented();
-                break;
-            case ActionsAndIntents.TYPE_OFFLINE:
+            case TYPE_OFFLINE:
                 return new OfflineAction();
-            case ActionsAndIntents.TYPE_FAVORITES:
+            case TYPE_FAVORITES:
                 return new FavoritesAction();
-            case ActionsAndIntents.TYPE_RULEZ:
+            case TYPE_RULEZ:
                 notNull(quoteId);
                 return new BashRulezAction(BashRulezAction.Type.RULEZ, quoteId);
-            case ActionsAndIntents.TYPE_SUX:
+            case TYPE_SUX:
                 notNull(quoteId);
                 return new BashRulezAction(BashRulezAction.Type.SUX, quoteId);
-            case ActionsAndIntents.TYPE_SEARCH:
+            case TYPE_SEARCH:
                 return new BashSearchAction();
         }
         throw new AssertionError();

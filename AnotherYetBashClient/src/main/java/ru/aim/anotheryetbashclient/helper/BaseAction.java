@@ -4,11 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.http.AndroidHttpClient;
-import android.os.Bundle;
 import ru.aim.anotheryetbashclient.helper.f.Action;
 
 @SuppressWarnings("unused")
-public abstract class BaseAction implements HttpAware, SqlDbAware, DbHelperAware, ContextAware, IntentAware, Action {
+public abstract class BaseAction implements HttpAware, DbHelperAware, ContextAware, IntentAware, Action {
 
     private AndroidHttpClient httpClient;
     private SQLiteDatabase db;
@@ -19,11 +18,6 @@ public abstract class BaseAction implements HttpAware, SqlDbAware, DbHelperAware
     @Override
     public final void setHttpClient(AndroidHttpClient httpClient) {
         this.httpClient = httpClient;
-    }
-
-    @Override
-    public final void setSqlDb(SQLiteDatabase db) {
-        this.db = db;
     }
 
     @Override

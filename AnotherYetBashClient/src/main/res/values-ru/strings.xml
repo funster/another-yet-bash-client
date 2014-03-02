@@ -35,5 +35,7 @@
     <string name="updating_fail">Не удалось обновить список цитат.</string>
     <string name="added_to_favorites">Цитата добавлена в избранное</string>
     <string name="empty_list">Список пуст</string>
+    <string name="search_action">Поиск</string>
+    <string name="search_hint">Текст или номер цитаты</string>
 
 </resources>

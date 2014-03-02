@@ -1,6 +1,9 @@
 package ru.aim.anotheryetbashclient.helper.actions;
 
 import android.content.ContentValues;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,28 +25,64 @@ import static ru.aim.anotheryetbashclient.helper.Utils.rethrowWithRuntime;
 @SuppressWarnings("unused")
 final class Package {
 
-    static long OFFLINE_SLEEP = 2000L;
+    static long OFFLINE_SLEEP = 1000L;
 
     private Package() {
         throw new AssertionError();
     }
 
     static void parseDocument(final InputStream is, final String uri, final Function1<ElementWrapper, Void> f) {
+        parseDocument(is, uri, null, f);
+    }
+
+    static void parseDocument(final InputStream is, final String uri,
+                              final Function1<Document, Void> f0,
+                              final Function1<ElementWrapper, Void> f1) {
         rethrowWithRuntime(new Block() {
             @Override
             public void apply() throws Exception {
                 Document document = Jsoup.parse(is, WINDOWS_1215, uri);
-                Elements quotesElements = document.select("div[class=quote]");
-                for (Element e : quotesElements) {
-                    Elements idElements = e.select("a[class=id]");
-                    Elements dateElements = e.select("span[class=date]");
-                    Elements textElements = e.select("div[class=text]");
-                    if (!textElements.isEmpty()) {
-                        f.apply(new ElementWrapper(idElements.html(), dateElements.html(), textElements.html().trim()));
+                if (f0 != null) {
+                    f0.apply(document);
+                }
+                if (f1 != null) {
+                    Elements quotesElements = document.select("div[class=quote]");
+                    for (Element e : quotesElements) {
+                        Elements idElements = e.select("a[class=id]");
+                        Elements dateElements = e.select("span[class=date]");
+                        Elements textElements = e.select("div[class=text]");
+                        if (!textElements.isEmpty()) {
+                            f1.apply(new ElementWrapper(idElements.html(), dateElements.html(), textElements.html().trim()));
+                        }
                     }
                 }
             }
         });
+    }
+
+    static void parseDocument(final HttpClient httpClient, final String uri, final Function1<Document, Void> f0,
+                              final Function1<ElementWrapper, Void> f1) {
+        rethrowWithRuntime(new Block() {
+            @Override
+            public void apply() throws Exception {
+                HttpGet httpGet = new HttpGet(uri);
+                HttpResponse httpResponse = httpClient.execute(httpGet);
+                parseDocument(httpResponse.getEntity().getContent(), uri, f0, f1);
+            }
+        });
+    }
+
+    static String getCharsetFromResponse(HttpResponse httpResponse) {
+        return httpResponse.getEntity().getContentType().getValue().split("=")[1];
+    }
+
+    static String findMore(Document document) {
+        Elements refs = document.select("#body > div.quote.more > a");
+        if (refs.size() > 0) {
+            return refs.get(0).attr("href");
+        } else {
+            throw new AssertionError();
+        }
     }
 
     static void storeInDb(DbHelper dbHelper, ElementWrapper elementWrapper) {

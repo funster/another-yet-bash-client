@@ -28,6 +28,7 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
     DbHelper dbHelper;
     ListView listView;
     int currentPage;
+    String nextPage;
     BroadcastReceiver refreshQuotesReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -45,6 +46,11 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
             if (intent.hasExtra(ActionsAndIntents.CURRENT_PAGE)) {
                 currentPage = intent.getIntExtra(ActionsAndIntents.CURRENT_PAGE, 0);
             }
+            if (intent.hasExtra(ActionsAndIntents.NEXT_PAGE)) {
+                nextPage = intent.getStringExtra(ActionsAndIntents.NEXT_PAGE);
+            } else {
+                nextPage = null;
+            }
             saveCurrentCursor(cursor);
             listView.setAdapter(new QuotesAdapter(dbHelper, context, cursor));
             getActivity().setProgressBarIndeterminateVisibility(false);
@@ -56,6 +62,7 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             currentPage = savedInstanceState.getInt(ActionsAndIntents.CURRENT_PAGE);
+            nextPage = savedInstanceState.getString(ActionsAndIntents.NEXT_PAGE);
         }
         View result = inflater.inflate(R.layout.fragment_list, null);
         assert result != null;
@@ -82,6 +89,9 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
         intent.putExtra(TYPE_ID, currentType);
         if (currentPage > 0) {
             intent.putExtra(ActionsAndIntents.CURRENT_PAGE, currentPage);
+        }
+        if (nextPage != null) {
+            intent.putExtra(ActionsAndIntents.NEXT_PAGE, nextPage);
         }
         getActivity().startService(intent);
         getActivity().setProgressBarIndeterminateVisibility(true);
@@ -129,7 +139,12 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(ActionsAndIntents.CURRENT_PAGE, currentPage);
+        if (currentPage > 0) {
+            outState.putInt(ActionsAndIntents.CURRENT_PAGE, currentPage);
+        }
+        if (nextPage != null) {
+            outState.putString(ActionsAndIntents.NEXT_PAGE, nextPage);
+        }
     }
 
     @Override
@@ -157,8 +172,6 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
         builder.show();
         return true;
     }
-
-
 
     static class QuotesAdapter extends CursorAdapter {
 
@@ -207,7 +220,7 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
 
         @Override
         public void notifyDataSetChanged() {
-            animatedPosition = 0;
+            animatedPosition = -1;
             super.notifyDataSetChanged();
         }
 
