@@ -23,10 +23,8 @@ import org.apache.http.client.methods.HttpGet;
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.helper.f.Block;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.URLEncoder;
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -369,5 +367,21 @@ public final class Utils {
         bitmap.setPixels(pix, 0, w, 0, 0, w, h);
 
         return (bitmap);
+    }
+
+    public static String encode(String encode, String encoding) {
+        try {
+            return URLEncoder.encode(encode, encoding);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String encode(String encode) {
+        try {
+            return URLEncoder.encode(encode, Utils.WINDOWS_1215);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -10,7 +10,6 @@ import ru.aim.anotheryetbashclient.helper.f.Action;
 public abstract class BaseAction implements HttpAware, DbHelperAware, ContextAware, IntentAware, Action {
 
     private AndroidHttpClient httpClient;
-    private SQLiteDatabase db;
     private DbHelper dbHelper;
     private Context context;
     private Intent intent;
@@ -37,10 +36,6 @@ public abstract class BaseAction implements HttpAware, DbHelperAware, ContextAwa
 
     public AndroidHttpClient getHttpClient() {
         return httpClient;
-    }
-
-    public SQLiteDatabase getDb() {
-        return db;
     }
 
     public DbHelper getDbHelper() {
