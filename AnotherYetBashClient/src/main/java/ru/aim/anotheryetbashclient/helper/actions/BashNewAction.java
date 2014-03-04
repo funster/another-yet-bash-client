@@ -18,13 +18,14 @@ import ru.aim.anotheryetbashclient.helper.f.Block;
 import java.util.ArrayList;
 
 import static ru.aim.anotheryetbashclient.helper.DbHelper.QUOTE_PUBLIC_ID;
-import static ru.aim.anotheryetbashclient.helper.Utils.WINDOWS_1215;
+import static ru.aim.anotheryetbashclient.helper.Utils.WINDOWS_1251;
 import static ru.aim.anotheryetbashclient.helper.Utils.rethrowWithRuntime;
+import static ru.aim.anotheryetbashclient.helper.actions.Package.wrapWithRoot;
 
 public class BashNewAction extends BaseAction {
 
-    static final String ROOT_PAGE = "http://bash.im/";
-    static final String NEXT_PAGE = "http://bash.im/index/%s";
+    static final String ROOT_PAGE = wrapWithRoot("");
+    static final String NEXT_PAGE = wrapWithRoot("index/%s");
 
     @Override
     public void apply() {
@@ -43,7 +44,7 @@ public class BashNewAction extends BaseAction {
                 }
                 HttpGet httpRequest = new HttpGet(uri);
                 HttpResponse httpResponse = getHttpClient().execute(httpRequest);
-                Document document = Jsoup.parse(httpResponse.getEntity().getContent(), WINDOWS_1215, uri);
+                Document document = Jsoup.parse(httpResponse.getEntity().getContent(), WINDOWS_1251, uri);
                 if (!getIntent().hasExtra(ActionsAndIntents.CURRENT_PAGE)) {
                     Elements elements = document.select("input[class=page]");
                     String page = null;

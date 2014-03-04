@@ -1,19 +1,19 @@
 package ru.aim.anotheryetbashclient;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
-import android.content.*;
-import android.database.Cursor;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.helper.ObjectSerializer;
 import ru.aim.anotheryetbashclient.helper.QuoteService;
@@ -29,40 +29,16 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
     ListView listView;
     int currentPage;
     String nextPage;
-    BroadcastReceiver refreshQuotesReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Cursor cursor = null;
-            if (intent.hasExtra(ActionsAndIntents.IDS)) {
-                ArrayList<String> list = intent.getStringArrayListExtra(ActionsAndIntents.IDS);
-                assert list != null;
-                if (!list.isEmpty()) {
-                    String[] arr = list.toArray(new String[list.size()]);
-                    cursor = dbHelper.getQuotes(arr);
-                }
-            } else {
-                cursor = dbHelper.getUnread();
-            }
-            if (intent.hasExtra(ActionsAndIntents.CURRENT_PAGE)) {
-                currentPage = intent.getIntExtra(ActionsAndIntents.CURRENT_PAGE, 0);
-            }
-            if (intent.hasExtra(ActionsAndIntents.NEXT_PAGE)) {
-                nextPage = intent.getStringExtra(ActionsAndIntents.NEXT_PAGE);
-            } else {
-                nextPage = null;
-            }
-            saveCurrentCursor(cursor);
-            listView.setAdapter(new QuotesAdapter(dbHelper, context, cursor));
-            getActivity().setProgressBarIndeterminateVisibility(false);
-        }
-    };
     int currentType;
+    boolean abyss;
+    RefreshBroadcastReceiver refreshReceiver;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             currentPage = savedInstanceState.getInt(ActionsAndIntents.CURRENT_PAGE);
             nextPage = savedInstanceState.getString(ActionsAndIntents.NEXT_PAGE);
+            abyss = true;
         }
         View result = inflater.inflate(R.layout.fragment_list, null);
         assert result != null;
@@ -70,14 +46,19 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
         listView.setEmptyView(result.findViewById(android.R.id.text1));
         listView.setOnItemLongClickListener(this);
         dbHelper = new DbHelper(getActivity());
-        if (isSavedCursorExists()) {
+        if (isSavedCursorNotExists()) {
             callRefresh(currentType);
         } else {
-            listView.setAdapter(new QuotesAdapter(dbHelper, getActivity(), dbHelper.getQuotes(getSavedCursor())));
+            if (abyss) {
+                listView.setAdapter(new QuotesAdapter(dbHelper, getActivity(), dbHelper.getAbyss()));
+            } else {
+                listView.setAdapter(new QuotesAdapter(dbHelper, getActivity(), dbHelper.getQuotes(getSavedCursor())));
+            }
         }
+        refreshReceiver = new RefreshBroadcastReceiver(this);
         IntentFilter intentFilter = new IntentFilter(ActionsAndIntents.REFRESH);
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getActivity());
-        localBroadcastManager.registerReceiver(refreshQuotesReceiver, intentFilter);
+        localBroadcastManager.registerReceiver(refreshReceiver, intentFilter);
 
         return result;
     }
@@ -101,23 +82,7 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
         this.currentType = currentType;
     }
 
-    void saveCurrentCursor(Cursor cursor) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        if (cursor == null) {
-            preferences.edit().remove(CURRENT_QUOTES).commit();
-        } else {
-            ArrayList<String> list = new ArrayList<String>();
-            while (cursor.moveToNext()) {
-                list.add(cursor.getString(cursor.getColumnIndex(DbHelper.QUOTE_PUBLIC_ID)));
-            }
-            String bin = ObjectSerializer.serialize(list);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString(CURRENT_QUOTES, bin);
-            editor.commit();
-        }
-    }
-
-    boolean isSavedCursorExists() {
+    boolean isSavedCursorNotExists() {
         return PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(CURRENT_QUOTES, null) == null;
     }
 
@@ -132,13 +97,16 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
     public void onDestroyView() {
         dbHelper.close();
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getActivity());
-        localBroadcastManager.unregisterReceiver(refreshQuotesReceiver);
+        localBroadcastManager.unregisterReceiver(refreshReceiver);
         super.onDestroyView();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        if (abyss) {
+            outState.putBoolean(ActionsAndIntents.ABYSS, abyss);
+        }
         if (currentPage > 0) {
             outState.putInt(ActionsAndIntents.CURRENT_PAGE, currentPage);
         }
@@ -171,65 +139,5 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
         });
         builder.show();
         return true;
-    }
-
-    static class QuotesAdapter extends CursorAdapter {
-
-        int animatedPosition = -1;
-        DbHelper mDbHelper;
-
-        public QuotesAdapter(DbHelper dbHelper, Context context, Cursor c) {
-            super(context, c, true);
-            this.mDbHelper = dbHelper;
-        }
-
-        @Override
-        public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
-            View view = LayoutInflater.from(context).inflate(R.layout.list_item, viewGroup, false);
-            ViewHolder viewHolder = new ViewHolder();
-            assert view != null;
-            viewHolder.date = (TextView) view.findViewById(android.R.id.text1);
-            viewHolder.id = (TextView) view.findViewById(android.R.id.text2);
-            viewHolder.text = (TextView) view.findViewById(R.id.text);
-            view.setTag(viewHolder);
-            return view;
-        }
-
-        @Override
-        public void bindView(View view, Context context, Cursor cursor) {
-            ViewHolder viewHolder = (ViewHolder) view.getTag();
-            String id = cursor.getString(cursor.getColumnIndex(DbHelper.QUOTE_PUBLIC_ID));
-            String date = cursor.getString(cursor.getColumnIndex(DbHelper.QUOTE_DATE));
-            String text = cursor.getString(cursor.getColumnIndex(DbHelper.QUOTE_TEXT));
-            viewHolder.date.setText(date);
-            viewHolder.id.setText(id);
-            viewHolder.text.setText(Html.fromHtml(text));
-            viewHolder.publicId = id;
-            viewHolder.innerId = cursor.getLong(cursor.getColumnIndex(DbHelper.QUOTE_ID));
-            mDbHelper.markRead(viewHolder.innerId);
-            if (animatedPosition < cursor.getPosition()) {
-                AnimatorSet animatorSet = new AnimatorSet();
-                ObjectAnimator alpha = ObjectAnimator.ofFloat(view, "alpha", 0f, 1f);
-                ObjectAnimator translate = ObjectAnimator.ofFloat(view, "x", -300f, 0f);
-                animatorSet.playTogether(alpha, translate);
-                animatorSet.setDuration(1000);
-                animatorSet.start();
-                animatedPosition = cursor.getPosition();
-            }
-        }
-
-        @Override
-        public void notifyDataSetChanged() {
-            animatedPosition = -1;
-            super.notifyDataSetChanged();
-        }
-
-        static class ViewHolder {
-            TextView date;
-            TextView id;
-            TextView text;
-            String publicId;
-            long innerId;
-        }
     }
 }

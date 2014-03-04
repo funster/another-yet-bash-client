@@ -31,7 +31,7 @@ import java.util.List;
 public final class Utils {
 
     public static final String UTF_8 = "UTF-8";
-    public static final String WINDOWS_1215 = "windows-1251";
+    public static final String WINDOWS_1251 = "windows-1251";
     static final String TAG = "Utils";
 
     private Utils() {
@@ -378,10 +378,6 @@ public final class Utils {
     }
 
     public static String encode(String encode) {
-        try {
-            return URLEncoder.encode(encode, Utils.WINDOWS_1215);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        return encode(encode, WINDOWS_1251);
     }
 }

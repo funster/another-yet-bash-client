@@ -24,6 +24,8 @@ public class ActionsAndIntents {
     public static final String CURRENT_PAGE = "CURRENT_PAGE";
     public static final String SEARCH_QUERY = "SEARCH_QUERY";
     public static final String NEXT_PAGE = "NEXT_PAGE";
+    public static final String ABYSS = "ABYSS";
+    public static final String DATE = "DATE";
 
 
     /**

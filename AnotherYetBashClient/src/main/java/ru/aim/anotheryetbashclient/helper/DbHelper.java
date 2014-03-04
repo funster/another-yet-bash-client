@@ -13,6 +13,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "quote_db";
     public static final String QUOTE_TABLE = "quotes";
+    public static final String QUOTE_ABYSS_TABLE = "quotes_abyss";
     public static final String QUOTE_ID = "_id";
     public static final String QUOTE_PUBLIC_ID = "quote_public_id";
     public static final String QUOTE_DATE = "quote_date";
@@ -41,6 +42,11 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE " + QUOTE_TABLE +
+                " (" + QUOTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                QUOTE_PUBLIC_ID + " TEXT, " + QUOTE_DATE + " TEXT, " +
+                QUOTE_IS_NEW + " INTEGER, " + QUOTE_IS_FAVORITE + " INTEGER," +
+                QUOTE_TEXT + " TEXT)");
+        sqLiteDatabase.execSQL("CREATE TABLE " + QUOTE_ABYSS_TABLE +
                 " (" + QUOTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 QUOTE_PUBLIC_ID + " TEXT, " + QUOTE_DATE + " TEXT, " +
                 QUOTE_IS_NEW + " INTEGER, " + QUOTE_IS_FAVORITE + " INTEGER," +
@@ -170,5 +176,23 @@ public class DbHelper extends SQLiteOpenHelper {
         String sql = "select * from " + QUOTE_TABLE + " where " + QUOTE_PUBLIC_ID + " in (" +
                 makePlaceholders(quotes.length) + ")";
         return db.rawQuery(sql, quotes);
+    }
+
+    public void clearAbyss() {
+        SQLiteDatabase db = getWritableDatabase();
+        assert db != null;
+        db.delete(QUOTE_ABYSS_TABLE, null, null);
+    }
+
+    public Cursor getAbyss() {
+        SQLiteDatabase db = getReadableDatabase();
+        assert db != null;
+        return db.query(QUOTE_ABYSS_TABLE, null, null, null, null, null, null);
+    }
+
+    public void addNewQuoteAbyss(ContentValues values) {
+        SQLiteDatabase db = getWritableDatabase();
+        assert db != null;
+        db.insert(QUOTE_ABYSS_TABLE, null, values);
     }
 }

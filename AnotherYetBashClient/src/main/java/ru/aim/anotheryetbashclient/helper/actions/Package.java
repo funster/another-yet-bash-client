@@ -10,6 +10,8 @@ import org.jsoup.select.Elements;
 @SuppressWarnings("unused")
 final class Package {
 
+    static String ROOT_URL = "http://bash.im";
+    static String WITH_SLASH = ROOT_URL + "/";
     static long OFFLINE_SLEEP = 1000L;
 
     private Package() {
@@ -27,5 +29,13 @@ final class Package {
         } else {
             throw new AssertionError();
         }
+    }
+
+    static String wrapWithRoot(String url) {
+        return WITH_SLASH + url;
+    }
+
+    static String wrapWithRootWithoutSlash(String url) {
+        return ROOT_URL + url;
     }
 }

@@ -3,13 +3,14 @@ package ru.aim.anotheryetbashclient.helper.actions;
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 
 import static ru.aim.anotheryetbashclient.helper.Utils.encode;
+import static ru.aim.anotheryetbashclient.helper.actions.Package.wrapWithRoot;
 
 /**
  *
  */
 public class BashSearchAction extends AbstractAction {
 
-    static final String URL = "http://bash.im/index?text=%s";
+    static final String URL = wrapWithRoot("index?text=%s");
 
     String url;
 

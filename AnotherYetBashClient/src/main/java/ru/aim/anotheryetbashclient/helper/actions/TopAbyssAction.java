@@ -2,12 +2,12 @@ package ru.aim.anotheryetbashclient.helper.actions;
 
 import static ru.aim.anotheryetbashclient.helper.actions.Package.wrapWithRoot;
 
-@SuppressWarnings("unused")
-public class BashBestAction extends AbstractAction {
+/**
+ *
+ */
+public class TopAbyssAction extends AbstractAbyssAction {
 
-    public static final String TAG = "BashBestAction";
-
-    static final String URL = wrapWithRoot("best");
+    static final String URL = wrapWithRoot("abysstop");
 
     @Override
     protected String getUrl() {

@@ -4,10 +4,13 @@ import android.content.Intent;
 import org.jsoup.nodes.Document;
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 
+import static ru.aim.anotheryetbashclient.helper.actions.Package.wrapWithRoot;
+import static ru.aim.anotheryetbashclient.helper.actions.Package.wrapWithRootWithoutSlash;
+
 public class BashRandomAction extends AbstractAction {
 
-    static final String URL = "http://bash.im/random";
-    static final String MORE_URL = "http://bash.im%s";
+    static final String URL = wrapWithRoot("random");
+    static final String MORE_URL = wrapWithRootWithoutSlash("%s");
 
     String more;
 

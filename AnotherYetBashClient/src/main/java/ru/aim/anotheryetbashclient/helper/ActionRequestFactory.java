@@ -5,7 +5,6 @@ import ru.aim.anotheryetbashclient.helper.actions.*;
 import ru.aim.anotheryetbashclient.helper.f.Action;
 
 import static ru.aim.anotheryetbashclient.ActionsAndIntents.*;
-import static ru.aim.anotheryetbashclient.helper.Preconditions.notImplemented;
 import static ru.aim.anotheryetbashclient.helper.Preconditions.notNull;
 
 public final class ActionRequestFactory {
@@ -29,11 +28,9 @@ public final class ActionRequestFactory {
             case TYPE_ABYSS:
                 return new AbyssAction();
             case TYPE_BEST_ABYSS:
-                notImplemented();
-                break;
+                return new TopAbyssAction();
             case TYPE_TOP_ABYSS:
-                notImplemented();
-                break;
+                return new BestAbyssAction();
             case TYPE_OFFLINE:
                 return new OfflineAction();
             case TYPE_FAVORITES:

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import static ru.aim.anotheryetbashclient.helper.DbHelper.QUOTE_PUBLIC_ID;
 import static ru.aim.anotheryetbashclient.helper.Utils.rethrowWithRuntime;
+import static ru.aim.anotheryetbashclient.helper.actions.Package.getCharsetFromResponse;
 
 /**
  *
@@ -37,7 +38,7 @@ abstract class AbstractAction extends BaseAction {
                 Intent intent = new Intent(ActionsAndIntents.REFRESH);
                 HttpUriRequest httpRequest = getHttpRequest();
                 HttpResponse httpResponse = getHttpClient().execute(httpRequest);
-                String encoding = Package.getCharsetFromResponse(httpResponse);
+                String encoding = getCharsetFromResponse(httpResponse);
                 Document document = Jsoup.parse(httpResponse.getEntity().getContent(), encoding, getUrl());
                 beforeParsing(document);
                 Elements quotesElements = document.select("div[class=quote]");
@@ -61,9 +62,13 @@ abstract class AbstractAction extends BaseAction {
                 values.put(DbHelper.QUOTE_IS_NEW, 1);
                 values.put(DbHelper.QUOTE_TEXT, textElements.html().trim());
                 ids.add(idElements.html());
-                getDbHelper().addNewQuote(values);
+                saveQuote(values);
             }
         }
+    }
+
+    protected void saveQuote(ContentValues values) {
+        getDbHelper().addNewQuote(values);
     }
 
     protected abstract String getUrl();

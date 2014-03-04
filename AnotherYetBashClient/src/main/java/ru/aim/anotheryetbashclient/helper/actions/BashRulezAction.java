@@ -17,11 +17,12 @@ import ru.aim.anotheryetbashclient.helper.multipart.StringPart;
 
 import static ru.aim.anotheryetbashclient.helper.Preconditions.notNull;
 import static ru.aim.anotheryetbashclient.helper.Utils.*;
+import static ru.aim.anotheryetbashclient.helper.actions.Package.wrapWithRoot;
 
 public class BashRulezAction implements HttpAware, ContextAware, Action {
 
     public static final String TAG = "BashRulezAction";
-    public static final String REQUEST = "http://bash.im/quote/%s/%s";
+    public static final String REQUEST = wrapWithRoot("quote/%s/%s");
 
     final Type type;
     final String quoteId;
