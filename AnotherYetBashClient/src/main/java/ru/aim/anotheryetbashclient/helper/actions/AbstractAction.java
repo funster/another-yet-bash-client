@@ -46,8 +46,14 @@ abstract class AbstractAction extends BaseAction {
                     onEachElement(e);
                 }
                 afterParsing(intent);
+                sendIntent(intent);
             }
         });
+    }
+
+    protected void sendIntent(Intent intent) {
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getContext());
+        localBroadcastManager.sendBroadcast(intent);
     }
 
     protected void onEachElement(Element e) {
@@ -78,8 +84,6 @@ abstract class AbstractAction extends BaseAction {
 
     protected void afterParsing(Intent intent) {
         intent.putExtra(ActionsAndIntents.IDS, ids);
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getContext());
-        localBroadcastManager.sendBroadcast(intent);
     }
 
     protected HttpUriRequest getHttpRequest() {
