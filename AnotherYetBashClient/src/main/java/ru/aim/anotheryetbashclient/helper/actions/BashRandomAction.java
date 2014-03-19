@@ -4,6 +4,7 @@ import android.content.Intent;
 import org.jsoup.nodes.Document;
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 
+import static ru.aim.anotheryetbashclient.helper.actions.Package.findMore;
 import static ru.aim.anotheryetbashclient.helper.actions.Package.wrapWithRoot;
 import static ru.aim.anotheryetbashclient.helper.actions.Package.wrapWithRootWithoutSlash;
 
@@ -28,7 +29,7 @@ public class BashRandomAction extends AbstractAction {
     @Override
     protected void beforeParsing(Document document) {
         super.beforeParsing(document);
-        more = Package.findMore(document);
+        more = findMore(document);
     }
 
     @Override

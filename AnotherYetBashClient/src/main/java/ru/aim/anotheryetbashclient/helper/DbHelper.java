@@ -6,8 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.Random;
-
 @SuppressWarnings("unused")
 public class DbHelper extends SQLiteOpenHelper {
 
@@ -86,68 +84,15 @@ public class DbHelper extends SQLiteOpenHelper {
     public Cursor getUnread() {
         SQLiteDatabase database = getReadableDatabase();
         assert database != null;
-        Cursor cursor = database.rawQuery("select * from " + QUOTE_TABLE + " where " + QUOTE_IS_NEW + " = ? limit 10", new String[]{"1"});
+        String offlineMessagesLimit = Integer.toString(10);
+        Cursor cursor = database.rawQuery("select * from " + QUOTE_TABLE + " where " + QUOTE_IS_NEW + " = ? " +
+                "limit " + offlineMessagesLimit, new String[]{"1"});
         if (cursor.getCount() < 10) {
-            // todo: if we have no unread quotes then we need return old stuff
-            if (cursor.getCount() > 0) {
-                long[] arr = new long[cursor.getCount()];
-                int counter = 0;
-                while (cursor.moveToNext()) {
-                    arr[counter] = cursor.getLong(cursor.getColumnIndex(QUOTE_ID));
-                }
-                cursor.close();
-                StringBuilder sb = new StringBuilder("(");
-                for (int i = 0; i < arr.length; i++) {
-                    sb.append(Long.toString(arr[i]));
-                    if (i + 1 != arr.length) {
-                        sb.append(",");
-                    }
-                }
-                sb.append(")");
-                Cursor cursor1 = database.rawQuery("select _id from " + QUOTE_TABLE + " where _id not in " + sb.toString(), null);
-                long[] tmpArr = new long[cursor1.getCount()];
-                for (int i = 0; i < tmpArr.length; i++) {
-                    tmpArr[i] = cursor1.getLong(cursor1.getColumnIndex(QUOTE_ID));
-                }
-                cursor1.close();
-                long[] result = new long[10];
-                counter = 0;
-                for (int i = 0; i < arr.length; i++) {
-                    result[i] = arr[i];
-                    counter++;
-                }
-                Random random = new Random();
-                int justForCheck = 0;
-                while (counter != result.length) {
-                    long tmpId = tmpArr[random.nextInt(tmpArr.length)];
-                    if (!Utils.contains(result, tmpId)) {
-                        result[counter] = tmpId;
-                        counter++;
-                    }
-                    justForCheck++;
-                    if (justForCheck == counter + 20) {
-                        // if something bad happened
-                        // we will spinning only 20+ times
-                        break;
-                    }
-                }
-                sb.delete(1, sb.length());
-                for (int i = 0; i < result.length; i++) {
-                    sb.append(Long.toString(result[i]));
-                    if (i + 1 != result.length) {
-                        sb.append(",");
-                    }
-                }
-                sb.append(")");
-                //noinspection UnnecessaryLocalVariable
-                Cursor resultCursor = database.rawQuery("select * from " + QUOTE_TABLE + " where _id in " + sb.toString(), null);
-                return resultCursor;
-            } else {
-            }
-            return cursor;
-        } else {
-            return cursor;
+            cursor.close();
+            cursor = database.rawQuery("select * from " + QUOTE_TABLE + " where " + QUOTE_IS_NEW + " = ? " +
+                    "order by random() limit " + offlineMessagesLimit, new String[]{"1"});
         }
+        return cursor;
     }
 
     public boolean exists(String id) {
