@@ -16,6 +16,7 @@ if "%DIRNAME%" == "" set DIRNAME=.
 set APP_BASE_NAME=%~n0
 set APP_HOME=%DIRNAME%..
 set GRADLE_HOME=G:\java\gradle-1.11
+@rem set GRADLE_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005
 
 @rem Find java.exe
 if defined JAVA_HOME goto findJavaFromJavaHome
