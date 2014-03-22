@@ -6,19 +6,30 @@ buildscript {
         classpath 'com.android.tools.build:gradle:0.9.+'
     }
 }
+
 apply plugin: 'android'
 
 dependencies {
     compile files('libs/android-support-v4.jar')
     compile files('libs/jsoup-1.7.2.jar')
+    'com.github.castorflex.smoothprogressbar:library:0.2.0'
 }
 
 android {
-    compileSdkVersion 17
-    buildToolsVersion "17.0.0"
+    compileSdkVersion 19
+    buildToolsVersion "19.0.3"
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 18
+        minSdkVersion 17
+        targetSdkVersion 19
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    lintOptions {
+        abortOnError false
     }
 }

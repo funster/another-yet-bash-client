@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="app_name">Bash.im</string>
+    <string name="app_name_with_type">%s</string>
+    <string name="app_name_with_type_and_page">%1$s (%2$s)</string>
     <string name="action_settings">Настройки</string>
     <string name="action_refresh">Обновить</string>
     <string-array name="types">
@@ -37,5 +40,7 @@
     <string name="empty_list">Список пуст</string>
     <string name="search_action">Поиск</string>
     <string name="search_hint">Текст или номер цитаты</string>
+    <string name="title_activity_settings">Настройки</string>
+    <string name="pref_header_general">Общие</string>
 
 </resources>
