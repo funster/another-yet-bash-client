@@ -12,12 +12,12 @@ apply plugin: 'android'
 dependencies {
     compile files('libs/android-support-v4.jar')
     compile files('libs/jsoup-1.7.2.jar')
-    'com.github.castorflex.smoothprogressbar:library:0.2.0'
+    compile 'com.github.castorflex.smoothprogressbar:library:0.2.0'
 }
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.0.3"
+    buildToolsVersion '19.0.3'
 
     defaultConfig {
         minSdkVersion 17
