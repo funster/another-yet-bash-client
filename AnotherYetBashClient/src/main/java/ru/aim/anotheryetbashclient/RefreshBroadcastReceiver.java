@@ -53,7 +53,7 @@ class RefreshBroadcastReceiver extends BroadcastReceiver {
         }
         saveCurrentCursor(intent, cursor);
         fragment.listView.setAdapter(new QuotesAdapter(fragment.dbHelper, context, cursor));
-        fragment.getActivity().setProgressBarIndeterminateVisibility(false);
+        fragment.setUpdate(false);
     }
 
     void saveCurrentCursor(Intent intent, Cursor cursor) {

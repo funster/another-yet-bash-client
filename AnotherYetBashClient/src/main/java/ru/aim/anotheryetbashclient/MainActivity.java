@@ -16,8 +16,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.*;
+import ru.aim.anotheryetbashclient.helper.L;
 import ru.aim.anotheryetbashclient.helper.QuoteService;
 import ru.aim.anotheryetbashclient.helper.Utils;
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 
 import static ru.aim.anotheryetbashclient.Package.updateHeader;
 import static ru.aim.anotheryetbashclient.SettingsHelper.loadType;
@@ -54,7 +57,7 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        L.setIsDebug(this);
 
         currentTypeId = loadType(this);
         updateHeader(this, currentTypeId);
@@ -171,10 +174,15 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (position != currentTypeId) {
             currentTypeId = position;
-            saveType(this, currentTypeId);
             callRefresh();
         }
         mDrawerLayout.closeDrawers();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveType(this, currentTypeId);
     }
 
     @Override

@@ -17,16 +17,20 @@ import android.widget.Toast;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.helper.ObjectSerializer;
 import ru.aim.anotheryetbashclient.helper.QuoteService;
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 import java.util.ArrayList;
 
 import static ru.aim.anotheryetbashclient.ActionsAndIntents.*;
 import static ru.aim.anotheryetbashclient.Package.updateHeader;
 
-public class QuotesFragment extends Fragment implements AdapterView.OnItemLongClickListener {
+public class QuotesFragment extends Fragment implements AdapterView.OnItemLongClickListener, OnRefreshListener {
 
     DbHelper dbHelper;
     ListView listView;
+    PullToRefreshLayout mPullToRefreshLayout;
     int currentPage;
     String nextPage;
     int currentType;
@@ -45,7 +49,21 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
         listView = (ListView) result.findViewById(android.R.id.list);
         listView.setEmptyView(result.findViewById(android.R.id.text1));
         listView.setOnItemLongClickListener(this);
+
+        // As we're using a ListFragment we create a PullToRefreshLayout manually
+        mPullToRefreshLayout = new PullToRefreshLayout(getActivity());
+
+        // We can now setup the PullToRefreshLayout
+        ActionBarPullToRefresh.from(getActivity())
+                // We need to insert the PullToRefreshLayout into the Fragment's ViewGroup
+                .insertLayoutInto((ViewGroup) result)
+                        // Here we mark just the ListView and it's Empty View as pullable
+                .theseChildrenArePullable(android.R.id.list, android.R.id.empty)
+                .listener(this)
+                .setup(mPullToRefreshLayout);
+
         dbHelper = new DbHelper(getActivity());
+
         if (isSavedCursorNotExists()) {
             callRefresh(currentType);
         } else {
@@ -75,7 +93,11 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
             intent.putExtra(ActionsAndIntents.NEXT_PAGE, nextPage);
         }
         getActivity().startService(intent);
-        getActivity().setProgressBarIndeterminateVisibility(true);
+        setUpdate(true);
+    }
+
+    void setUpdate(boolean value) {
+        mPullToRefreshLayout.setRefreshing(value);
     }
 
     public void setCurrentType(int currentType) {
@@ -139,5 +161,10 @@ public class QuotesFragment extends Fragment implements AdapterView.OnItemLongCl
         });
         builder.show();
         return true;
+    }
+
+    @Override
+    public void onRefreshStarted(View view) {
+        callRefresh(currentType);
     }
 }
