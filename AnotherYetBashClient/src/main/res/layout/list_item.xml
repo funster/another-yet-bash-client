@@ -12,13 +12,24 @@
             android:layout_height="wrap_content">
 
         <TextView
-                android:layout_weight="1"
                 android:gravity="left"
                 android:id="@android:id/text2"
                 android:textAppearance="@style/listItemSubtitle"
                 android:text="@string/app_name"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+
+        <TextView
+                android:layout_weight="1"
+                android:gravity="left"
+                android:id="@+id/newQuote"
+                android:paddingLeft="4dp"
+                android:textAppearance="@style/listItemNew"
+                android:text="@string/new_quote"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold|italic"/>
+
 
         <TextView
                 android:gravity="right"

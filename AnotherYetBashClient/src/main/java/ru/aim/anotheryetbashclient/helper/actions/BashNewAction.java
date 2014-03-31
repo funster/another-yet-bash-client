@@ -35,10 +35,11 @@ public class BashNewAction extends BaseAction {
                 LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getContext());
                 Intent intent = new Intent(ActionsAndIntents.REFRESH);
                 int currentPage = 0;
+                int maxPage = 0;
                 String uri;
                 if (getIntent().hasExtra(ActionsAndIntents.CURRENT_PAGE)) {
                     currentPage = getIntent().getIntExtra(ActionsAndIntents.CURRENT_PAGE, 0);
-                    uri = String.format(NEXT_PAGE, currentPage - 1);
+                    uri = String.format(NEXT_PAGE, currentPage);
                 } else {
                     uri = ROOT_PAGE;
                 }
@@ -54,9 +55,8 @@ public class BashNewAction extends BaseAction {
                     if (!TextUtils.isEmpty(page)) {
                         assert page != null;
                         currentPage = Integer.parseInt(page);
+                        maxPage = currentPage;
                     }
-                } else {
-                    currentPage -= 1;
                 }
                 Elements quotesElements = document.select("div[class=quote]");
                 ArrayList<String> list = new ArrayList<String>();
@@ -79,6 +79,9 @@ public class BashNewAction extends BaseAction {
                 }
                 intent.putStringArrayListExtra(ActionsAndIntents.IDS, list);
                 intent.putExtra(ActionsAndIntents.CURRENT_PAGE, currentPage);
+                if (maxPage != 0) {
+                    intent.putExtra(ActionsAndIntents.MAX_PAGE, maxPage);
+                }
                 localBroadcastManager.sendBroadcast(intent);
             }
         });

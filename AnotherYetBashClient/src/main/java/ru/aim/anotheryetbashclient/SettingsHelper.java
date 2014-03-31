@@ -7,7 +7,7 @@ import android.preference.PreferenceManager;
 /**
  *
  */
-class SettingsHelper {
+public class SettingsHelper {
 
     public static final String TYPE_ID = "typeId";
 

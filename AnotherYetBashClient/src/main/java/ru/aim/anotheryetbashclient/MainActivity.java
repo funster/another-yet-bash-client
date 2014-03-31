@@ -8,23 +8,24 @@ import android.content.res.Configuration;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.*;
+import ru.aim.anotheryetbashclient.fragments.AbstractBashFragment;
+import ru.aim.anotheryetbashclient.fragments.FragmentsFactory;
 import ru.aim.anotheryetbashclient.helper.L;
 import ru.aim.anotheryetbashclient.helper.QuoteService;
-import ru.aim.anotheryetbashclient.helper.Utils;
-import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 
 import static ru.aim.anotheryetbashclient.Package.updateHeader;
 import static ru.aim.anotheryetbashclient.SettingsHelper.loadType;
 import static ru.aim.anotheryetbashclient.SettingsHelper.saveType;
+import static ru.aim.anotheryetbashclient.helper.Utils.setItemsVisibility;
 
 /**
  * In progress:
@@ -41,11 +42,12 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
     ListView mTypesListView;
     DrawerLayout mDrawerLayout;
     ActionBarDrawerToggle mDrawerToggle;
-    QuotesFragment quotesFragment;
     MenuItemsAdapter adapter;
     TransitionDrawable cache;
+    boolean hideAdditionalMenu;
 
     int currentTypeId;
+    final String fragmentKey = "fragmentKey";
 
     BroadcastReceiver notifyBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -54,13 +56,20 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
         }
     };
 
+    BroadcastReceiver refreshReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            getCurrentFragment().doReceive(intent);
+        }
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         L.setIsDebug(this);
 
         currentTypeId = loadType(this);
-        updateHeader(this, currentTypeId);
 
         setContentView(R.layout.activity_main);
         mainFrame = (FrameLayout) findViewById(R.id.main_frame);
@@ -73,24 +82,26 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
 
             @Override
             public void onDrawerClosed(View drawerView) {
-                cache.reverseTransition(BLUR_DURATION / 2);
-                quotesFragment.getView().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mainFrame.setForeground(null);
-                        quotesFragment.getView().setVisibility(View.VISIBLE);
-                    }
-                }, BLUR_DURATION);
+//                cache.reverseTransition(BLUR_DURATION / 2);
+//                quotesFragment.getView().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        mainFrame.setForeground(null);
+//                        quotesFragment.getView().setVisibility(View.VISIBLE);
+//                    }
+//                }, BLUR_DURATION);
+                setMenuItemsVisible(true);
                 super.onDrawerClosed(drawerView);
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
-                quotesFragment.getView().setVisibility(View.INVISIBLE);
-                cache = Utils.makeTransition(MainActivity.this, quotesFragment.getView());
-                cache.setCrossFadeEnabled(true);
-                mainFrame.setForeground(cache);
-                cache.startTransition(BLUR_DURATION);
+                //quotesFragment.getView().setVisibility(View.INVISIBLE);
+//                cache = Utils.makeTransition(MainActivity.this, quotesFragment.getView());
+//                cache.setCrossFadeEnabled(true);
+                ///              mainFrame.setForeground(cache);
+                //           cache.startTransition(BLUR_DURATION);
+                setMenuItemsVisible(false);
                 super.onDrawerOpened(drawerView);
             }
         };
@@ -113,16 +124,22 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
         IntentFilter intentFilter1 = new IntentFilter(ActionsAndIntents.NOTIFY);
         localBroadcastManager.registerReceiver(notifyBroadcastReceiver, intentFilter1);
 
+        IntentFilter intentFilter = new IntentFilter(ActionsAndIntents.REFRESH);
+        localBroadcastManager.registerReceiver(refreshReceiver, intentFilter);
+
         assert getActionBar() != null;
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
 
-        quotesFragment = (QuotesFragment) getSupportFragmentManager().findFragmentById(R.id.main_fragment);
-        quotesFragment.setCurrentType(currentTypeId);
+        setFragment();
     }
 
-    public void callRefresh() {
-        quotesFragment.callRefresh(currentTypeId);
+    AbstractBashFragment getCurrentFragment() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(fragmentKey);
+        if (fragment instanceof AbstractBashFragment) {
+            return (AbstractBashFragment) fragment;
+        }
+        return null;
     }
 
     @Override
@@ -130,12 +147,13 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
         super.onDestroy();
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
         localBroadcastManager.unregisterReceiver(notifyBroadcastReceiver);
+        localBroadcastManager.unregisterReceiver(refreshReceiver);
     }
 
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         if (item.getItemId() == R.id.action_refresh) {
-            callRefresh();
+            getCurrentFragment().onManualUpdate();
             return true;
         } else if (item.getItemId() == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
@@ -148,7 +166,6 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
     @SuppressWarnings("ConstantConditions")
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-
         final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setQueryHint(getString(R.string.search_hint));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -166,23 +183,33 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
                 return false;
             }
         });
-
+        setItemsVisibility(menu, !hideAdditionalMenu);
         return true;
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (position != currentTypeId) {
+        if (currentTypeId != position) {
             currentTypeId = position;
-            callRefresh();
+            setFragment();
         }
         mDrawerLayout.closeDrawers();
+    }
+
+    void setFragment() {
+        updateHeader(this, currentTypeId);
+        Fragment fragment = FragmentsFactory.getFragment(currentTypeId);
+        getSupportFragmentManager().beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .replace(R.id.main_frame, fragment, fragmentKey)
+                .commit();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         saveType(this, currentTypeId);
+        getCurrentFragment().saveData();
     }
 
     @Override
@@ -205,5 +232,13 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    public void setMenuItemsVisible(boolean visible) {
+        hideAdditionalMenu = !visible;
+        if (getCurrentFragment() != null) {
+            getCurrentFragment().setMenuItemsVisibility(visible);
+        }
+        invalidateOptionsMenu();
     }
 }

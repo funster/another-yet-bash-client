@@ -26,6 +26,7 @@ public class ActionsAndIntents {
     public static final String NEXT_PAGE = "NEXT_PAGE";
     public static final String ABYSS = "ABYSS";
     public static final String DATE = "DATE";
+    public static final String MAX_PAGE = "DATE";
 
 
     /**
@@ -53,4 +54,24 @@ public class ActionsAndIntents {
 
     //-----------------------------------------------------------------------
 
+    public enum Types {
+        TYPE_NEW(0),
+        TYPE_RANDOM(1),
+        TYPE_BEST(2),
+        TYPE_BY_RATING(3),
+        TYPE_ABYSS(4),
+        TYPE_TOP_ABYSS(5),
+        TYPE_BEST_ABYSS(6),
+        TYPE_OFFLINE(7),
+        TYPE_FAVORITES(8),
+        TYPE_RULEZ(10),
+        TYPE_SUX(11),
+        TYPE_SEARCH(12);
+
+        final int typeId;
+
+        Types(int typeId) {
+            this.typeId = typeId;
+        }
+    }
 }

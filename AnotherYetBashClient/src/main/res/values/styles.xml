@@ -13,7 +13,7 @@
     </style>
 
     <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
+    <style name="AppTheme" parent="android:Theme.Holo">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
@@ -25,4 +25,7 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="listItemNew" parent="android:TextAppearance.Small">
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
 </resources>

@@ -59,6 +59,7 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         assert db != null;
         db.execSQL("update " + QUOTE_TABLE + " set " + QUOTE_IS_NEW + " = 0 where " + QUOTE_ID + " = " + innerId);
+        db.close();
     }
 
     public void addToFavorite(long innerId) {
@@ -69,10 +70,26 @@ public class DbHelper extends SQLiteOpenHelper {
         doFavorite(innerId, 0);
     }
 
+    public boolean isFavorite(long innerId) {
+        SQLiteDatabase db = getReadableDatabase();
+        assert db != null;
+        Cursor cursor = db.query(QUOTE_TABLE, new String[]{QUOTE_IS_FAVORITE}, QUOTE_ID + " = ?",
+                new String[]{Long.toString(innerId)}, null, null, null);
+        if (cursor.getCount() == 0) {
+            throw new IllegalArgumentException("Can't find quote with inner id: " + innerId);
+        }
+        cursor.moveToFirst();
+        int value = cursor.getInt(cursor.getColumnIndex(QUOTE_IS_FAVORITE));
+        cursor.close();
+        db.close();
+        return value == 1;
+    }
+
     void doFavorite(long innerId, int value) {
         SQLiteDatabase db = getWritableDatabase();
         assert db != null;
         db.execSQL("update " + QUOTE_TABLE + " set " + QUOTE_IS_FAVORITE + " = " + value + " where " + QUOTE_ID + " = " + innerId);
+        db.close();
     }
 
     public Cursor getFavorites() {
@@ -98,10 +115,12 @@ public class DbHelper extends SQLiteOpenHelper {
     public boolean exists(String id) {
         SQLiteDatabase db = getReadableDatabase();
         assert db != null;
-        Cursor cursor = db.rawQuery("select count(*) from " + QUOTE_TABLE + " where " +
+        final Cursor cursor = db.rawQuery("select count(*) from " + QUOTE_TABLE + " where " +
                 QUOTE_PUBLIC_ID + " = ?", new String[]{id});
         cursor.moveToFirst();
         long count = cursor.getLong(0);
+        cursor.close();
+        db.close();
         return count != 0;
     }
 
@@ -113,13 +132,14 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         assert db != null;
         db.insert(QUOTE_TABLE, null, values);
+        db.close();
     }
 
     public Cursor getQuotes(String... quotes) {
         SQLiteDatabase db = getReadableDatabase();
         assert db != null;
         String sql = "select * from " + QUOTE_TABLE + " where " + QUOTE_PUBLIC_ID + " in (" +
-                makePlaceholders(quotes.length) + ")";
+                makePlaceholders(quotes.length) + ") order by " + QUOTE_PUBLIC_ID + " desc";
         return db.rawQuery(sql, quotes);
     }
 
@@ -127,6 +147,7 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         assert db != null;
         db.delete(QUOTE_ABYSS_TABLE, null, null);
+        db.close();
     }
 
     public Cursor getAbyss() {
@@ -139,5 +160,6 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         assert db != null;
         db.insert(QUOTE_ABYSS_TABLE, null, values);
+        db.close();
     }
 }

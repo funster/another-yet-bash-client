@@ -37,10 +37,17 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="updating_fail">Не удалось обновить список цитат.</string>
     <string name="added_to_favorites">Цитата добавлена в избранное</string>
+    <string name="removed_to_favorites">Цитата удалена из избранного</string>
     <string name="empty_list">Список пуст</string>
     <string name="search_action">Поиск</string>
     <string name="search_hint">Текст или номер цитаты</string>
     <string name="title_activity_settings">Настройки</string>
     <string name="pref_header_general">Общие</string>
+    <string name="back">Назад</string>
+    <string name="forward">Вперёд</string>
+    <string name="like">Нравится</string>
+    <string name="dont_like">Не нравится</string>
+    <string name="add_to_favorites">Добавить в избранное</string>
+    <string name="remove_from_favorites">Удалить из избранного</string>
 
 </resources>

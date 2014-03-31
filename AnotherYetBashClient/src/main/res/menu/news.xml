@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+            android:id="@+id/action_back"
+            android:icon="@drawable/ic_action_back"
+            android:title="@string/back"
+            android:showAsAction="always"/>
+
+    <item
+            android:id="@+id/action_page"
+            android:title="@string/current_page"
+            android:showAsAction="always"/>
+
+    <item
+            android:id="@+id/action_forward"
+            android:icon="@drawable/ic_action_forward"
+            android:title="@string/forward"
+            android:showAsAction="always"/>
+
+</menu>

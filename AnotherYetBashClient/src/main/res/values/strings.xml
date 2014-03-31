@@ -40,5 +40,12 @@
     <string name="empty_list">Empty</string>
     <string name="search_action">Search</string>
     <string name="search_hint">Текст или номер цитаты</string>
+    <string name="back">Back</string>
+    <string name="forward">Forward</string>
+    <string name="current_page">Текущая страница</string>
+    <string name="select_page">Укажите страницу</string>
+    <string name="cancel">Отмена</string>
+    <string name="ok">Ok</string>
+    <string name="new_quote">Новая!</string>
 
 </resources>

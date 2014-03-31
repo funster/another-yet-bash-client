@@ -15,15 +15,11 @@ final class Package {
         updateHeader(activity, currentType, -1);
     }
 
+    @SuppressWarnings("ConstantConditions")
     static void updateHeader(Activity activity, int currentType, int page) {
         String[] types = activity.getResources().getStringArray(R.array.types);
         String actionBarTitle;
-        if (currentType == ActionsAndIntents.TYPE_NEW && page > 0) {
-            actionBarTitle = activity.getResources().getString(R.string.app_name_with_type_and_page, types[currentType], Integer.toString(page));
-        } else {
-            actionBarTitle = activity.getResources().getString(R.string.app_name_with_type, types[currentType]);
-        }
-        assert activity.getActionBar() != null;
+        actionBarTitle = activity.getResources().getString(R.string.app_name_with_type, types[currentType]);
         activity.getActionBar().setTitle(actionBarTitle);
     }
 }

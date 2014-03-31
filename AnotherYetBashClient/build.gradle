@@ -3,7 +3,6 @@ apply plugin: 'android'
 dependencies {
     compile files('libs/android-support-v4.jar')
     compile files('libs/jsoup-1.7.2.jar')
-    compile 'com.github.chrisbanes.actionbarpulltorefresh:library:+'
 }
 
 android {

@@ -12,8 +12,12 @@ public class MenuItemsAdapter extends ArrayAdapter<String> {
         super(context, resource, objects);
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public boolean isEnabled(int position) {
+        if (position == ActionsAndIntents.TYPE_OFFLINE) {
+            return false;
+        }
         return super.isEnabled(position);
     }
 }

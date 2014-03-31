@@ -18,9 +18,13 @@ import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 import org.apache.http.client.methods.HttpGet;
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
+import ru.aim.anotheryetbashclient.R;
 import ru.aim.anotheryetbashclient.helper.f.Block;
 
 import java.io.*;
@@ -379,5 +383,18 @@ public final class Utils {
 
     public static String encode(String encode) {
         return encode(encode, WINDOWS_1251);
+    }
+
+    public static void showToast(Context context, String message) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+    }
+
+    public static void setItemsVisibility(Menu menu, boolean visible) {
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem menuItem = menu.getItem(i);
+            if (menuItem.getItemId() != R.id.action_settings) {
+                menuItem.setVisible(visible);
+            }
+        }
     }
 }
