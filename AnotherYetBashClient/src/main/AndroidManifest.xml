@@ -27,12 +27,21 @@
             </intent-filter>
         </activity>
 
-        <service android:name="ru.aim.anotheryetbashclient.helper.QuoteService"/>
+        <service android:name="ru.aim.anotheryetbashclient.helper.QuoteService"
+                 android:exported="false"/>
 
         <activity
                 android:name="ru.aim.anotheryetbashclient.SettingsActivity"
                 android:label="@string/title_activity_settings">
         </activity>
+
+        <provider
+                android:name="ru.aim.anotheryetbashclient.QuotesContentProvider"
+                android:authorities="quotes"
+                android:enabled="true"
+                android:exported="false">
+        </provider>
+
     </application>
 
 </manifest>
