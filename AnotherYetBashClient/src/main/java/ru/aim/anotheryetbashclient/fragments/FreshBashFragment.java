@@ -3,6 +3,7 @@ package ru.aim.anotheryetbashclient.fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -17,13 +18,17 @@ import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.QuotesAdapter;
 import ru.aim.anotheryetbashclient.R;
 import ru.aim.anotheryetbashclient.helper.QuoteService;
+import ru.aim.anotheryetbashclient.loaders.FreshLoader;
+import ru.aim.anotheryetbashclient.loaders.FreshResult;
+import ru.aim.anotheryetbashclient.loaders.SimpleLoaderCallbacks;
+import ru.aim.anotheryetbashclient.loaders.SimpleResult;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static ru.aim.anotheryetbashclient.ActionsAndIntents.*;
 
-public class NewBashFragment extends AbstractBashFragment {
+public class FreshBashFragment extends AbstractBashFragment implements SimpleLoaderCallbacks<FreshResult> {
 
     int currentPage;
     int maxPage;
@@ -45,17 +50,9 @@ public class NewBashFragment extends AbstractBashFragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (currentPage > 0) {
-            outState.putInt(ActionsAndIntents.CURRENT_PAGE, currentPage);
-        }
-    }
-
-    @Override
     public boolean onItemLongClick(AdapterView<?> parent, final View view, int position, long id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        final List<String> list = new ArrayList<>();
+        final List<String> list = new ArrayList<String>();
         if (isOnline()) {
             list.add(getString(R.string.like));
             list.add(getString(R.string.dont_like));
@@ -173,19 +170,18 @@ public class NewBashFragment extends AbstractBashFragment {
     }
 
     @Override
-    public void saveData() {
-        super.saveData();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        preferences.edit().putInt(ActionsAndIntents.CURRENT_PAGE, currentPage).
-                putInt(ActionsAndIntents.MAX_PAGE, maxPage).commit();
+    public Loader<SimpleResult<FreshResult>> onCreateLoader(int id, Bundle args) {
+//        return id == FreshLoader.ID ? new FreshLoader(getActivity(), args) : null;
+        return null;
     }
 
     @Override
-    protected void loadData() {
-        super.loadData();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        currentPage = preferences.getInt(ActionsAndIntents.CURRENT_PAGE, 0);
-        maxPage = preferences.getInt(ActionsAndIntents.MAX_PAGE, 0);
-        getActivity().invalidateOptionsMenu();
+    public void onLoadFinished(Loader<SimpleResult<FreshResult>> loader, SimpleResult<FreshResult> data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<SimpleResult<FreshResult>> loader) {
+
     }
 }

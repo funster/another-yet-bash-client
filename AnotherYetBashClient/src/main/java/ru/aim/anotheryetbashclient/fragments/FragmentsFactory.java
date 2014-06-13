@@ -11,10 +11,10 @@ import java.util.Map;
  */
 public final class FragmentsFactory {
 
-    static Map<Integer, Class<?>> map = new HashMap<>();
+    static Map<Integer, Class<?>> map = new HashMap<Integer, Class<?>>();
 
     static {
-        map.put(ActionsAndIntents.TYPE_NEW, NewBashFragment.class);
+        map.put(ActionsAndIntents.TYPE_NEW, FreshBashFragment.class);
         map.put(ActionsAndIntents.TYPE_RANDOM, RandomBashFragment.class);
         map.put(ActionsAndIntents.TYPE_BEST, BestBashFragment.class);
         map.put(ActionsAndIntents.TYPE_BY_RATING, ByRatingBashFragment.class);

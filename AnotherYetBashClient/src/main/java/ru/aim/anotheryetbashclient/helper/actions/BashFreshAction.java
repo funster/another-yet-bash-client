@@ -22,7 +22,7 @@ import static ru.aim.anotheryetbashclient.helper.Utils.WINDOWS_1251;
 import static ru.aim.anotheryetbashclient.helper.Utils.rethrowWithRuntime;
 import static ru.aim.anotheryetbashclient.helper.actions.Package.wrapWithRoot;
 
-public class BashNewAction extends BaseAction {
+public class BashFreshAction extends BaseAction {
 
     static final String ROOT_PAGE = wrapWithRoot("");
     static final String NEXT_PAGE = wrapWithRoot("index/%s");

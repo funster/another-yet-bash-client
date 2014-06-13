@@ -18,7 +18,7 @@ public final class ActionRequestFactory {
         String quoteId = intent.getStringExtra(QUOTE_ID);
         switch (typeId) {
             case TYPE_NEW:
-                return new BashNewAction();
+                return new BashFreshAction();
             case TYPE_RANDOM:
                 return new BashRandomAction();
             case TYPE_BEST:

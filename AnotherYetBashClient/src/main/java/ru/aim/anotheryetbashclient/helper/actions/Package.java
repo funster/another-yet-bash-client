@@ -8,7 +8,7 @@ import org.jsoup.select.Elements;
  * Common functions for {@code ru.aim.anotheryetbashclient.helper.actions} package.
  */
 @SuppressWarnings("unused")
-final class Package {
+public final class Package {
 
     static String ROOT_URL = "http://bash.im";
     static String WITH_SLASH = ROOT_URL + "/";
@@ -18,11 +18,11 @@ final class Package {
         throw new AssertionError();
     }
 
-    static String getCharsetFromResponse(HttpResponse httpResponse) {
+    public static String getCharsetFromResponse(HttpResponse httpResponse) {
         return httpResponse.getEntity().getContentType().getValue().split("=")[1];
     }
 
-    static String findMore(Document document) {
+    public static String findMore(Document document) {
         Elements refs = document.select("#body > div.quote.more > a");
         if (refs.size() > 0) {
             return refs.get(0).attr("href");
@@ -31,11 +31,11 @@ final class Package {
         }
     }
 
-    static String wrapWithRoot(String url) {
+    public static String wrapWithRoot(String url) {
         return WITH_SLASH + url;
     }
 
-    static String wrapWithRootWithoutSlash(String url) {
+    public static String wrapWithRootWithoutSlash(String url) {
         return ROOT_URL + url;
     }
 }

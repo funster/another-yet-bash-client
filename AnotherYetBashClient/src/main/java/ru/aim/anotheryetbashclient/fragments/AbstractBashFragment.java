@@ -50,12 +50,6 @@ public abstract class AbstractBashFragment extends ListFragment
         mDbHelper = new DbHelper(getActivity());
         ListView listView = (ListView) root.findViewById(android.R.id.list);
         listView.setOnItemLongClickListener(this);
-        int savedType = SettingsHelper.loadType(getActivity());
-        if (savedType == getType() && isSavedCursorExists()) {
-            loadData();
-        } else {
-            afterViewCreated();
-        }
         return root;
     }
 
@@ -65,12 +59,6 @@ public abstract class AbstractBashFragment extends ListFragment
     }
 
     protected void afterViewCreated() {
-    }
-
-    protected void loadData() {
-        String[] ids = getSavedCursor();
-        cursor = getDbHelper().getQuotes(ids);
-        setListAdapter(new QuotesAdapter(getDbHelper(), getActivity(), cursor));
     }
 
     protected final DbHelper getDbHelper() {
@@ -142,47 +130,8 @@ public abstract class AbstractBashFragment extends ListFragment
         getActivity().invalidateOptionsMenu();
     }
 
-    protected void loadCursor(Intent intent) {
-        ArrayList<String> list = intent.getStringArrayListExtra(ActionsAndIntents.IDS);
-        assert list != null;
-        if (!list.isEmpty()) {
-            String[] arr = list.toArray(new String[list.size()]);
-            if (cursor != null) {
-                cursor.close();
-            }
-            cursor = getDbHelper().getQuotes(arr);
-        }
-    }
-
     public boolean isItemsVisible() {
         return itemsVisible && !isRefreshing && isOnline();
-    }
-
-    public void saveData() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        if (cursor == null) {
-            preferences.edit().remove(CURRENT_QUOTES).commit();
-        } else {
-            ArrayList<String> list = new ArrayList<>();
-            while (cursor.moveToNext()) {
-                list.add(cursor.getString(cursor.getColumnIndex(DbHelper.QUOTE_PUBLIC_ID)));
-            }
-            String bin = ObjectSerializer.serialize(list);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString(CURRENT_QUOTES, bin);
-            editor.commit();
-        }
-    }
-
-    boolean isSavedCursorExists() {
-        return PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(CURRENT_QUOTES, null) != null;
-    }
-
-    @SuppressWarnings("unchecked")
-    String[] getSavedCursor() {
-        String bin = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(CURRENT_QUOTES, null);
-        ArrayList<String> list = (ArrayList<String>) ObjectSerializer.deserialize(bin);
-        return list.toArray(new String[list.size()]);
     }
 
     @Override
@@ -196,5 +145,17 @@ public abstract class AbstractBashFragment extends ListFragment
 
     protected boolean isOnline() {
         return isNetworkAvailable(getActivity());
+    }
+
+    protected void loadCursor(Intent intent) {
+        ArrayList<String> list = intent.getStringArrayListExtra(ActionsAndIntents.IDS);
+        assert list != null;
+        if (!list.isEmpty()) {
+            String[] arr = list.toArray(new String[list.size()]);
+            if (cursor != null) {
+                cursor.close();
+            }
+            cursor = getDbHelper().getQuotes(arr);
+        }
     }
 }

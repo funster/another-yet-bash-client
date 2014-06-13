@@ -209,7 +209,6 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
     protected void onPause() {
         super.onPause();
         saveType(this, currentTypeId);
-        getCurrentFragment().saveData();
     }
 
     @Override

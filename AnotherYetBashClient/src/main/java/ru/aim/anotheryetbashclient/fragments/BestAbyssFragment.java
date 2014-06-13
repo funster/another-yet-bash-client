@@ -123,7 +123,7 @@ public class BestAbyssFragment extends AbstractBashFragment {
             if (intent.hasExtra(ActionsAndIntents.ABYSS)) {
                 preferences.edit().clear().putBoolean(ActionsAndIntents.ABYSS, true).commit();
             } else {
-                ArrayList<String> list = new ArrayList<>();
+                ArrayList<String> list = new ArrayList<String>();
                 while (cursor.moveToNext()) {
                     list.add(cursor.getString(cursor.getColumnIndex(DbHelper.QUOTE_PUBLIC_ID)));
                 }

@@ -28,7 +28,7 @@ import static ru.aim.anotheryetbashclient.helper.actions.Package.getCharsetFromR
 abstract class AbstractAction extends BaseAction {
 
     static final String TAG = "AbstractAction";
-    ArrayList<String> ids = new ArrayList<>();
+    ArrayList<String> ids = new ArrayList<String>();
 
     @Override
     public final void apply() {

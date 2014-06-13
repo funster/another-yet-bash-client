@@ -26,7 +26,7 @@ public class ActionsAndIntents {
     public static final String NEXT_PAGE = "NEXT_PAGE";
     public static final String ABYSS = "ABYSS";
     public static final String DATE = "DATE";
-    public static final String MAX_PAGE = "DATE";
+    public static final String MAX_PAGE = "MAX_PAGE";
 
 
     /**
