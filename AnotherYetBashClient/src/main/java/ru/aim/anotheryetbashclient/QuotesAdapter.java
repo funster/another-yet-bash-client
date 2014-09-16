@@ -10,10 +10,11 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
+
+import com.daimajia.swipe.SwipeLayout;
+
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 
 /**
@@ -21,23 +22,31 @@ import ru.aim.anotheryetbashclient.helper.DbHelper;
  */
 public class QuotesAdapter extends CursorAdapter {
 
-    int animatedPosition = -1;
-    DbHelper mDbHelper;
+    protected int animatedPosition = -1;
+    protected DbHelper mDbHelper;
+    private boolean isAnimationEnabled;
 
     public QuotesAdapter(DbHelper dbHelper, Context context, Cursor c) {
         super(context, c, true);
         this.mDbHelper = dbHelper;
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        isAnimationEnabled = preferences.getBoolean(SettingsActivity.LIST_ITEM_ANIMATION, false);
     }
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
         View view = LayoutInflater.from(context).inflate(R.layout.list_item, viewGroup, false);
-        ViewHolder viewHolder = new ViewHolder();
         assert view != null;
+        SwipeLayout swipeLayout = (SwipeLayout) view;
+        swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
+        swipeLayout.setDragEdge(SwipeLayout.DragEdge.Right);
+
+        ViewHolder viewHolder = new ViewHolder();
         viewHolder.date = (TextView) view.findViewById(android.R.id.text1);
         viewHolder.id = (TextView) view.findViewById(android.R.id.text2);
         viewHolder.text = (TextView) view.findViewById(R.id.text);
         viewHolder.isNew = (TextView) view.findViewById(R.id.newQuote);
+        viewHolder.rating = (TextView) view.findViewById(R.id.rating);
         view.setTag(viewHolder);
         return view;
     }
@@ -53,30 +62,18 @@ public class QuotesAdapter extends CursorAdapter {
         viewHolder.text.setText(Html.fromHtml(text));
         viewHolder.publicId = id;
         viewHolder.innerId = cursor.getLong(cursor.getColumnIndex(DbHelper.QUOTE_ID));
-        if (cursor.getInt(cursor.getColumnIndexOrThrow(DbHelper.QUOTE_IS_NEW)) == 1) {
-            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
-            viewHolder.isNew.startAnimation(animation);
-            viewHolder.isNew.setVisibility(View.VISIBLE);
-        } else {
-            viewHolder.isNew.setVisibility(View.GONE);
-        }
+        viewHolder.rating.setText(cursor.getString(cursor.getColumnIndex(DbHelper.QUOTE_RATING)));
         mDbHelper.markRead(viewHolder.innerId);
-        if (isItemAnimationEnabled(context)) {
+        if (isAnimationEnabled) {
             if (animatedPosition < cursor.getPosition()) {
                 AnimatorSet animatorSet = new AnimatorSet();
                 ObjectAnimator alpha = ObjectAnimator.ofFloat(view, "alpha", 0f, 1f);
-                ObjectAnimator translate = ObjectAnimator.ofFloat(view, "x", -300f, 0f);
-                animatorSet.playTogether(alpha, translate);
-                animatorSet.setDuration(1000);
+                animatorSet.playTogether(alpha);
+                animatorSet.setDuration(500);
                 animatorSet.start();
                 animatedPosition = cursor.getPosition();
             }
         }
-    }
-
-    boolean isItemAnimationEnabled(Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.getBoolean(SettingsActivity.LIST_ITEM_ANIMATION, false);
     }
 
     @Override
@@ -90,6 +87,8 @@ public class QuotesAdapter extends CursorAdapter {
         public TextView id;
         public TextView text;
         public TextView isNew;
+        public TextView rating;
+
         public String publicId;
         public long innerId;
     }

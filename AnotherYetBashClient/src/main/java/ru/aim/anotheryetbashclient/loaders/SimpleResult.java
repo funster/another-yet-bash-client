@@ -3,10 +3,12 @@ package ru.aim.anotheryetbashclient.loaders;
 /**
  *
  */
+@SuppressWarnings("unused")
 public class SimpleResult<Result> {
 
     private Throwable error;
     private Result result;
+    private Object tag;
 
     public SimpleResult() {
     }
@@ -20,8 +22,13 @@ public class SimpleResult<Result> {
     }
 
     public SimpleResult(Throwable error, Result result) {
-        this.error = error;
+        this(error);
         this.result = result;
+    }
+
+    public SimpleResult(Throwable error, Result result, Object tag) {
+        this(error, result);
+        this.tag = tag;
     }
 
     public Throwable getError() {
@@ -42,5 +49,13 @@ public class SimpleResult<Result> {
 
     public boolean containsError() {
         return error != null;
+    }
+
+    public Object getTag() {
+        return tag;
+    }
+
+    public void setTag(Object tag) {
+        this.tag = tag;
     }
 }

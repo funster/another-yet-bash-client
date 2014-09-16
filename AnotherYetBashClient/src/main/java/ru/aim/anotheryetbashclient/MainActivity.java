@@ -16,23 +16,21 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.*;
-import ru.aim.anotheryetbashclient.fragments.AbstractBashFragment;
+import android.widget.AdapterView;
+import android.widget.FrameLayout;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import ru.aim.anotheryetbashclient.fragments.AbstractFragment;
 import ru.aim.anotheryetbashclient.fragments.FragmentsFactory;
-import ru.aim.anotheryetbashclient.helper.L;
-import ru.aim.anotheryetbashclient.helper.QuoteService;
+import ru.aim.anotheryetbashclient.fragments.SearchDialog;
+import ru.aim.anotheryetbashclient.helper.Utils;
 
 import static ru.aim.anotheryetbashclient.Package.updateHeader;
-import static ru.aim.anotheryetbashclient.SettingsHelper.loadType;
 import static ru.aim.anotheryetbashclient.SettingsHelper.saveType;
-import static ru.aim.anotheryetbashclient.helper.Utils.setItemsVisibility;
 
 /**
- * In progress:
- * <p/>
- * 1. *** Save currentType when orientation changed.
- * 2. *** Highlight selected menu item in main menu. Restore it.
- * 3.
+ *
  */
 public class MainActivity extends FragmentActivity implements AdapterView.OnItemClickListener {
 
@@ -59,17 +57,13 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
     BroadcastReceiver refreshReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            getCurrentFragment().doReceive(intent);
+
         }
     };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        L.setIsDebug(this);
-
-        currentTypeId = loadType(this);
 
         setContentView(R.layout.activity_main);
         mainFrame = (FrameLayout) findViewById(R.id.main_frame);
@@ -109,8 +103,7 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         mTypesListView = (ListView) findViewById(R.id.types);
-        adapter = new MenuItemsAdapter(this, R.layout.menu_item,
-                getResources().getStringArray(R.array.types));
+        adapter = new MenuItemsAdapter(this, R.layout.menu_item);
         mTypesListView.setAdapter(adapter);
         mTypesListView.setOnItemClickListener(this);
         mTypesListView.post(new Runnable() {
@@ -134,10 +127,10 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
         setFragment();
     }
 
-    AbstractBashFragment getCurrentFragment() {
+    AbstractFragment getCurrentFragment() {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(fragmentKey);
-        if (fragment instanceof AbstractBashFragment) {
-            return (AbstractBashFragment) fragment;
+        if (fragment instanceof AbstractFragment) {
+            return (AbstractFragment) fragment;
         }
         return null;
     }
@@ -166,24 +159,24 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
     @SuppressWarnings("ConstantConditions")
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-        final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setQueryHint(getString(R.string.search_hint));
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Intent intent = new Intent(MainActivity.this, QuoteService.class);
-                intent.putExtra(ActionsAndIntents.SEARCH_QUERY, query);
-                intent.putExtra(ActionsAndIntents.TYPE_ID, ActionsAndIntents.TYPE_SEARCH);
-                startService(intent);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-        setItemsVisibility(menu, !hideAdditionalMenu);
+//        final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+//        searchView.setQueryHint(getString(R.string.search_hint));
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                Intent intent = new Intent(MainActivity.this, QuoteService.class);
+//                intent.putExtra(ActionsAndIntents.SEARCH_QUERY, query);
+//                intent.putExtra(ActionsAndIntents.TYPE_ID, ActionsAndIntents.TYPE_SEARCH);
+//                startService(intent);
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                return false;
+//            }
+//        });
+        Utils.setItemsVisibility(menu, !hideAdditionalMenu);
         return true;
     }
 
@@ -191,7 +184,12 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (currentTypeId != position) {
             currentTypeId = position;
-            setFragment();
+            if (position == 4) {
+                new SearchDialog().show(getSupportFragmentManager());
+                mTypesListView.setSelection(currentTypeId);
+            } else {
+                setFragment();
+            }
         }
         mDrawerLayout.closeDrawers();
     }

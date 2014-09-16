@@ -16,8 +16,9 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String QUOTE_PUBLIC_ID = "quote_public_id";
     public static final String QUOTE_DATE = "quote_date";
     public static final String QUOTE_IS_NEW = "quote_is_new";
-    public static final String QUOTE_IS_FAVORITE = "quote_is_favorite";
+    public static final String QUOTE_FLAG = "quote_flag";
     public static final String QUOTE_TEXT = "quote_text";
+    public static final String QUOTE_RATING = "quote_rating";
 
     public DbHelper(Context context) {
         super(context, DB_NAME, null, 1);
@@ -42,13 +43,13 @@ public class DbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("CREATE TABLE " + QUOTE_TABLE +
                 " (" + QUOTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 QUOTE_PUBLIC_ID + " TEXT, " + QUOTE_DATE + " TEXT, " +
-                QUOTE_IS_NEW + " INTEGER, " + QUOTE_IS_FAVORITE + " INTEGER," +
-                QUOTE_TEXT + " TEXT)");
+                QUOTE_IS_NEW + " INTEGER, " + QUOTE_FLAG + " INTEGER, " +
+                QUOTE_RATING + " TEXT, " + QUOTE_TEXT + " TEXT)");
         sqLiteDatabase.execSQL("CREATE TABLE " + QUOTE_ABYSS_TABLE +
                 " (" + QUOTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 QUOTE_PUBLIC_ID + " TEXT, " + QUOTE_DATE + " TEXT, " +
-                QUOTE_IS_NEW + " INTEGER, " + QUOTE_IS_FAVORITE + " INTEGER," +
-                QUOTE_TEXT + " TEXT)");
+                QUOTE_IS_NEW + " INTEGER, " + QUOTE_FLAG + " INTEGER," +
+                QUOTE_RATING + " TEXT, " + QUOTE_TEXT + " TEXT)");
     }
 
     @Override
@@ -73,13 +74,13 @@ public class DbHelper extends SQLiteOpenHelper {
     public boolean isFavorite(long innerId) {
         SQLiteDatabase db = getReadableDatabase();
         assert db != null;
-        Cursor cursor = db.query(QUOTE_TABLE, new String[]{QUOTE_IS_FAVORITE}, QUOTE_ID + " = ?",
+        Cursor cursor = db.query(QUOTE_TABLE, new String[]{QUOTE_FLAG}, QUOTE_ID + " = ?",
                 new String[]{Long.toString(innerId)}, null, null, null);
         if (cursor.getCount() == 0) {
             throw new IllegalArgumentException("Can't find quote with inner id: " + innerId);
         }
         cursor.moveToFirst();
-        int value = cursor.getInt(cursor.getColumnIndex(QUOTE_IS_FAVORITE));
+        int value = cursor.getInt(cursor.getColumnIndex(QUOTE_FLAG));
         cursor.close();
         db.close();
         return value == 1;
@@ -88,14 +89,14 @@ public class DbHelper extends SQLiteOpenHelper {
     void doFavorite(long innerId, int value) {
         SQLiteDatabase db = getWritableDatabase();
         assert db != null;
-        db.execSQL("update " + QUOTE_TABLE + " set " + QUOTE_IS_FAVORITE + " = " + value + " where " + QUOTE_ID + " = " + innerId);
+        db.execSQL("update " + QUOTE_TABLE + " set " + QUOTE_FLAG + " = " + value + " where " + QUOTE_ID + " = " + innerId);
         db.close();
     }
 
     public Cursor getFavorites() {
         SQLiteDatabase db = getReadableDatabase();
         assert db != null;
-        return db.rawQuery("select " + QUOTE_PUBLIC_ID + "  from " + QUOTE_TABLE + " where " + QUOTE_IS_FAVORITE + " = 1", null);
+        return db.rawQuery("select " + QUOTE_PUBLIC_ID + "  from " + QUOTE_TABLE + " where " + QUOTE_FLAG + " = 1", null);
     }
 
     public Cursor getUnread() {
@@ -112,11 +113,11 @@ public class DbHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public boolean exists(String id) {
+    public boolean exists(String publicId) {
         SQLiteDatabase db = getReadableDatabase();
         assert db != null;
         final Cursor cursor = db.rawQuery("select count(*) from " + QUOTE_TABLE + " where " +
-                QUOTE_PUBLIC_ID + " = ?", new String[]{id});
+                QUOTE_PUBLIC_ID + " = ?", new String[]{publicId});
         cursor.moveToFirst();
         long count = cursor.getLong(0);
         cursor.close();
@@ -128,11 +129,12 @@ public class DbHelper extends SQLiteOpenHelper {
         return !exists(id);
     }
 
-    public void addNewQuote(ContentValues values) {
+    public long addNewQuote(ContentValues values) {
         SQLiteDatabase db = getWritableDatabase();
         assert db != null;
-        db.insert(QUOTE_TABLE, null, values);
+        long id = db.insert(QUOTE_TABLE, null, values);
         db.close();
+        return id;
     }
 
     public Cursor getQuotes(String... quotes) {
@@ -150,6 +152,19 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void clearDefault() {
+        SQLiteDatabase db = getWritableDatabase();
+        assert db != null;
+        db.delete(QUOTE_TABLE, null, null);
+        db.close();
+    }
+
+    public Cursor getDefault() {
+        SQLiteDatabase db = getReadableDatabase();
+        assert db != null;
+        return db.query(QUOTE_TABLE, null, null, null, null, null, null);
+    }
+
     public Cursor getAbyss() {
         SQLiteDatabase db = getReadableDatabase();
         assert db != null;
@@ -160,6 +175,13 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         assert db != null;
         db.insert(QUOTE_ABYSS_TABLE, null, values);
+        db.close();
+    }
+
+    public void updateQuote(ContentValues contentValues) {
+        SQLiteDatabase db = getWritableDatabase();
+        assert db != null;
+        db.update(QUOTE_TABLE, contentValues, QUOTE_PUBLIC_ID + " = ?", new String[]{contentValues.getAsString(QUOTE_PUBLIC_ID)});
         db.close();
     }
 }

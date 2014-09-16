@@ -1,6 +1,6 @@
 package ru.aim.anotheryetbashclient.loaders;
 
-import android.app.LoaderManager;
+import android.support.v4.app.LoaderManager;
 
 /**
  *

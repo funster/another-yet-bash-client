@@ -11,10 +11,11 @@
         <item>Случайные</item>
         <item>Лучшие</item>
         <item>По рейтингу</item>
-        <item>Бездна</item>
-        <item>Топ Бездны</item>
-        <item>Лучшее Бездны</item>
-        <item>Оффлайн</item>
+        <item>Поиск</item>
+        <!--<item>Бездна</item>-->
+        <!--<item>Топ Бездны</item>-->
+        <!--<item>Лучшее Бездны</item>-->
+        <!--<item>Оффлайн</item>-->
         <item>Избранное</item>
     </string-array>
 
@@ -49,5 +50,22 @@
     <string name="dont_like">Не нравится</string>
     <string name="add_to_favorites">Добавить в избранное</string>
     <string name="remove_from_favorites">Удалить из избранного</string>
+    <string name="error">Ошибка</string>
+    <string name="choose_period">Укажите период</string>
+
+    <string-array name="months">
+        <item>янв</item>
+        <item>фев</item>
+        <item>мар</item>
+        <item>апр</item>
+        <item>май</item>
+        <item>июн</item>
+        <item>июл</item>
+        <item>авг</item>
+        <item>сен</item>
+        <item>окт</item>
+        <item>ноя</item>
+        <item>дек</item>
+    </string-array>
 
 </resources>

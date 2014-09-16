@@ -3,6 +3,7 @@ package ru.aim.anotheryetbashclient.helper.actions;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -10,12 +11,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import java.util.ArrayList;
+
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.helper.BaseAction;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.helper.f.Block;
-
-import java.util.ArrayList;
 
 import static ru.aim.anotheryetbashclient.helper.DbHelper.QUOTE_PUBLIC_ID;
 import static ru.aim.anotheryetbashclient.helper.Utils.rethrowWithRuntime;
@@ -80,6 +82,7 @@ abstract class AbstractAction extends BaseAction {
     protected abstract String getUrl();
 
     protected void beforeParsing(Document document) {
+        getDbHelper().clearAbyss();
     }
 
     protected void afterParsing(Intent intent) {

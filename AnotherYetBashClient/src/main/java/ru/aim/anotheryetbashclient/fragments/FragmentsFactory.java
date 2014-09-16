@@ -1,26 +1,25 @@
 package ru.aim.anotheryetbashclient.fragments;
 
 import android.support.v4.app.Fragment;
-import ru.aim.anotheryetbashclient.ActionsAndIntents;
+import android.util.SparseArray;
 
-import java.util.HashMap;
-import java.util.Map;
+import ru.aim.anotheryetbashclient.ActionsAndIntents;
 
 /**
  *
  */
 public final class FragmentsFactory {
 
-    static Map<Integer, Class<?>> map = new HashMap<Integer, Class<?>>();
+    static SparseArray<Class<?>> map = new SparseArray<Class<?>>();
 
     static {
-        map.put(ActionsAndIntents.TYPE_NEW, FreshBashFragment.class);
-        map.put(ActionsAndIntents.TYPE_RANDOM, RandomBashFragment.class);
-        map.put(ActionsAndIntents.TYPE_BEST, BestBashFragment.class);
-        map.put(ActionsAndIntents.TYPE_BY_RATING, ByRatingBashFragment.class);
-        map.put(ActionsAndIntents.TYPE_ABYSS, AbstractBashFragment.class);
-        map.put(ActionsAndIntents.TYPE_TOP_ABYSS, TopAbyssFragment.class);
-        map.put(ActionsAndIntents.TYPE_BEST_ABYSS, BestAbyssFragment.class);
+        map.put(ActionsAndIntents.TYPE_NEW, FreshFragment.class);
+        map.put(ActionsAndIntents.TYPE_RANDOM, RandomFragment.class);
+        map.put(ActionsAndIntents.TYPE_BEST, BestFragment.class);
+        map.put(ActionsAndIntents.TYPE_BY_RATING, RatingFragment.class);
+//        map.put(ActionsAndIntents.TYPE_ABYSS, AbstractBashFragment.class);
+//        map.put(ActionsAndIntents.TYPE_TOP_ABYSS, TopAbyssFragment.class);
+//        map.put(ActionsAndIntents.TYPE_BEST_ABYSS, BestAbyssFragment.class);
     }
 
     private FragmentsFactory() {
@@ -30,6 +29,9 @@ public final class FragmentsFactory {
     @SuppressWarnings("TryWithIdenticalCatches")
     public static Fragment getFragment(int type) {
         Class<?> clazz = map.get(type);
+        if (clazz == null) {
+            throw new UnsupportedOperationException("not implemented yet");
+        }
         try {
             Object fragment = clazz.newInstance();
             return (Fragment) fragment;

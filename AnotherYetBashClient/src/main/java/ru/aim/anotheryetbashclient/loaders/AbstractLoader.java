@@ -12,6 +12,7 @@ abstract class AbstractLoader<T> extends SimpleLoader<SimpleResult<T>> {
     static final String TAG = "AbstractSbtLoader";
 
     DbHelper dbHelper;
+    Object tag;
 
     public AbstractLoader(Context context) {
         super(context);
@@ -31,7 +32,7 @@ abstract class AbstractLoader<T> extends SimpleLoader<SimpleResult<T>> {
             L.e(TAG, "Error in loader", e1);
             exc = e1;
         }
-        return new SimpleResult<T>(exc, result);
+        return new SimpleResult<T>(exc, result, tag);
     }
 
     @Override
@@ -52,4 +53,12 @@ abstract class AbstractLoader<T> extends SimpleLoader<SimpleResult<T>> {
     }
 
     public abstract T doInBackground() throws Exception;
+
+    public void setDbHelper(DbHelper dbHelper) {
+        this.dbHelper = dbHelper;
+    }
+
+    public void setTag(Object tag) {
+        this.tag = tag;
+    }
 }

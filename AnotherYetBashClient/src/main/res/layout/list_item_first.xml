@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="4dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:gravity="left"
+            android:id="@android:id/text2"
+            android:textAppearance="@style/listItemSubtitle"
+            android:text="@string/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_weight="1"
+            android:gravity="left"
+            android:visibility="gone"
+            android:id="@+id/newQuote"
+            android:paddingLeft="4dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:textAppearance="@style/listItemNew"
+            android:text="@string/new_quote"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold|italic" />
+
+        <TextView
+            android:gravity="end"
+            android:layout_weight="1"
+            android:id="@android:id/text1"
+            android:textAppearance="@style/listItemSubtitle"
+            android:text="@string/app_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/text"
+        android:textAppearance="@style/listItemText"
+        android:text="@string/app_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
