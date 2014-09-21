@@ -109,7 +109,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public Cursor getFavorites() {
         SQLiteDatabase db = getReadableDatabase();
         assert db != null;
-        return db.rawQuery("select " + QUOTE_PUBLIC_ID + "  from " + QUOTE_FAVORITES_TABLE, null);
+        return db.rawQuery("select * from " + QUOTE_FAVORITES_TABLE, null);
     }
 
     public Cursor getUnread() {
