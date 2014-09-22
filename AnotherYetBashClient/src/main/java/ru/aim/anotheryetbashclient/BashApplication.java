@@ -23,13 +23,4 @@ public class BashApplication extends Application {
     public AndroidHttpClient getHttpClient() {
         return httpClient;
     }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        try {
-            httpClient.close();
-        } catch (Exception ignored) {
-        }
-    }
 }

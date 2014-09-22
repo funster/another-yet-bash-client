@@ -9,7 +9,6 @@ import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
@@ -31,7 +30,7 @@ import static ru.aim.anotheryetbashclient.SettingsHelper.saveType;
 /**
  *
  */
-public class MainActivity extends FragmentActivity implements AdapterView.OnItemClickListener {
+public class MainActivity extends RulezActivity implements AdapterView.OnItemClickListener {
 
     public static final int BLUR_DURATION = 500;
 

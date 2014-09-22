@@ -1,13 +1,11 @@
 package ru.aim.anotheryetbashclient.helper;
 
-import android.content.Context;
 import android.util.Log;
+
 import ru.aim.anotheryetbashclient.BuildConfig;
-import ru.aim.anotheryetbashclient.R;
 
 public final class L {
 
-    private static final String KEY = "isDebug";
     private static boolean isDebug = BuildConfig.DEBUG;
 
     private L() {

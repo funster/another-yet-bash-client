@@ -52,6 +52,8 @@
     <string name="remove_from_favorites">Удалить из избранного</string>
     <string name="error">Ошибка</string>
     <string name="choose_period">Укажите период</string>
+    <string name="error_send_request">Не удалось отправить запрос</string>
+    <string name="vote_accepted">Ваш голос учтён</string>
 
     <string-array name="months">
         <item>янв</item>

@@ -34,7 +34,7 @@
         android:textAppearance="@android:style/TextAppearance.Large" />
 
     <Button
-        android:id="@+id/boyan"
+        android:id="@+id/bayan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/btn_borderless"

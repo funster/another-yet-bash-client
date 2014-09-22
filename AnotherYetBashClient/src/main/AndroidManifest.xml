@@ -22,10 +22,6 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name="ru.aim.anotheryetbashclient.helper.QuoteService"
-            android:exported="false" />
-
         <activity
             android:name="ru.aim.anotheryetbashclient.SettingsActivity"
             android:label="@string/title_activity_settings" />

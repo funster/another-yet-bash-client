@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.daimajia.swipe.SwipeLayout;
 
 import ru.aim.anotheryetbashclient.helper.DbHelper;
+import ru.aim.anotheryetbashclient.loaders.RulezType;
 
 /**
  *
@@ -27,12 +28,16 @@ public class QuotesAdapter extends CursorAdapter {
     protected int animatedPosition = -1;
     protected DbHelper mDbHelper;
     private boolean isAnimationEnabled;
+    private RulezActivity rulezActivity;
 
     public QuotesAdapter(DbHelper dbHelper, Context context, Cursor c) {
         super(context, c, true);
         this.mDbHelper = dbHelper;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         isAnimationEnabled = preferences.getBoolean(SettingsActivity.LIST_ITEM_ANIMATION, false);
+        if (context instanceof RulezActivity) {
+            rulezActivity = (RulezActivity) context;
+        }
     }
 
     @Override
@@ -51,6 +56,9 @@ public class QuotesAdapter extends CursorAdapter {
         viewHolder.isNew = (TextView) view.findViewById(R.id.newQuote);
         viewHolder.rating = (TextView) view.findViewById(R.id.rating);
         viewHolder.addFavorite = (ImageButton) view.findViewById(R.id.add_favorite);
+        viewHolder.plus = view.findViewById(R.id.plus);
+        viewHolder.minus = view.findViewById(R.id.minus);
+        viewHolder.bayan = view.findViewById(R.id.bayan);
         view.setTag(viewHolder);
         return view;
     }
@@ -86,6 +94,24 @@ public class QuotesAdapter extends CursorAdapter {
                 }
             }
         });
+        viewHolder.plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendRulez(viewHolder.publicId, RulezType.RULEZ);
+            }
+        });
+        viewHolder.minus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendRulez(viewHolder.publicId, RulezType.SUX);
+            }
+        });
+        viewHolder.minus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendRulez(viewHolder.publicId, RulezType.BAYAN);
+            }
+        });
         if (isAnimationEnabled) {
             if (animatedPosition < cursor.getPosition()) {
                 AnimatorSet animatorSet = new AnimatorSet();
@@ -95,6 +121,12 @@ public class QuotesAdapter extends CursorAdapter {
                 animatorSet.start();
                 animatedPosition = cursor.getPosition();
             }
+        }
+    }
+
+    void sendRulez(String id, RulezType type) {
+        if (rulezActivity != null) {
+            rulezActivity.sendRulez(id, type);
         }
     }
 
@@ -112,6 +144,9 @@ public class QuotesAdapter extends CursorAdapter {
         public TextView isNew;
         public TextView rating;
         public ImageButton addFavorite;
+        public View plus;
+        public View minus;
+        public View bayan;
 
         public String publicId;
         public long innerId;
