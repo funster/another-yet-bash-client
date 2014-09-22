@@ -23,7 +23,6 @@ import android.widget.Toast;
 
 import ru.aim.anotheryetbashclient.fragments.AbstractFragment;
 import ru.aim.anotheryetbashclient.fragments.FragmentsFactory;
-import ru.aim.anotheryetbashclient.fragments.SearchDialog;
 import ru.aim.anotheryetbashclient.helper.Utils;
 
 import static ru.aim.anotheryetbashclient.Package.updateHeader;
@@ -184,12 +183,7 @@ public class MainActivity extends FragmentActivity implements AdapterView.OnItem
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (currentTypeId != position) {
             currentTypeId = position;
-            if (position == 4) {
-                new SearchDialog().show(getSupportFragmentManager());
-                mTypesListView.setSelection(currentTypeId);
-            } else {
-                setFragment();
-            }
+            setFragment();
         }
         mDrawerLayout.closeDrawers();
     }

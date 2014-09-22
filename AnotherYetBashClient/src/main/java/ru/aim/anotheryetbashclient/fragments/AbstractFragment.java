@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CursorAdapter;
 import android.widget.ListView;
 
 import ru.aim.anotheryetbashclient.MainActivity;
@@ -30,11 +31,10 @@ public abstract class AbstractFragment extends RefreshFragment implements Adapte
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_list, null);
+        View root = inflater.inflate(getRootLayoutId(), container, false);
         setHasOptionsMenu(true);
         mDbHelper = new DbHelper(getActivity());
         ListView listView = (ListView) root.findViewById(android.R.id.list);
-//        listView.setEmptyView(root.findViewById(android.R.id.empty));
         listView.setOnItemLongClickListener(this);
         return root;
     }
@@ -61,5 +61,23 @@ public abstract class AbstractFragment extends RefreshFragment implements Adapte
         if (!isRefreshing()) {
             setItemsVisibility(menu, isItemsVisible());
         }
+    }
+
+    public CursorAdapter getCursorAdapter() {
+        if (getListAdapter() == null) {
+            return null;
+        }
+        return (CursorAdapter) getListAdapter();
+    }
+
+    void safeSwap() {
+        CursorAdapter adapter = getCursorAdapter();
+        if (adapter != null) {
+            adapter.swapCursor(null);
+        }
+    }
+
+    protected int getRootLayoutId() {
+        return R.layout.fragment_list;
     }
 }

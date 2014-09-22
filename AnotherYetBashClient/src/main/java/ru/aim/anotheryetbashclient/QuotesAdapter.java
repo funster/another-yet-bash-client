@@ -17,9 +17,6 @@ import android.widget.Toast;
 
 import com.daimajia.swipe.SwipeLayout;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 
 /**
@@ -30,7 +27,6 @@ public class QuotesAdapter extends CursorAdapter {
     protected int animatedPosition = -1;
     protected DbHelper mDbHelper;
     private boolean isAnimationEnabled;
-    Set<Long> opened = new HashSet<Long>();
 
     public QuotesAdapter(DbHelper dbHelper, Context context, Cursor c) {
         super(context, c, true);
@@ -90,9 +86,6 @@ public class QuotesAdapter extends CursorAdapter {
                 }
             }
         });
-        if (opened.contains(viewHolder.innerId)) {
-            viewHolder.swipeLayout.open();
-        }
         if (isAnimationEnabled) {
             if (animatedPosition < cursor.getPosition()) {
                 AnimatorSet animatorSet = new AnimatorSet();

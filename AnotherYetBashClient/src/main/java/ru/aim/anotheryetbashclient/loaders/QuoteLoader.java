@@ -14,7 +14,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.HashSet;
 
 import ru.aim.anotheryetbashclient.BashApplication;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
@@ -24,8 +23,6 @@ import static ru.aim.anotheryetbashclient.helper.actions.Package.getCharsetFromR
 
 @SuppressWarnings("unused")
 public abstract class QuoteLoader extends AbstractLoader<Cursor> {
-
-    HashSet<String> ids = new HashSet<String>();
 
     public QuoteLoader(Context context) {
         super(context);
@@ -48,7 +45,6 @@ public abstract class QuoteLoader extends AbstractLoader<Cursor> {
             values.put(DbHelper.QUOTE_TEXT, textElements.html().trim());
             values.put(DbHelper.QUOTE_RATING, ratingElements.html().trim());
             values.put(DbHelper.QUOTE_FLAG, flag);
-            ids.add(idElements.html());
             saveQuote(values);
         }
     }

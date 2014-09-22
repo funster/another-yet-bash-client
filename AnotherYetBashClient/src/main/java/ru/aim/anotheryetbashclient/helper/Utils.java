@@ -21,15 +21,23 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
+
 import org.apache.http.client.methods.HttpGet;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.List;
+
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.R;
 import ru.aim.anotheryetbashclient.helper.f.Block;
-
-import java.io.*;
-import java.net.URLEncoder;
-import java.util.List;
 
 @SuppressWarnings("unused")
 public final class Utils {
@@ -396,5 +404,11 @@ public final class Utils {
                 menuItem.setVisible(visible);
             }
         }
+    }
+
+    public static void hideSoftKeyboard(EditText editText) {
+        Context context = editText.getContext();
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
 }
