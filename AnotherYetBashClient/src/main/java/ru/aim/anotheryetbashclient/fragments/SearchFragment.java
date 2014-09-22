@@ -5,35 +5,22 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.text.TextUtils;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.EditText;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ListAdapter;
-import android.widget.TextView;
+import android.widget.SearchView;
 
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.QuotesAdapter;
 import ru.aim.anotheryetbashclient.R;
-import ru.aim.anotheryetbashclient.helper.Utils;
 import ru.aim.anotheryetbashclient.loaders.SearchLoader;
 import ru.aim.anotheryetbashclient.loaders.SimpleResult;
 
-public class SearchFragment extends AbstractFragment implements TextView.OnEditorActionListener,
-        LoaderManager.LoaderCallbacks<SimpleResult<Cursor>> {
+public class SearchFragment extends AbstractFragment implements
+        LoaderManager.LoaderCallbacks<SimpleResult<Cursor>>, SearchView.OnQueryTextListener {
 
-    EditText searchEditText;
-
-    @Override
-    protected int getRootLayoutId() {
-        return R.layout.fragment_search_list;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        searchEditText = (EditText) view.findViewById(android.R.id.edit);
-        searchEditText.setOnEditorActionListener(this);
-    }
+    SearchView searchView;
 
     @Override
     public int getType() {
@@ -45,22 +32,28 @@ public class SearchFragment extends AbstractFragment implements TextView.OnEdito
         sendRequest();
     }
 
-    @Override
-    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        sendRequest();
-        return true;
-    }
-
     void sendRequest() {
-        if (!TextUtils.isEmpty(searchEditText.getText())) {
+        if (!TextUtils.isEmpty(searchView.getQuery())) {
             setRefreshing(true);
             getLoaderManager().restartLoader(1, bundle(), this);
         }
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.search, menu);
+        final MenuItem menuItem = menu.findItem(R.id.search);
+        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint(getString(R.string.search_hint));
+        searchView.setOnQueryTextListener(this);
+        menuItem.expandActionView();
+    }
+
     Bundle bundle() {
         Bundle bundle = new Bundle();
-        bundle.putString("search", searchEditText.getText().toString());
+        bundle.putString("search", searchView.getQuery().toString());
         return bundle;
     }
 
@@ -78,14 +71,23 @@ public class SearchFragment extends AbstractFragment implements TextView.OnEdito
             ListAdapter listAdapter = new QuotesAdapter(getDbHelper(), getActivity(), data.getResult());
             setListAdapter(listAdapter);
             setMenuItemsVisibility(true);
-            if (data.getResult().getCount() > 0) {
-                Utils.hideSoftKeyboard(searchEditText);
-            }
         }
     }
 
     @Override
     public void onLoaderReset(Loader<SimpleResult<Cursor>> loader) {
         safeSwap();
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        sendRequest();
+        searchView.clearFocus();
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }
