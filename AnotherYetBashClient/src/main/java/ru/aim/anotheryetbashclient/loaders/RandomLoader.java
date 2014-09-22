@@ -8,8 +8,8 @@ import org.jsoup.select.Elements;
 
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 
-import static ru.aim.anotheryetbashclient.helper.actions.Package.wrapWithRoot;
-import static ru.aim.anotheryetbashclient.helper.actions.Package.wrapWithRootWithoutSlash;
+import static ru.aim.anotheryetbashclient.loaders.Package.wrapWithRoot;
+import static ru.aim.anotheryetbashclient.loaders.Package.wrapWithRootWithoutSlash;
 
 public class RandomLoader extends QuoteLoader {
 

@@ -1,4 +1,4 @@
-package ru.aim.anotheryetbashclient.helper.actions;
+package ru.aim.anotheryetbashclient.loaders;
 
 import org.apache.http.HttpResponse;
 import org.jsoup.nodes.Document;

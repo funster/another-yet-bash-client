@@ -19,7 +19,7 @@ import ru.aim.anotheryetbashclient.BashApplication;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 
 import static ru.aim.anotheryetbashclient.helper.DbHelper.QUOTE_PUBLIC_ID;
-import static ru.aim.anotheryetbashclient.helper.actions.Package.getCharsetFromResponse;
+import static ru.aim.anotheryetbashclient.loaders.Package.getCharsetFromResponse;
 
 @SuppressWarnings("unused")
 public abstract class QuoteLoader extends AbstractLoader<Cursor> {

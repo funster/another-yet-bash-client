@@ -8,7 +8,7 @@ import org.jsoup.nodes.Element;
 
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 
-import static ru.aim.anotheryetbashclient.helper.actions.Package.wrapWithRoot;
+import static ru.aim.anotheryetbashclient.loaders.Package.wrapWithRoot;
 
 public class RatingLoader extends QuoteLoader {
 

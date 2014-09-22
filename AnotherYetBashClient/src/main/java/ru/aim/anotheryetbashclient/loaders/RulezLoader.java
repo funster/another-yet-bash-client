@@ -14,7 +14,7 @@ import ru.aim.anotheryetbashclient.helper.multipart.StringPart;
 
 import static ru.aim.anotheryetbashclient.helper.Utils.UTF_8;
 import static ru.aim.anotheryetbashclient.helper.Utils.readFromStream;
-import static ru.aim.anotheryetbashclient.helper.actions.Package.wrapWithRoot;
+import static ru.aim.anotheryetbashclient.loaders.Package.wrapWithRoot;
 
 public class RulezLoader extends AbstractLoader<RulezLoader.RulezResult> {
 

@@ -12,7 +12,7 @@ import org.jsoup.select.Elements;
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.fragments.BestFragment;
 
-import static ru.aim.anotheryetbashclient.helper.actions.Package.wrapWithRoot;
+import static ru.aim.anotheryetbashclient.loaders.Package.wrapWithRoot;
 
 public class BestLoader extends QuoteLoader {
 

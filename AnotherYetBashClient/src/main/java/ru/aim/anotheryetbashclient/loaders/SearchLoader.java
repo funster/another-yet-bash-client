@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import static ru.aim.anotheryetbashclient.helper.Utils.encode;
-import static ru.aim.anotheryetbashclient.helper.actions.Package.wrapWithRoot;
+import static ru.aim.anotheryetbashclient.loaders.Package.wrapWithRoot;
 
 public class SearchLoader extends QuoteLoader {
 

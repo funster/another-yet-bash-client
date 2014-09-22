@@ -37,7 +37,6 @@ import java.util.List;
 
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.R;
-import ru.aim.anotheryetbashclient.helper.f.Block;
 
 @SuppressWarnings("unused")
 public final class Utils {
@@ -78,15 +77,6 @@ public final class Utils {
             error = e;
         }
         return error == null;
-    }
-
-    public static void rethrowWithRuntime(Block block) {
-        try {
-            block.apply();
-        } catch (Exception e) {
-            L.e(TAG, "Unexpected exception", e);
-            throw new RuntimeException(e);
-        }
     }
 
     public static String readFromStream(InputStream is) {
