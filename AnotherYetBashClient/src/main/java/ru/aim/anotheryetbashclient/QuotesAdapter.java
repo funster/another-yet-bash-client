@@ -27,17 +27,21 @@ public class QuotesAdapter extends CursorAdapter {
 
     protected int animatedPosition = -1;
     protected DbHelper mDbHelper;
-    private boolean isAnimationEnabled;
-    private RulezActivity rulezActivity;
+    protected boolean isAnimationEnabled;
+    protected RulezActivity rulezActivity;
+    protected int textSize;
+    protected Context mContext;
 
     public QuotesAdapter(DbHelper dbHelper, Context context, Cursor c) {
         super(context, c, true);
         this.mDbHelper = dbHelper;
+        this.mContext = context;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         isAnimationEnabled = preferences.getBoolean(SettingsActivity.LIST_ITEM_ANIMATION, false);
         if (context instanceof RulezActivity) {
             rulezActivity = (RulezActivity) context;
         }
+        textSize = SettingsHelper.fontSize(context);
     }
 
     @Override
@@ -51,8 +55,11 @@ public class QuotesAdapter extends CursorAdapter {
         ViewHolder viewHolder = new ViewHolder();
         viewHolder.swipeLayout = swipeLayout;
         viewHolder.date = (TextView) view.findViewById(android.R.id.text1);
+        viewHolder.date.setTextSize(textSize);
         viewHolder.id = (TextView) view.findViewById(android.R.id.text2);
+        viewHolder.id.setTextSize(textSize);
         viewHolder.text = (TextView) view.findViewById(R.id.text);
+        viewHolder.text.setTextSize(textSize);
         viewHolder.isNew = (TextView) view.findViewById(R.id.newQuote);
         viewHolder.rating = (TextView) view.findViewById(R.id.rating);
         viewHolder.addFavorite = (ImageButton) view.findViewById(R.id.add_favorite);

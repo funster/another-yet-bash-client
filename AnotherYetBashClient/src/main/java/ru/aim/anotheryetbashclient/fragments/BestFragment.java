@@ -9,14 +9,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.Loader;
-import android.text.Html;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -76,7 +73,7 @@ public class BestFragment extends AbstractFragment implements SimpleLoaderCallba
         } else {
             ListAdapter listAdapter;
             if (dateResult.isToday()) {
-                listAdapter = new BestAdapter(getActivity(), data.getResult());
+                listAdapter = new BestAdapter(getDbHelper(), getActivity(), data.getResult());
             } else {
                 listAdapter = new QuotesAdapter(getDbHelper(), getActivity(), data.getResult());
             }
@@ -211,29 +208,30 @@ public class BestFragment extends AbstractFragment implements SimpleLoaderCallba
     /**
      * Adapter for first page.
      */
-    public static class BestAdapter extends BaseAdapter {
+    public static class BestAdapter extends QuotesAdapter {
 
-        Context context;
         int monthTitlePosition;
-        Cursor cursor;
 
-        public BestAdapter(Context context, Cursor cursor) {
-            this.context = context;
-            this.cursor = cursor;
+        public BestAdapter(DbHelper dbHelper, Context context, Cursor cursor) {
+            super(dbHelper, context, cursor);
             monthTitlePosition = 0;
-            while (cursor.moveToNext()) {
-                int flag = cursor.getInt(cursor.getColumnIndex(DbHelper.QUOTE_FLAG));
+            initSecondTitle();
+        }
+
+        void initSecondTitle() {
+            getCursor().moveToFirst();
+            while (getCursor().moveToNext()) {
+                int flag = getCursor().getInt(getCursor().getColumnIndex(DbHelper.QUOTE_FLAG));
                 if (flag == 1) {
                     break;
                 }
                 monthTitlePosition++;
             }
-            cursor.moveToFirst();
         }
 
         @Override
         public int getCount() {
-            return cursor.getCount() + 2;
+            return getCursor().getCount() + 2;
         }
 
         @Override
@@ -249,42 +247,24 @@ public class BestFragment extends AbstractFragment implements SimpleLoaderCallba
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (position == 0) {
-                TextView textView = (TextView) View.inflate(context, R.layout.best_title_item, null);
+                TextView textView = (TextView) View.inflate(mContext, R.layout.best_title_item, null);
                 textView.setText(R.string.best_of_day);
                 return textView;
             } else if (position == monthTitlePosition) {
-                TextView textView = (TextView) View.inflate(context, R.layout.best_title_item, null);
+                TextView textView = (TextView) View.inflate(mContext, R.layout.best_title_item, null);
                 textView.setText(R.string.best_of_week);
                 return textView;
             } else {
+                if (monthTitlePosition == 0) {
+                    initSecondTitle();
+                }
                 if (position < monthTitlePosition) {
                     position -= 1;
                 } else {
                     position -= 2;
                 }
-                cursor.moveToPosition(position);
-                ViewHolder viewHolder;
-                if (convertView == null || convertView.getTag() == null) {
-                    viewHolder = new ViewHolder();
-                    convertView = LayoutInflater.from(context).inflate(R.layout.list_item, null, false);
-                    viewHolder.date = (TextView) convertView.findViewById(android.R.id.text1);
-                    viewHolder.id = (TextView) convertView.findViewById(android.R.id.text2);
-                    viewHolder.text = (TextView) convertView.findViewById(R.id.text);
-                    viewHolder.isNew = (TextView) convertView.findViewById(R.id.newQuote);
-                    convertView.setTag(viewHolder);
-                } else {
-                    viewHolder = (ViewHolder) convertView.getTag();
-                }
-                String id = cursor.getString(cursor.getColumnIndex(DbHelper.QUOTE_PUBLIC_ID));
-                String date = cursor.getString(cursor.getColumnIndex(DbHelper.QUOTE_DATE));
-                String text = cursor.getString(cursor.getColumnIndex(DbHelper.QUOTE_TEXT));
-                viewHolder.date.setText(date);
-                viewHolder.id.setText(id);
-                viewHolder.text.setText(Html.fromHtml(text));
-                viewHolder.publicId = id;
-                viewHolder.innerId = cursor.getLong(cursor.getColumnIndex(DbHelper.QUOTE_ID));
+                return super.getView(position, convertView, parent);
             }
-            return convertView;
         }
 
         @Override
@@ -292,13 +272,14 @@ public class BestFragment extends AbstractFragment implements SimpleLoaderCallba
             return position != 0 && position != monthTitlePosition;
         }
 
-        public static class ViewHolder {
-            public TextView date;
-            public TextView id;
-            public TextView text;
-            public TextView isNew;
-            public String publicId;
-            public long innerId;
+        @Override
+        public int getViewTypeCount() {
+            return 2;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return position == 0 || position == monthTitlePosition ? 1 : 0;
         }
     }
 }

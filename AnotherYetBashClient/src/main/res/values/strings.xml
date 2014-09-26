@@ -77,4 +77,6 @@
     <string name="add_to_favorites">Add to favorites</string>
     <string name="error_send_request">Не удалось отправить запрос</string>
     <string name="vote_accepted">Ваш голос учтён</string>
+    <string name="font_size_title">Размер шрифта</string>
+    <string name="font_size_example">Пример текста, %s</string>
 </resources>
