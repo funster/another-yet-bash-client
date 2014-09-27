@@ -56,7 +56,7 @@ public class BestFragment extends AbstractFragment implements SimpleLoaderCallba
     @Override
     public void onManualUpdate() {
         setRefreshing(true);
-        getLoaderManager().getLoader(BestLoader.ID).forceLoad();
+        getLoaderManager().restartLoader(BestLoader.ID, Bundle.EMPTY, this);
     }
 
     @Override
