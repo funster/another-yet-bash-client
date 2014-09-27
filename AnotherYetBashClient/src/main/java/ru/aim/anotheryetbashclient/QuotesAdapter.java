@@ -37,7 +37,7 @@ public class QuotesAdapter extends CursorAdapter {
         this.mDbHelper = dbHelper;
         this.mContext = context;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        isAnimationEnabled = preferences.getBoolean(SettingsActivity.LIST_ITEM_ANIMATION, false);
+        isAnimationEnabled = preferences.getBoolean(SettingsActivity.LIST_ITEM_ANIMATION, true);
         if (context instanceof RulezActivity) {
             rulezActivity = (RulezActivity) context;
         }
