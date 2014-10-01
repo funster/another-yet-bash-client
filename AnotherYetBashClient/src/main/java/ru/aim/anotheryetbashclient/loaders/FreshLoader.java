@@ -12,8 +12,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.util.Calendar;
+
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.BashApplication;
+import ru.aim.anotheryetbashclient.SettingsHelper;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.helper.L;
 
@@ -41,12 +44,7 @@ public class FreshLoader extends AbstractLoader<FreshResult> {
     @Override
     public FreshResult doInBackground() throws Exception {
         FreshResult result = new FreshResult();
-        String uri;
-        if (mCurrentPage == 0) {
-            uri = ROOT_PAGE;
-        } else {
-            uri = String.format(NEXT_PAGE, mCurrentPage);
-        }
+        String uri = getUrl();
 
         HttpGet httpRequest = new HttpGet(uri);
         BashApplication app = (BashApplication) getContext().getApplicationContext();
@@ -81,12 +79,17 @@ public class FreshLoader extends AbstractLoader<FreshResult> {
                     values.put(DbHelper.QUOTE_RATING, ratingElements.html().trim());
                     values.put(DbHelper.QUOTE_TEXT, textElements.html().trim());
                     L.d(TAG, "Insert new item: " + values);
-                    getDbHelper().addNewQuote(values);
+                    addQuote(values);
                 }
             }
         }
-        result.cursor = getDbHelper().getDefault();
+        SettingsHelper.writeUpdateTimestamp(getContext(), Calendar.getInstance().getTimeInMillis());
+        result.cursor = getDbHelper().selectFromDefaultTable();
         return result;
+    }
+
+    protected void addQuote(ContentValues contentValues) {
+        getDbHelper().addQuoteToDefault(contentValues);
     }
 
     protected String getUrl() {

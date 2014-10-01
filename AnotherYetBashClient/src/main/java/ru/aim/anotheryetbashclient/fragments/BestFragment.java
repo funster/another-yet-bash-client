@@ -138,9 +138,6 @@ public class BestFragment extends AbstractFragment implements SimpleLoaderCallba
         }
     }
 
-    /**
-     * Date dialog.
-     */
     public static class DateDialog extends DialogFragment implements DialogInterface.OnClickListener, NumberPicker.OnValueChangeListener {
 
         Calendar now = Calendar.getInstance();

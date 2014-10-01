@@ -49,7 +49,7 @@ public class BestLoader extends QuoteLoader {
                     onEachElement(element, flag);
                 }
             }
-            return getDbHelper().getDefault();
+            return getDbHelper().selectFromDefaultTable();
         } else {
             return super.doInBackground();
         }
@@ -57,7 +57,7 @@ public class BestLoader extends QuoteLoader {
 
     @Override
     protected void saveQuote(ContentValues values) {
-        getDbHelper().addNewQuote(values);
+        getDbHelper().addQuoteToDefault(values);
     }
 
     boolean isFirstPage() {

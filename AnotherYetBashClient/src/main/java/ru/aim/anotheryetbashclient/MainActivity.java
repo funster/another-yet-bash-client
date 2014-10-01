@@ -52,17 +52,9 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
         }
     };
 
-    BroadcastReceiver refreshReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
         mainFrame = (FrameLayout) findViewById(R.id.main_frame);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -74,25 +66,12 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
 
             @Override
             public void onDrawerClosed(View drawerView) {
-//                cache.reverseTransition(BLUR_DURATION / 2);
-//                quotesFragment.getView().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        mainFrame.setForeground(null);
-//                        quotesFragment.getView().setVisibility(View.VISIBLE);
-//                    }
-//                }, BLUR_DURATION);
                 setMenuItemsVisible(true);
                 super.onDrawerClosed(drawerView);
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
-                //quotesFragment.getView().setVisibility(View.INVISIBLE);
-//                cache = Utils.makeTransition(MainActivity.this, quotesFragment.getView());
-//                cache.setCrossFadeEnabled(true);
-                ///              mainFrame.setForeground(cache);
-                //           cache.startTransition(BLUR_DURATION);
                 setMenuItemsVisible(false);
                 super.onDrawerOpened(drawerView);
             }
@@ -115,14 +94,11 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
         IntentFilter intentFilter1 = new IntentFilter(ActionsAndIntents.NOTIFY);
         localBroadcastManager.registerReceiver(notifyBroadcastReceiver, intentFilter1);
 
-        IntentFilter intentFilter = new IntentFilter(ActionsAndIntents.REFRESH);
-        localBroadcastManager.registerReceiver(refreshReceiver, intentFilter);
-
         assert getActionBar() != null;
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
 
-        setFragment();
+        setFragment(true);
     }
 
     AbstractFragment getCurrentFragment() {
@@ -138,7 +114,6 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
         super.onDestroy();
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
         localBroadcastManager.unregisterReceiver(notifyBroadcastReceiver);
-        localBroadcastManager.unregisterReceiver(refreshReceiver);
     }
 
     @Override
@@ -157,23 +132,6 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
     @SuppressWarnings("ConstantConditions")
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-//        final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-//        searchView.setQueryHint(getString(R.string.search_hint));
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                Intent intent = new Intent(MainActivity.this, QuoteService.class);
-//                intent.putExtra(ActionsAndIntents.SEARCH_QUERY, query);
-//                intent.putExtra(ActionsAndIntents.TYPE_ID, ActionsAndIntents.TYPE_SEARCH);
-//                startService(intent);
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                return false;
-//            }
-//        });
         Utils.setItemsVisibility(menu, !hideAdditionalMenu);
         return true;
     }
@@ -188,8 +146,15 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
     }
 
     void setFragment() {
+        setFragment(false);
+    }
+
+    void setFragment(boolean isFirst) {
         updateHeader(this, currentTypeId);
         Fragment fragment = FragmentsFactory.getFragment(currentTypeId);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ActionsAndIntents.IS_FIRST_LAUNCH, isFirst);
+        fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .replace(R.id.main_frame, fragment, fragmentKey)

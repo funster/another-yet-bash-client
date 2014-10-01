@@ -3,9 +3,7 @@ package ru.aim.anotheryetbashclient;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.preference.PreferenceManager;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,12 +34,11 @@ public class QuotesAdapter extends CursorAdapter {
         super(context, c, true);
         this.mDbHelper = dbHelper;
         this.mContext = context;
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        isAnimationEnabled = preferences.getBoolean(SettingsActivity.LIST_ITEM_ANIMATION, true);
+        isAnimationEnabled = SettingsHelper.isItemAnimationEnabled(context);
+        textSize = SettingsHelper.getFontSize(context);
         if (context instanceof RulezActivity) {
             rulezActivity = (RulezActivity) context;
         }
-        textSize = SettingsHelper.fontSize(context);
     }
 
     @Override

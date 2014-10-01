@@ -1,0 +1,23 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:key="@string/enable_list_item_animation_key"
+        android:title="@string/enable_list_item_animation_title"
+        android:defaultValue="true" />
+
+    <PreferenceCategory android:title="@string/auto_update_category">
+
+        <CheckBoxPreference
+            android:key="@string/auto_update_enable_key"
+            android:title="@string/auto_update_enable_title"
+            android:defaultValue="false" />
+
+        <ru.aim.anotheryetbashclient.TimePreference
+            android:dependency="auto_update_enable"
+            android:key="@string/auto_update_time_key"
+            android:summary="@string/auto_update_summary"
+            android:title="@string/auto_update_title" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

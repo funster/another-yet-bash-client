@@ -1,6 +1,5 @@
 package ru.aim.anotheryetbashclient.fragments;
 
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
@@ -47,9 +46,7 @@ public abstract class BaseFragment extends ListFragment {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                Bundle bundle = new Bundle();
                 SimpleDialog simpleDialog = SimpleDialog.newInstance(message);
-                simpleDialog.setArguments(bundle);
                 simpleDialog.show(fragmentManager);
             }
         });

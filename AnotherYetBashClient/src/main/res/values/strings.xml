@@ -4,45 +4,72 @@
     <string name="app_name">Bash.im</string>
     <string name="app_name_with_type">%s</string>
     <string name="app_name_with_type_and_page">%1$s (%2$s)</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_refresh">Refresh</string>
+    <string name="action_settings">Настройки</string>
+    <string name="action_refresh">Обновить</string>
     <string-array name="types">
-        <item>New</item>
-        <item>Random</item>
-        <item>Best</item>
-        <item>By rating</item>
-        <item>Search</item>
-        <!--<item>Abyss</item>-->
-        <!--<item>Top abyss</item>-->
-        <!--<item>Best abyss</item>-->
-        <!--<item>Offline mode</item>-->
-        <item>Favorites</item>
+        <item>Новые</item>
+        <item>Случайные</item>
+        <item>Лучшие</item>
+        <item>По рейтингу</item>
+        <item>Поиск</item>
+        <!--<item>Бездна</item>-->
+        <!--<item>Топ Бездны</item>-->
+        <!--<item>Лучшее Бездны</item>-->
+        <!--<item>Оффлайн</item>-->
+        <item>Избранное</item>
     </string-array>
 
     <!--новые случайные лучшие по рейтингу Бездна топ Бездны лучшее Бездны-->
 
     <string-array name="item_menu">
-        <item>Like</item>
-        <item>Do not like</item>
-        <item>Add to favorites</item>
+        <item>Нравится</item>
+        <item>Не нравится</item>
+        <item>В избранное</item>
     </string-array>
 
     <string-array name="item_menu_favorites">
-        <item>Remove from favorites</item>
+        <item>Удалить из избранного</item>
     </string-array>
 
     <string name="rulez_confirm">Вам %1$s понравилась цитата %2$s</string>
-    <string name="no">no</string>
+    <string name="no">не</string>
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    <string name="updating_fail">Error occurred while updating</string>
-    <string name="added_to_favorites">Quote added to favorites</string>
-    <string name="empty_list">Empty</string>
-    <string name="search_action">Search</string>
+    <string name="updating_fail">Не удалось обновить список цитат.</string>
+    <string name="added_to_favorites">Цитата добавлена в избранное</string>
+    <string name="removed_to_favorites">Цитата удалена из избранного</string>
+    <string name="empty_list">Нет данных</string>
+    <string name="search_action">Поиск</string>
     <string name="search_hint">Текст или номер цитаты</string>
-    <string name="back">Back</string>
-    <string name="forward">Forward</string>
+    <string name="title_activity_settings">Настройки</string>
+    <string name="pref_header_general">Общие</string>
+    <string name="back">Назад</string>
+    <string name="forward">Вперёд</string>
+    <string name="like">Нравится</string>
+    <string name="dont_like">Не нравится</string>
+    <string name="add_to_favorites">Добавить в избранное</string>
+    <string name="remove_from_favorites">Удалить из избранного</string>
+    <string name="error">Ошибка</string>
+    <string name="choose_period">Укажите период</string>
+    <string name="error_send_request">Не удалось отправить запрос</string>
+    <string name="vote_accepted">Ваш голос учтён</string>
+
+    <string-array name="months">
+        <item>янв</item>
+        <item>фев</item>
+        <item>мар</item>
+        <item>апр</item>
+        <item>май</item>
+        <item>июн</item>
+        <item>июл</item>
+        <item>авг</item>
+        <item>сен</item>
+        <item>окт</item>
+        <item>ноя</item>
+        <item>дек</item>
+    </string-array>
+
     <string name="current_page">Текущая страница</string>
     <string name="select_page">Укажите страницу</string>
     <string name="cancel">Отмена</string>
@@ -56,27 +83,18 @@
     <string name="boyan">[:||||:]</string>
     <string name="sample_number">3204</string>
     <string name="search_dialog_title">Укажитие строку для поиска</string>
-
-    <string-array name="months">
-        <item>yan</item>
-        <item>feb</item>
-        <item>mar</item>
-        <item>apr</item>
-        <item>may</item>
-        <item>jun</item>
-        <item>jul</item>
-        <item>aug</item>
-        <item>sen</item>
-        <item>okt</item>
-        <item>nov</item>
-        <item>dec</item>
-    </string-array>
-
-    <!--янв фев мар апр май июн июл авг сен-->
-    <string name="removed_to_favorites">Quote removed from favorites</string>
-    <string name="add_to_favorites">Add to favorites</string>
-    <string name="error_send_request">Не удалось отправить запрос</string>
-    <string name="vote_accepted">Ваш голос учтён</string>
     <string name="font_size_title">Размер шрифта</string>
     <string name="font_size_example">Пример текста, %s</string>
+    <string name="load_error">Ошибка при получении данных.</string>
+    <string name="auto_update_summary">Новые цитаты будут загружаться автоматически в указанное время</string>
+    <string name="auto_update_title">Время обновления</string>
+    <string name="auto_update_time_key">auto_update_time</string>
+    <string name="auto_update_enable_key">auto_update_enable</string>
+    <string name="auto_update_timestamp_key">auto_update_timestamp</string>
+    <string name="last_update">Последнее обновление от %s</string>
+    <string name="auto_update_enable_title">Использовать обновление</string>
+    <string name="enable_list_item_animation_title">Анимация при обновления</string>
+    <string name="enable_list_item_animation_key">enable_list_item_animation</string>
+    <string name="auto_update_category">Автоматическое обновление</string>
+
 </resources>

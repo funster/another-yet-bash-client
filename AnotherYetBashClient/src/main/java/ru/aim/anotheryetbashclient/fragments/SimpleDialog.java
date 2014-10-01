@@ -24,8 +24,9 @@ public class SimpleDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(getArguments().getString(MESSAGE));
+        builder.setMessage(R.string.load_error);
         builder.setTitle(R.string.error);
+        builder.setPositiveButton(R.string.ok, null);
         return builder.create();
     }
 

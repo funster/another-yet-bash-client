@@ -58,7 +58,7 @@ public abstract class QuoteLoader extends AbstractLoader<Cursor> {
             onEachElement(e);
         }
         afterParsing();
-        return getDbHelper().getDefault();
+        return getDbHelper().selectFromDefaultTable();
     }
 
     protected Document prepareRequest() throws IOException {
@@ -70,7 +70,7 @@ public abstract class QuoteLoader extends AbstractLoader<Cursor> {
 
     protected void saveQuote(ContentValues values) {
         if (getDbHelper().notExists(values.getAsString(DbHelper.QUOTE_PUBLIC_ID))) {
-            getDbHelper().addNewQuote(values);
+            getDbHelper().addQuoteToDefault(values);
         }
     }
 

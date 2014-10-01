@@ -8,6 +8,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -23,13 +24,13 @@ import java.util.List;
  * handset devices, settings are presented as a single list. On tablets,
  * settings are split by category, with category headers shown to the left of
  * the list of settings.
- * <p>
+ * <p/>
  * See <a href="http://developer.android.com/design/patterns/settings.html">
  * Android Design: Settings</a> for design guidelines and the <a
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends PreferenceActivity implements Preference.OnPreferenceChangeListener {
 
     public static final String LIST_ITEM_ANIMATION = "enable_list_item_animation";
 
@@ -64,7 +65,11 @@ public class SettingsActivity extends PreferenceActivity {
 
         // Add 'general' preferences.
         addPreferencesFromResource(R.xml.pref_general);
-        addPreferencesFromResource(R.xml.pref_anim);
+        addPreferencesFromResource(R.xml.pref_update);
+
+
+        CheckBoxPreference enableUpdatePreference = (CheckBoxPreference) findPreference(getString(R.string.auto_update_enable_key));
+        enableUpdatePreference.setOnPreferenceChangeListener(this);
 
         // Add 'notifications' preferences, and a corresponding header.
 //        PreferenceCategory fakeHeader = new PreferenceCategory(this);
@@ -87,7 +92,9 @@ public class SettingsActivity extends PreferenceActivity {
         // bindPreferenceSummaryToValue(findPreference("sync_frequency"));
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean onIsMultiPane() {
         return isXLargeTablet(this) && !isSimplePreferences(this);
@@ -99,7 +106,7 @@ public class SettingsActivity extends PreferenceActivity {
      */
     private static boolean isXLargeTablet(Context context) {
         return (context.getResources().getConfiguration().screenLayout
-        & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
+                & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
     }
 
     /**
@@ -115,7 +122,9 @@ public class SettingsActivity extends PreferenceActivity {
                 || !isXLargeTablet(context);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onBuildHeaders(List<Header> target) {
@@ -197,6 +206,17 @@ public class SettingsActivity extends PreferenceActivity {
                         .getString(preference.getKey(), ""));
     }
 
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        boolean value = (Boolean) newValue;
+        if (value) {
+            AlarmReceiver.setAlarm(this);
+        } else {
+            AlarmReceiver.cancelAlarm(this);
+        }
+        return true;
+    }
+
     /**
      * This fragment shows general preferences only. It is used when the
      * activity is showing a two-pane settings UI.
@@ -207,7 +227,7 @@ public class SettingsActivity extends PreferenceActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_general);
-            addPreferencesFromResource(R.xml.pref_anim);
+            addPreferencesFromResource(R.xml.pref_update);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are

@@ -11,6 +11,6 @@ public class FavoritesLoader extends AbstractLoader<Cursor> {
 
     @Override
     public Cursor doInBackground() throws Exception {
-        return getDbHelper().getFavorites();
+        return getDbHelper().selectFromFavorites();
     }
 }

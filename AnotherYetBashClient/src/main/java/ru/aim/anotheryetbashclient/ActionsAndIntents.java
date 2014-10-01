@@ -74,4 +74,9 @@ public class ActionsAndIntents {
             this.typeId = typeId;
         }
     }
+
+    // -----------------------------------------------------------------------
+    // misc
+
+    public static final String IS_FIRST_LAUNCH = "isFirst";
 }

@@ -46,7 +46,7 @@ public class LoadersTest extends ActivityInstrumentationTestCase2<MainActivity> 
         assertSame(cursor.getCount(), 35);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        query(db, "select count(*) from " + DbHelper.QUOTE_TABLE + " where " + DbHelper.QUOTE_FLAG + " = ?",
+        query(db, "select count(*) from " + DbHelper.QUOTE_DEFAULT_TABLE + " where " + DbHelper.QUOTE_FLAG + " = ?",
                 new String[]{"0"}, new Function1<Cursor, Void>() {
                     @Override
                     public Void apply(Cursor arg0) {
@@ -56,7 +56,7 @@ public class LoadersTest extends ActivityInstrumentationTestCase2<MainActivity> 
                     }
                 });
 
-        query(db, "select count(*) from " + DbHelper.QUOTE_TABLE + " where " + DbHelper.QUOTE_FLAG + " = ?",
+        query(db, "select count(*) from " + DbHelper.QUOTE_DEFAULT_TABLE + " where " + DbHelper.QUOTE_FLAG + " = ?",
                 new String[]{"1"}, new Function1<Cursor, Void>() {
                     @Override
                     public Void apply(Cursor arg0) {
