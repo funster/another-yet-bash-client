@@ -54,7 +54,7 @@ public class FreshFragment extends AbstractFragment implements SimpleLoaderCallb
     public void onResume() {
         super.onResume();
         if (isLoadFromCache()) {
-            ListAdapter listAdapter = new QuotesAdapter(getDbHelper(), getActivity(), getDbHelper().selectFromFavorites());
+            ListAdapter listAdapter = new QuotesAdapter(getDbHelper(), getActivity(), getDbHelper().selectFromFresh());
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(SettingsHelper.getUpdateTimestamp(getActivity()));
             emptyView.setText(getString(R.string.last_update, dateFormat.format(calendar.getTime())));

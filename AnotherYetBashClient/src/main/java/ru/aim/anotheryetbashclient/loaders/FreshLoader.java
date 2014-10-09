@@ -31,6 +31,7 @@ public class FreshLoader extends AbstractLoader<FreshResult> {
 
     static final String ROOT_PAGE = wrapWithRoot("");
     static final String NEXT_PAGE = wrapWithRoot("index/%s");
+    boolean fromService;
 
     public static final int ID = ActionsAndIntents.TYPE_NEW;
 
@@ -64,6 +65,9 @@ public class FreshLoader extends AbstractLoader<FreshResult> {
         Elements quotesElements = document.select("div[class=quote]");
         L.d(TAG, "Quotes size " + quotesElements.size());
         getDbHelper().clearDefault();
+        if (!fromService && isFirstPage()) {
+            getDbHelper().clearFresh();
+        }
         for (Element e : quotesElements) {
             Elements idElements = e.select("a[class=id]");
             Elements dateElements = e.select("span[class=date]");
@@ -80,10 +84,15 @@ public class FreshLoader extends AbstractLoader<FreshResult> {
                     values.put(DbHelper.QUOTE_TEXT, textElements.html().trim());
                     L.d(TAG, "Insert new item: " + values);
                     addQuote(values);
+                    if (!fromService && isFirstPage()) {
+                        getDbHelper().addQuoteToFresh(values);
+                    }
                 }
             }
         }
-        SettingsHelper.writeUpdateTimestamp(getContext(), Calendar.getInstance().getTimeInMillis());
+        if (!fromService && isFirstPage()) {
+            SettingsHelper.writeUpdateTimestamp(getContext(), Calendar.getInstance().getTimeInMillis());
+        }
         result.cursor = getDbHelper().selectFromDefaultTable();
         return result;
     }
@@ -92,8 +101,16 @@ public class FreshLoader extends AbstractLoader<FreshResult> {
         getDbHelper().addQuoteToDefault(contentValues);
     }
 
+    boolean isFirstPage() {
+        return mCurrentPage == 0;
+    }
+
+    public void setFromService(boolean fromService) {
+        this.fromService = fromService;
+    }
+
     protected String getUrl() {
-        if (mCurrentPage == 0) {
+        if (isFirstPage()) {
             return ROOT_PAGE;
         } else {
             return String.format(NEXT_PAGE, mCurrentPage);

@@ -9,8 +9,11 @@ import android.content.Intent;
 import java.util.Calendar;
 
 import ru.aim.anotheryetbashclient.helper.DbHelper;
+import ru.aim.anotheryetbashclient.helper.L;
 
 public class AlarmReceiver extends BroadcastReceiver {
+
+    public static final String TAG = "AlarmReceiver";
 
     public static final String ALARM_ACTION = "ru.aim.anotheryetbashclient.UPDATE";
     public static final int DEFAULT_REQUEST_CODE = 0;
@@ -25,6 +28,9 @@ public class AlarmReceiver extends BroadcastReceiver {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, SettingsHelper.getUpdateHour(context));
         calendar.set(Calendar.MINUTE, SettingsHelper.getUpdateMinute(context));
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        L.d(TAG, "Set new alarm at " + calendar.getTime());
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, pendingIntent);
     }
@@ -45,6 +51,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        L.d(TAG, "Alarm received: " + intent.toString());
         context.startService(new Intent(context, QuoteService.class));
     }
 }

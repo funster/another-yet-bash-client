@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 @SuppressWarnings("unused")
 public class DbHelper extends SQLiteOpenHelper {
 
+    private static final String TAG = "DbHelper";
+
     public static final String DB_NAME = "quote_db";
     public static final String QUOTE_DEFAULT_TABLE = "quotes";
     public static final String QUOTE_ABYSS_TABLE = "quotes_abyss";
@@ -119,6 +121,10 @@ public class DbHelper extends SQLiteOpenHelper {
         return selectAll(QUOTE_FAVORITES_TABLE);
     }
 
+    public Cursor selectFromFresh() {
+        return selectAll(QUOTE_FRESH_TABLE);
+    }
+
     public Cursor getUnread() {
         SQLiteDatabase database = getReadableDatabase();
         assert database != null;
@@ -199,6 +205,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public long addQuote(String tableName, ContentValues values) {
+        L.d(TAG, "Add new quotes to " + tableName + " values: " + values);
         SQLiteDatabase db = getWritableDatabase();
         assert db != null;
         long id = db.insert(tableName, null, values);

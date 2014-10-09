@@ -21,6 +21,7 @@ public class QuoteService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        L.d(TAG, "Service raised");
         DbHelper dbHelper = new DbHelper(this);
         dbHelper.clearFresh();
         FreshLoader freshLoader = new FreshLoader(this, Bundle.EMPTY) {
@@ -30,6 +31,7 @@ public class QuoteService extends IntentService {
             }
         };
         freshLoader.setDbHelper(dbHelper);
+        freshLoader.setFromService(true);
         try {
             freshLoader.doInBackground();
             SettingsHelper.writeUpdateTimestamp(this, Calendar.getInstance().getTimeInMillis());
