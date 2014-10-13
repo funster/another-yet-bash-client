@@ -18,6 +18,11 @@
             android:summary="@string/auto_update_summary"
             android:title="@string/auto_update_title" />
 
+        <CheckBoxPreference
+            android:key="@string/auto_update_wifi_key"
+            android:title="@string/auto_update_wife_title"
+            android:defaultValue="true" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

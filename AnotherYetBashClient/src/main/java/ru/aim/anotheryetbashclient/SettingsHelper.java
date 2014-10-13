@@ -52,6 +52,10 @@ public class SettingsHelper {
         return preferences.getBoolean(context.getString(R.string.auto_update_enable_key), false);
     }
 
+    public static boolean isPreloadedAvailable(Context context) {
+        return isUpdateEnabled(context) && isFreshTableNotEmpty(context);
+    }
+
     public static boolean isFreshTableNotEmpty(Context context) {
         DbHelper dbHelper = new DbHelper(context);
         return !dbHelper.isEmptyFreshTable();
@@ -69,7 +73,7 @@ public class SettingsHelper {
         return TimePreference.getMinute(hourString);
     }
 
-    public static void writeUpdateTimestamp(Context context, long timestamp) {
+    public static void writeTimestamp(Context context, long timestamp) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (timestamp == 0) {
             preferences.edit().remove(context.getString(R.string.auto_update_timestamp_key)).clear();
@@ -79,8 +83,13 @@ public class SettingsHelper {
         }
     }
 
-    public static long getUpdateTimestamp(Context context) {
+    public static long getTimestamp(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getLong(context.getString(R.string.auto_update_timestamp_key), 0);
+    }
+
+    public static boolean isUpdateOnlyWifiEnabled(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getBoolean(context.getString(R.string.auto_update_wifi_key), true);
     }
 }

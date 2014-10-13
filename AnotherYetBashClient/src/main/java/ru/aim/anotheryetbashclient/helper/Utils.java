@@ -17,7 +17,6 @@ import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -179,7 +178,7 @@ public final class Utils {
         int h = bitmap.getHeight();
 
         int[] pix = new int[w * h];
-        Log.e("pix", w + " " + h + " " + pix.length);
+        L.e("pix", w + " " + h + " " + pix.length, null);
         bitmap.getPixels(pix, 0, w, 0, 0, w, h);
 
         int wm = w - 1;
@@ -365,7 +364,7 @@ public final class Utils {
             }
         }
 
-        Log.e("pix", w + " " + h + " " + pix.length);
+        L.e("pix", w + " " + h + " " + pix.length, null);
         bitmap.setPixels(pix, 0, w, 0, 0, w, h);
 
         return (bitmap);

@@ -19,6 +19,7 @@ public final class FragmentsFactory {
         map.put(ActionsAndIntents.TYPE_BY_RATING, RatingFragment.class);
         map.put(ActionsAndIntents.TYPE_SEARCH, SearchFragment.class);
         map.put(ActionsAndIntents.TYPE_FAVORITES, FavoritesFragment.class);
+        map.put(ActionsAndIntents.TYPE_OFFLINE, OfflineFragment.class);
 //        map.put(ActionsAndIntents.TYPE_ABYSS, AbstractBashFragment.class);
 //        map.put(ActionsAndIntents.TYPE_TOP_ABYSS, TopAbyssFragment.class);
 //        map.put(ActionsAndIntents.TYPE_BEST_ABYSS, BestAbyssFragment.class);

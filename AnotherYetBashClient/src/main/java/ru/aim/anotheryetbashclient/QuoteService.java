@@ -2,7 +2,10 @@ package ru.aim.anotheryetbashclient;
 
 import android.app.IntentService;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import java.util.Calendar;
@@ -21,7 +24,24 @@ public class QuoteService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        L.d(TAG, "Service raised");
+        L.d(TAG, "Service rises");
+        boolean onlyWifi = SettingsHelper.isUpdateOnlyWifiEnabled(this);
+
+        if (onlyWifi) {
+            ConnectivityManager connMgr = (ConnectivityManager)
+                    getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            if (networkInfo == null) {
+                L.d(TAG, "Wifi not connected!1");
+                return;
+            }
+            boolean isWifiConn = networkInfo.isConnected();
+            if (!isWifiConn) {
+                L.d(TAG, "Wifi not connected!2");
+                return;
+            }
+        }
+
         DbHelper dbHelper = new DbHelper(this);
         dbHelper.clearFresh();
         FreshLoader freshLoader = new FreshLoader(this, Bundle.EMPTY) {
@@ -34,7 +54,7 @@ public class QuoteService extends IntentService {
         freshLoader.setFromService(true);
         try {
             freshLoader.doInBackground();
-            SettingsHelper.writeUpdateTimestamp(this, Calendar.getInstance().getTimeInMillis());
+            SettingsHelper.writeTimestamp(this, Calendar.getInstance().getTimeInMillis());
         } catch (Exception e) {
             L.e(TAG, "Error while getting new quotes", e);
         }

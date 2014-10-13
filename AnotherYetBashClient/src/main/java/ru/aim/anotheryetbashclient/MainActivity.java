@@ -98,7 +98,10 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
 
-        setFragment(true);
+        if (savedInstanceState == null && SettingsHelper.isPreloadedAvailable(this)) {
+            currentTypeId = ActionsAndIntents.TYPE_OFFLINE;
+        }
+        setFragment();
     }
 
     AbstractFragment getCurrentFragment() {
@@ -146,15 +149,8 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
     }
 
     void setFragment() {
-        setFragment(false);
-    }
-
-    void setFragment(boolean isFirst) {
         updateHeader(this, currentTypeId);
         Fragment fragment = FragmentsFactory.getFragment(currentTypeId);
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(ActionsAndIntents.IS_FIRST_LAUNCH, isFirst);
-        fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .replace(R.id.main_frame, fragment, fragmentKey)

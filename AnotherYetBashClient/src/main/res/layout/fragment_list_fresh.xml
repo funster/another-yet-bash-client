@@ -10,7 +10,6 @@
 
         <TextView
             android:padding="4dp"
-            android:visibility="gone"
             android:id="@+id/update_date"
             android:textAppearance="@android:style/TextAppearance.Small"
             android:layout_gravity="center"

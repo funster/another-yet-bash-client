@@ -91,7 +91,7 @@ public class FreshLoader extends AbstractLoader<FreshResult> {
             }
         }
         if (!fromService && isFirstPage()) {
-            SettingsHelper.writeUpdateTimestamp(getContext(), Calendar.getInstance().getTimeInMillis());
+            SettingsHelper.writeTimestamp(getContext(), Calendar.getInstance().getTimeInMillis());
         }
         result.cursor = getDbHelper().selectFromDefaultTable();
         return result;

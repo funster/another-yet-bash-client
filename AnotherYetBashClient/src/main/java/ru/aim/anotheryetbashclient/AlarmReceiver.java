@@ -42,7 +42,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, DEFAULT_REQUEST_CODE,
                 buildIntent(), PendingIntent.FLAG_CANCEL_CURRENT);
         alarmManager.cancel(pendingIntent);
-        SettingsHelper.writeUpdateTimestamp(context, 0);
+        SettingsHelper.writeTimestamp(context, 0);
     }
 
     public static Intent buildIntent() {

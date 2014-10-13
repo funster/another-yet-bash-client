@@ -6,18 +6,11 @@ import android.support.v4.content.Loader;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ListAdapter;
-import android.widget.TextView;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.QuotesAdapter;
 import ru.aim.anotheryetbashclient.R;
-import ru.aim.anotheryetbashclient.SettingsHelper;
 import ru.aim.anotheryetbashclient.loaders.FreshLoader;
 import ru.aim.anotheryetbashclient.loaders.FreshResult;
 import ru.aim.anotheryetbashclient.loaders.SimpleLoaderCallbacks;
@@ -29,47 +22,16 @@ public class FreshFragment extends AbstractFragment implements SimpleLoaderCallb
 
     int currentPage;
     int maxPage;
-    boolean isFirstLaunch;
-    DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyy hh:mm");
-
-    TextView emptyView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState == null) {
-            if (getArguments() != null) {
-                isFirstLaunch = getArguments().getBoolean(ActionsAndIntents.IS_FIRST_LAUNCH);
-            }
-        }
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        emptyView = (TextView) view.findViewById(R.id.update_date);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (isLoadFromCache()) {
-            ListAdapter listAdapter = new QuotesAdapter(getDbHelper(), getActivity(), getDbHelper().selectFromFresh());
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(SettingsHelper.getUpdateTimestamp(getActivity()));
-            emptyView.setText(getString(R.string.last_update, dateFormat.format(calendar.getTime())));
-            emptyView.setVisibility(View.VISIBLE);
-            setListAdapter(listAdapter);
-            setMenuItemsVisibility(false);
-            isFirstLaunch = false;
-        } else {
-            getLoaderManager().initLoader(FreshLoader.ID, getArguments(), this);
-        }
-    }
-
-    boolean isLoadFromCache() {
-        return isFirstLaunch && SettingsHelper.isUpdateEnabled(getActivity())
-                && SettingsHelper.isFreshTableNotEmpty(getActivity());
+        getLoaderManager().initLoader(FreshLoader.ID, Bundle.EMPTY, this);
     }
 
     @Override
@@ -105,7 +67,6 @@ public class FreshFragment extends AbstractFragment implements SimpleLoaderCallb
         if (data.containsError()) {
             showWarning(getFragmentManager(), data.getError().getMessage());
         } else {
-            emptyView.setVisibility(View.GONE);
             FreshResult freshResult = data.getResult();
             ListAdapter listAdapter = new QuotesAdapter(getDbHelper(), getActivity(), freshResult.cursor);
             setListAdapter(listAdapter);
@@ -171,10 +132,5 @@ public class FreshFragment extends AbstractFragment implements SimpleLoaderCallb
         public void onClick(DialogInterface dialog, int which) {
             sendMessage(getActivity(), FreshFragment.class, picker.getValue());
         }
-    }
-
-    @Override
-    protected int getRootLayoutId() {
-        return R.layout.fragment_list_fresh;
     }
 }
