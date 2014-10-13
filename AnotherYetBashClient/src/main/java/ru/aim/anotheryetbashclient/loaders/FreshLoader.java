@@ -16,9 +16,11 @@ import java.util.Calendar;
 
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.BashApplication;
+import ru.aim.anotheryetbashclient.R;
 import ru.aim.anotheryetbashclient.SettingsHelper;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.helper.L;
+import ru.aim.anotheryetbashclient.helper.Utils;
 
 import static ru.aim.anotheryetbashclient.helper.DbHelper.QUOTE_PUBLIC_ID;
 import static ru.aim.anotheryetbashclient.loaders.Package.getCharsetFromResponse;
@@ -44,6 +46,9 @@ public class FreshLoader extends AbstractLoader<FreshResult> {
 
     @Override
     public FreshResult doInBackground() throws Exception {
+        if (Utils.isNetworkNotAvailable(getContext())) {
+            throw new RuntimeException(getContext().getString(R.string.error_no_connection));
+        }
         FreshResult result = new FreshResult();
         String uri = getUrl();
 

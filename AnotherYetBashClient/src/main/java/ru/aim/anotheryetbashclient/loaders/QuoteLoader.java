@@ -16,7 +16,9 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 
 import ru.aim.anotheryetbashclient.BashApplication;
+import ru.aim.anotheryetbashclient.R;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
+import ru.aim.anotheryetbashclient.helper.Utils;
 
 import static ru.aim.anotheryetbashclient.helper.DbHelper.QUOTE_PUBLIC_ID;
 import static ru.aim.anotheryetbashclient.loaders.Package.getCharsetFromResponse;
@@ -51,6 +53,9 @@ public abstract class QuoteLoader extends AbstractLoader<Cursor> {
 
     @Override
     public Cursor doInBackground() throws Exception {
+        if (Utils.isNetworkNotAvailable(getContext())) {
+            throw new RuntimeException(getContext().getString(R.string.error_no_connection));
+        }
         Document document = prepareRequest();
         beforeParsing(document);
         Elements quotesElements = document.select("div[class=quote]");

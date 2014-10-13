@@ -9,6 +9,7 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:fontFamily="sans-serif-condensed"
             android:padding="4dp"
             android:id="@+id/update_date"
             android:textAppearance="@android:style/TextAppearance.Small"

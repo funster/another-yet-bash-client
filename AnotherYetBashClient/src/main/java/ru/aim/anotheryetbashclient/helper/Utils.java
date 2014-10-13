@@ -55,6 +55,10 @@ public final class Utils {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    public static boolean isNetworkNotAvailable(Context context) {
+        return !isNetworkAvailable(context);
+    }
+
     public static boolean contains(long[] arr, long value) {
         //noinspection ForLoopReplaceableByForEach
         for (int i = 0; i < arr.length; i++) {

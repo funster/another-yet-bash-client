@@ -13,14 +13,16 @@
             android:defaultValue="false" />
 
         <ru.aim.anotheryetbashclient.TimePreference
-            android:dependency="auto_update_enable"
+            android:dependency="@string/auto_update_enable_key"
             android:key="@string/auto_update_time_key"
             android:summary="@string/auto_update_summary"
             android:title="@string/auto_update_title" />
 
         <CheckBoxPreference
+            android:dependency="@string/auto_update_enable_key"
             android:key="@string/auto_update_wifi_key"
             android:title="@string/auto_update_wife_title"
+            android:summary="@string/auto_update_wifi_summary"
             android:defaultValue="true" />
 
     </PreferenceCategory>

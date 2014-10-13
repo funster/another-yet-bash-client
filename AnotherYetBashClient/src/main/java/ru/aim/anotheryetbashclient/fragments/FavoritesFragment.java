@@ -47,7 +47,7 @@ public class FavoritesFragment extends AbstractFragment
     public void onLoadFinished(Loader<SimpleResult<Cursor>> loader, SimpleResult<Cursor> result) {
         setRefreshing(false);
         if (result.containsError()) {
-            showWarning(getFragmentManager(), result.getError().getMessage());
+            showWarning(getActivity(), result.getError().getMessage());
         } else {
             ListAdapter listAdapter = new QuotesAdapter(getDbHelper(), getActivity(), result.getResult());
             setListAdapter(listAdapter);

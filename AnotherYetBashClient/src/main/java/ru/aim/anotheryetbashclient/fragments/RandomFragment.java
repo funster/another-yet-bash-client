@@ -45,7 +45,7 @@ public class RandomFragment extends AbstractFragment implements SimpleLoaderCall
     public void onLoadFinished(Loader<SimpleResult<Cursor>> loader, SimpleResult<Cursor> data) {
         setRefreshing(false);
         if (data.containsError()) {
-            showWarning(getFragmentManager(), data.getError().getMessage());
+            showWarning(getActivity(), data.getError().getMessage());
         } else {
             ListAdapter listAdapter = new QuotesAdapter(getDbHelper(), getActivity(), data.getResult());
             setListAdapter(listAdapter);

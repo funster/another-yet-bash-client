@@ -65,7 +65,7 @@ public class FreshFragment extends AbstractFragment implements SimpleLoaderCallb
     public void onLoadFinished(Loader<SimpleResult<FreshResult>> loader, final SimpleResult<FreshResult> data) {
         setRefreshing(false);
         if (data.containsError()) {
-            showWarning(getFragmentManager(), data.getError().getMessage());
+            showWarning(getActivity(), data.getError().getMessage());
         } else {
             FreshResult freshResult = data.getResult();
             ListAdapter listAdapter = new QuotesAdapter(getDbHelper(), getActivity(), freshResult.cursor);

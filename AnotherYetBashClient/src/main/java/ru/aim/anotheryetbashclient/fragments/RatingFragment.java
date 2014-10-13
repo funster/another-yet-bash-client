@@ -62,7 +62,7 @@ public class RatingFragment extends AbstractFragment implements SimpleLoaderCall
     public void onLoadFinished(Loader<SimpleResult<Cursor>> loader, final SimpleResult<Cursor> data) {
         setRefreshing(false);
         if (data.containsError()) {
-            showWarning(getFragmentManager(), data.getError().getMessage());
+            showWarning(getActivity(), data.getError().getMessage());
         } else {
             ListAdapter listAdapter = new QuotesAdapter(getDbHelper(), getActivity(), data.getResult());
             setListAdapter(listAdapter);

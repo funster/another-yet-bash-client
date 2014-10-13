@@ -6,8 +6,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
+import android.widget.Toast;
 
 import ru.aim.anotheryetbashclient.MainActivity;
+import ru.aim.anotheryetbashclient.R;
 import ru.aim.anotheryetbashclient.helper.L;
 
 @SuppressWarnings("unused")
@@ -41,13 +43,14 @@ public abstract class BaseFragment extends ListFragment {
         return (MainActivity) getActivity();
     }
 
-    public static void showWarning(final FragmentManager fragmentManager, final String message) {
+    public static void showWarning(final FragmentActivity activity, final String message) {
         Handler handler = new Handler(Looper.myLooper());
         handler.post(new Runnable() {
             @Override
             public void run() {
-                SimpleDialog simpleDialog = SimpleDialog.newInstance(message);
-                simpleDialog.show(fragmentManager);
+                // SimpleDialog simpleDialog = SimpleDialog.newInstance(message);
+                // simpleDialog.show(fragmentManager);
+                Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
             }
         });
     }

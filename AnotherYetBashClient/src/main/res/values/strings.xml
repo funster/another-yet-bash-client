@@ -93,6 +93,12 @@
     <string name="auto_update_category">Автоматическое обновление</string>
     <string name="offline_hint">Здесь будут отображаться цитаты загруженные автоматически.</string>
     <string name="auto_update_wifi_key">auto_update_wifi_key</string>
-    <string name="auto_update_wife_title">Обновлять только по Wifi</string>
+    <string name="auto_update_wife_title">Обновлять только по wifi</string>
+    <string name="version_title">Версия</string>
+    <string name="version_summary">Текущая версия: %s</string>
+    <string name="version_key">version_key</string>
+    <string name="about_app_title">О программе</string>
+    <string name="auto_update_wifi_summary">Обновление будет происходить только если есть доступ к сети через wifi.</string>
+    <string name="error_no_connection">При загрузке данных произошла ошибка. Проверьте Ваше подключение к сети</string>
 
 </resources>

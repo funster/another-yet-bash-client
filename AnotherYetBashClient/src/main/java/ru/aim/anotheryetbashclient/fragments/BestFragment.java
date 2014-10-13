@@ -69,7 +69,7 @@ public class BestFragment extends AbstractFragment implements SimpleLoaderCallba
     public void onLoadFinished(Loader<SimpleResult<Cursor>> loader, SimpleResult<Cursor> data) {
         setRefreshing(false);
         if (data.containsError()) {
-            showWarning(getFragmentManager(), data.getError().getMessage());
+            showWarning(getActivity(), data.getError().getMessage());
         } else {
             ListAdapter listAdapter;
             if (dateResult.isToday()) {

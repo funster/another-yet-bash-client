@@ -2,6 +2,7 @@ package ru.aim.anotheryetbashclient;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -16,6 +17,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.view.MenuItem;
 
 import java.util.List;
 
@@ -48,6 +50,9 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         super.onPostCreate(savedInstanceState);
 
         setupSimplePreferencesScreen();
+
+        getActionBar().setDisplayShowHomeEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     /**
@@ -66,10 +71,22 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         // Add 'general' preferences.
         addPreferencesFromResource(R.xml.pref_general);
         addPreferencesFromResource(R.xml.pref_update);
+        addPreferencesFromResource(R.xml.pref_about);
 
 
         CheckBoxPreference enableUpdatePreference = (CheckBoxPreference) findPreference(getString(R.string.auto_update_enable_key));
         enableUpdatePreference.setOnPreferenceChangeListener(this);
+
+        Preference versionPreference = findPreference(getString(R.string.version_key));
+        try {
+            String versionName = getPackageManager()
+                    .getPackageInfo(getPackageName(), 0).versionName;
+            if (BuildConfig.DEBUG) {
+                versionName += " (" + getPackageManager().getPackageInfo(getPackageName(), 0).versionCode + ")";
+            }
+            versionPreference.setSummary(getString(R.string.version_summary, versionName));
+        } catch (PackageManager.NameNotFoundException ignored) {
+        }
 
         // Add 'notifications' preferences, and a corresponding header.
 //        PreferenceCategory fakeHeader = new PreferenceCategory(this);
@@ -90,6 +107,15 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
 //        bindPreferenceSummaryToValue(findPreference("example_list"));
 //        bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
         // bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -228,6 +254,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_general);
             addPreferencesFromResource(R.xml.pref_update);
+            addPreferencesFromResource(R.xml.pref_about);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
