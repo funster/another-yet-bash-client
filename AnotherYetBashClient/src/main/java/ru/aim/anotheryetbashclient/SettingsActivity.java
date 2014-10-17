@@ -51,7 +51,6 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
 
         setupSimplePreferencesScreen();
 
-        getActionBar().setDisplayShowHomeEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

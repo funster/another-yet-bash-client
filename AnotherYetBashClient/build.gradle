@@ -1,20 +1,20 @@
 apply plugin: 'com.android.application'
 
 dependencies {
-    compile "com.android.support:support-v4:20.0.0"
+    compile "com.android.support:support-v4:21.0.0"
     compile "org.jsoup:jsoup:1.7.3"
     compile "com.daimajia.swipelayout:library:1.0.7@aar"
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion '20'
+    compileSdkVersion 21
+    buildToolsVersion '21'
 
     defaultConfig {
         versionCode 8
         versionName '0.1'
         minSdkVersion 17
-        targetSdkVersion 19
+        targetSdkVersion 21
     }
 
     signingConfigs {
