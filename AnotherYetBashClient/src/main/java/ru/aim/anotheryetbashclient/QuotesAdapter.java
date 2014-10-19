@@ -87,15 +87,7 @@ public class QuotesAdapter extends CursorAdapter {
         viewHolder.addFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mDbHelper.isFavorite(id)) {
-                    mDbHelper.removeFromFavorite(viewHolder.publicId);
-                    Toast.makeText(context, R.string.removed_to_favorites, Toast.LENGTH_LONG).show();
-                    viewHolder.addFavorite.setImageResource(R.drawable.ic_action_favorite);
-                } else {
-                    mDbHelper.addToFavorite(viewHolder.publicId);
-                    Toast.makeText(context, R.string.added_to_favorites, Toast.LENGTH_LONG).show();
-                    viewHolder.addFavorite.setImageResource(R.drawable.ic_action_favorite_red);
-                }
+                onFavoriteClick(id, viewHolder, context);
             }
         });
         viewHolder.plus.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +117,18 @@ public class QuotesAdapter extends CursorAdapter {
                 animatorSet.start();
                 animatedPosition = cursor.getPosition();
             }
+        }
+    }
+
+    protected void onFavoriteClick(String id, ViewHolder viewHolder, Context context) {
+        if (mDbHelper.isFavorite(id)) {
+            mDbHelper.removeFromFavorite(viewHolder.publicId);
+            Toast.makeText(context, R.string.removed_to_favorites, Toast.LENGTH_LONG).show();
+            viewHolder.addFavorite.setImageResource(R.drawable.ic_action_favorite);
+        } else {
+            mDbHelper.addToFavorite(viewHolder.publicId);
+            Toast.makeText(context, R.string.added_to_favorites, Toast.LENGTH_LONG).show();
+            viewHolder.addFavorite.setImageResource(R.drawable.ic_action_favorite_red);
         }
     }
 

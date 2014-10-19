@@ -100,5 +100,6 @@
     <string name="about_app_title">О программе</string>
     <string name="auto_update_wifi_summary">Обновление будет происходить только если есть доступ к сети через wifi.</string>
     <string name="error_no_connection">При загрузке данных произошла ошибка. Проверьте Ваше подключение к сети</string>
+    <string name="data_refreshing">Данные обновляются…</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package ru.aim.anotheryetbashclient.fragments;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -9,6 +10,7 @@ import android.widget.ListAdapter;
 
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.QuotesAdapter;
+import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.loaders.FavoritesLoader;
 import ru.aim.anotheryetbashclient.loaders.SimpleResult;
 
@@ -49,7 +51,7 @@ public class FavoritesFragment extends AbstractFragment
         if (result.containsError()) {
             showWarning(getActivity(), result.getError().getMessage());
         } else {
-            ListAdapter listAdapter = new QuotesAdapter(getDbHelper(), getActivity(), result.getResult());
+            ListAdapter listAdapter = new FavoritesAdapter(getDbHelper(), getActivity(), result.getResult());
             setListAdapter(listAdapter);
             setMenuItemsVisibility(true);
         }
@@ -58,5 +60,18 @@ public class FavoritesFragment extends AbstractFragment
     @Override
     public void onLoaderReset(Loader<SimpleResult<Cursor>> loader) {
         safeSwap();
+    }
+
+    class FavoritesAdapter extends QuotesAdapter {
+
+        public FavoritesAdapter(DbHelper dbHelper, Context context, Cursor c) {
+            super(dbHelper, context, c);
+        }
+
+        @Override
+        protected void onFavoriteClick(String id, ViewHolder viewHolder, Context context) {
+            super.onFavoriteClick(id, viewHolder, context);
+            onManualUpdate();
+        }
     }
 }

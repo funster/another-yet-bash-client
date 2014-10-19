@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import ru.aim.anotheryetbashclient.R;
 import ru.aim.anotheryetbashclient.SwipeRefreshUtils;
@@ -15,18 +16,31 @@ public abstract class RefreshFragment extends BaseFragment implements SwipeRefre
 
     private boolean itemsVisible;
     private SwipeRefreshLayout refreshLayout;
+    private TextView emptyView;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         refreshLayout.setOnRefreshListener(this);
         SwipeRefreshUtils.applyStyle(refreshLayout);
+        emptyView = (TextView) view.findViewById(android.R.id.empty);
         super.onViewCreated(view, savedInstanceState);
     }
 
     protected void setRefreshing(boolean value) {
         refreshLayout.setRefreshing(value);
         getMainActivity().setMenuItemsVisible(!value);
+        if (isEmptyList()) {
+            if (value) {
+                emptyView.setText(R.string.data_refreshing);
+            } else {
+                emptyView.setText(R.string.empty_list);
+            }
+        }
+    }
+
+    boolean isEmptyList() {
+        return (getListAdapter() == null || getListAdapter().getCount() == 0) && emptyView != null;
     }
 
     public abstract void onManualUpdate();
