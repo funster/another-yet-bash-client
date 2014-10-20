@@ -12,7 +12,7 @@
             android:title="@string/auto_update_enable_title"
             android:defaultValue="false" />
 
-        <ru.pavelshackih.anotheryetbashclient.TimePreference
+        <ru.aim.anotheryetbashclient.TimePreference
             android:dependency="@string/auto_update_enable_key"
             android:key="@string/auto_update_time_key"
             android:summary="@string/auto_update_summary"

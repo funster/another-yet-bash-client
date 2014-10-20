@@ -3,11 +3,11 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="ru.pavelshackih.anotheryetbashclient.SettingsActivity$GeneralPreferenceFragment"
+        android:fragment="ru.aim.anotheryetbashclient.SettingsActivity$GeneralPreferenceFragment"
         android:title="@string/pref_header_general" />
 
     <header
-        android:fragment="ru.pavelshackih.anotheryetbashclient.SettingsActivity$NotificationPreferenceFragment"
+        android:fragment="ru.aim.anotheryetbashclient.SettingsActivity$NotificationPreferenceFragment"
         android:title="@string/pref_header_notifications" />
 
 
