@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 dependencies {
     compile "com.android.support:support-v4:21.0.0"
     compile "org.jsoup:jsoup:1.7.3"
-    compile "com.daimajia.swipelayout:library:1.0.7@aar"
+    compile "com.daimajia.swipelayout:library:1.1.7@aar"
 }
 
 android {

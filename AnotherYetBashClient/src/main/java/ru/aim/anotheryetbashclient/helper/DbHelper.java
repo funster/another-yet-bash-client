@@ -70,7 +70,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public void addToFavorite(String publicId) {
         if (!isFavorite(publicId)) {
-            Cursor cursor = getQuotes(publicId);
+            Cursor cursor = findQuotes(publicId);
             cursor.moveToFirst();
             ContentValues contentValues = new ContentValues();
             contentValues.put(DbHelper.QUOTE_PUBLIC_ID, publicId);
@@ -163,12 +163,25 @@ public class DbHelper extends SQLiteOpenHelper {
         return addQuote(QUOTE_FRESH_TABLE, values);
     }
 
-    public Cursor getQuotes(String... quotes) {
+    private Cursor getQuotesFromDefault(String... quotes) {
+        return getQuotes(QUOTE_DEFAULT_TABLE, quotes);
+    }
+
+    private Cursor getQuotes(String tableName, String... quotes) {
         SQLiteDatabase db = getReadableDatabase();
         assert db != null;
-        String sql = "select * from " + QUOTE_DEFAULT_TABLE + " where " + QUOTE_PUBLIC_ID + " in (" +
+        String sql = "select * from " + tableName + " where " + QUOTE_PUBLIC_ID + " in (" +
                 makePlaceholders(quotes.length) + ") order by " + QUOTE_PUBLIC_ID + " desc";
         return db.rawQuery(sql, quotes);
+    }
+
+    public Cursor findQuotes(String... quotes) {
+        Cursor cursor = getQuotesFromDefault(quotes);
+        if (cursor.getCount() == 0) {
+            cursor.close();
+            cursor = getQuotes(QUOTE_FRESH_TABLE, quotes);
+        }
+        return cursor;
     }
 
     public void clearAbyss() {
@@ -231,7 +244,7 @@ public class DbHelper extends SQLiteOpenHelper {
     void updateRating(String publicId, int to) {
         SQLiteDatabase db = getWritableDatabase();
         assert db != null;
-        Cursor cursor = getQuotes(publicId);
+        Cursor cursor = findQuotes(publicId);
         cursor.moveToFirst();
         int value = Integer.parseInt(cursor.getString(cursor.getColumnIndex(DbHelper.QUOTE_RATING)));
         value = value + to;
