@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name_with_type">Bash.im :: %s</string>
-    <string name="app_name_with_type_and_page">Bash.im :: %1$s (%2$s)</string>
+    <string name="app_name_with_type">Баш :: %s</string>
+    <string name="app_name_with_type_and_page">Баш :: %1$s (%2$s)</string>
 
 </resources>

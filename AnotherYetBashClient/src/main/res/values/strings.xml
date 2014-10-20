@@ -101,5 +101,10 @@
     <string name="auto_update_wifi_summary">Обновление будет происходить только если есть доступ к сети через wifi.</string>
     <string name="error_no_connection">При загрузке данных произошла ошибка. Проверьте Ваше подключение к сети</string>
     <string name="data_refreshing">Данные обновляются…</string>
+    <string name="about_rights">Правообладатель контента: <u>bash.im</u></string>
+    <string name="about_support">Предложения или замечания: <u>anotheryetandroidbashclient@gmail.com</u></string>
+    <string name="support_email">anotheryetandroidbashclient@gmail.com</string>
+    <string name="support_email_subject">Поддержка клиента Bash.im для Android</string>
+    <string name="bash_url">http://bash.im</string>
 
 </resources>

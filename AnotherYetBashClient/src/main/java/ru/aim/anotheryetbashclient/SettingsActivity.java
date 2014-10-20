@@ -84,6 +84,14 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
                 versionName += " (" + getPackageManager().getPackageInfo(getPackageName(), 0).versionCode + ")";
             }
             versionPreference.setSummary(getString(R.string.version_summary, versionName));
+            versionPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    AboutDialog aboutDialog = new AboutDialog();
+                    aboutDialog.show(getFragmentManager(), "about-dialog");
+                    return true;
+                }
+            });
         } catch (PackageManager.NameNotFoundException ignored) {
         }
 
