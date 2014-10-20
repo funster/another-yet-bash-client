@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Bash.im</string>
+    <string name="app_name">Баш</string>
     <string name="app_name_with_type">%s</string>
     <string name="app_name_with_type_and_page">%1$s (%2$s)</string>
     <string name="action_settings">Настройки</string>
