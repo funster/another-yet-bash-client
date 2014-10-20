@@ -30,7 +30,7 @@
             <!--android:negativeButtonText="@null"-->
             <!--android:positiveButtonText="@null"/>-->
 
-    <ru.aim.anotheryetbashclient.FontPreference
+    <ru.pavelshackih.anotheryetbashclient.FontPreference
         android:max="24"
         android:key="font_size"
         android:title="Font size"

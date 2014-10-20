@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ru.aim.anotheryetbashclient.test">
+    package="ru.pavelshackih.anotheryetbashclient.test">
 
     <uses-sdk android:minSdkVersion="16" />
 
@@ -20,6 +20,6 @@
     -->
     <instrumentation
         android:name="android.test.InstrumentationTestRunner"
-        android:targetPackage="ru.aim.anotheryetbashclient" />
+        android:targetPackage="ru.pavelshackih.anotheryetbashclient" />
 
 </manifest>
