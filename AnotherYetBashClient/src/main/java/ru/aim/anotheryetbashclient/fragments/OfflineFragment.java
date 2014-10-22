@@ -29,8 +29,14 @@ public class OfflineFragment extends AbstractFragment implements LoaderManager.L
         getListView().setEmptyView(view.findViewById(android.R.id.empty));
         TextView date = (TextView) view.findViewById(R.id.update_date);
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(SettingsHelper.getTimestamp(getActivity()));
-        date.setText(getString(R.string.last_update, dateFormat.format(calendar.getTime())));
+        long timeInMs = SettingsHelper.getTimestamp(getActivity());
+        calendar.setTimeInMillis(timeInMs);
+        if (timeInMs == 0) {
+            date.setVisibility(View.GONE);
+        } else {
+            date.setText(getString(R.string.last_update, dateFormat.format(calendar.getTime())));
+            date.setVisibility(View.VISIBLE);
+        }
         TextView emptyTextView = (TextView) view.findViewById(android.R.id.empty);
         emptyTextView.setText(R.string.offline_hint);
     }
