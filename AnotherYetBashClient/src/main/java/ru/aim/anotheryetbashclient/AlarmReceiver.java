@@ -19,8 +19,6 @@ public class AlarmReceiver extends BroadcastReceiver {
     public static final int DEFAULT_REQUEST_CODE = 0;
 
     public static void setAlarm(Context context) {
-        DbHelper dbHelper = new DbHelper(context);
-        dbHelper.clearFresh();
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, DEFAULT_REQUEST_CODE,
                 buildIntent(), PendingIntent.FLAG_CANCEL_CURRENT);
@@ -36,13 +34,10 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     public static void cancelAlarm(Context context) {
-        DbHelper dbHelper = new DbHelper(context);
-        dbHelper.clearFresh();
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, DEFAULT_REQUEST_CODE,
                 buildIntent(), PendingIntent.FLAG_CANCEL_CURRENT);
         alarmManager.cancel(pendingIntent);
-        SettingsHelper.writeTimestamp(context, 0);
     }
 
     public static Intent buildIntent() {
