@@ -8,7 +8,6 @@ import android.content.Intent;
 
 import java.util.Calendar;
 
-import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.helper.L;
 
 public class AlarmReceiver extends BroadcastReceiver {
