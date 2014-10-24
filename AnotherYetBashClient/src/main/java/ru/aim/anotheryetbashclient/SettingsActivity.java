@@ -272,6 +272,11 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         }
     }
 
+    @Override
+    protected boolean isValidFragment(String fragmentName) {
+        return true;
+    }
+
     /**
      * This fragment shows notification preferences only. It is used when the
      * activity is showing a two-pane settings UI.
