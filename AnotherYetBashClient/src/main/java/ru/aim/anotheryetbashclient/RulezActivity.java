@@ -36,8 +36,6 @@ public abstract class RulezActivity extends FragmentActivity {
                 RulezResult rulezResult = data.getResult();
                 if (rulezResult.isOk) {
                     Toast.makeText(RulezActivity.this, R.string.vote_accepted, Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(RulezActivity.this, "Oopps", Toast.LENGTH_LONG).show();
                 }
             }
         }

@@ -1,6 +1,7 @@
 package ru.aim.anotheryetbashclient.fragments;
 
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.Loader;
 import android.view.Menu;
@@ -75,6 +76,9 @@ public class FreshFragment extends AbstractFragment implements SimpleLoaderCallb
                 maxPage = data.getResult().maxPage;
             }
             setMenuItemsVisibility(true);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                getActivity().invalidateOptionsMenu();
+            }
         }
     }
 

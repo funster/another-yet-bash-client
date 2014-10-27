@@ -21,12 +21,12 @@ public abstract class RefreshFragment extends BaseFragment implements SwipeRefre
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         refreshLayout.setOnRefreshListener(this);
         SwipeRefreshUtils.applyStyle(refreshLayout);
         emptyView = (TextView) view.findViewById(android.R.id.empty);
         progressView = view.findViewById(android.R.id.progress);
-        super.onViewCreated(view, savedInstanceState);
     }
 
     protected void setRefreshing(boolean value) {
@@ -81,6 +81,6 @@ public abstract class RefreshFragment extends BaseFragment implements SwipeRefre
     }
 
     public boolean isRefreshing() {
-        return refreshLayout.isRefreshing();
+        return refreshLayout == null || refreshLayout.isRefreshing();
     }
 }
