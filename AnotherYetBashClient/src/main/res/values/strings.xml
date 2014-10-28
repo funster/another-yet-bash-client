@@ -88,7 +88,7 @@
     <string name="auto_update_timestamp_key">auto_update_timestamp</string>
     <string name="last_update">Последнее обновление от %s</string>
     <string name="auto_update_enable_title">Использовать обновление</string>
-    <string name="enable_list_item_animation_title">Анимация при обновления</string>
+    <string name="enable_list_item_animation_title">Анимация при обновлении</string>
     <string name="enable_list_item_animation_key">enable_list_item_animation</string>
     <string name="auto_update_category">Автоматическое обновление</string>
     <string name="offline_hint">Здесь будут отображаться цитаты загруженные автоматически.</string>
