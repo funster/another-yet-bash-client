@@ -41,10 +41,9 @@ public class TimePreference extends DialogPreference {
     @Override
     protected void onBindDialogView(View v) {
         super.onBindDialogView(v);
-
+        picker.setIs24HourView(true);
         picker.setCurrentHour(lastHour);
         picker.setCurrentMinute(lastMinute);
-        picker.setIs24HourView(true);
     }
 
     @Override
@@ -60,6 +59,8 @@ public class TimePreference extends DialogPreference {
             if (callChangeListener(time)) {
                 persistString(time);
             }
+
+            setSummary(getContext().getString(R.string.auto_update_summary, SettingsHelper.getUpdateTime(getContext())));
 
             AlarmReceiver.setAlarm(getContext());
         }

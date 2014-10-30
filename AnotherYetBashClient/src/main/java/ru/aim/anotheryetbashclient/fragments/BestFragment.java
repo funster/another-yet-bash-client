@@ -43,14 +43,13 @@ public class BestFragment extends AbstractFragment implements SimpleLoaderCallba
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        getLoaderManager().initLoader(RandomLoader.ID, Bundle.EMPTY, this);
+    public int getType() {
+        return ActionsAndIntents.TYPE_BEST;
     }
 
     @Override
-    public int getType() {
-        return ActionsAndIntents.TYPE_BEST;
+    protected void initLoader() {
+        getLoaderManager().initLoader(RandomLoader.ID, Bundle.EMPTY, this);
     }
 
     @Override

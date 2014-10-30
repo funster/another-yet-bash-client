@@ -4,6 +4,8 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,12 +25,17 @@ import ru.aim.anotheryetbashclient.loaders.RulezType;
  */
 public class QuotesAdapter extends CursorAdapter {
 
+    private static final String TAG = "QuotesAdapter";
+
     protected int animatedPosition = -1;
     protected DbHelper mDbHelper;
     protected boolean isAnimationEnabled;
     protected RulezActivity rulezActivity;
     protected int textSize;
     protected Context mContext;
+
+    int favoriteFill = R.drawable.ic_star_white_38dp;
+    int favoriteEmpty = R.drawable.ic_star_outline_white_38dp;
 
     public QuotesAdapter(DbHelper dbHelper, Context context, Cursor c) {
         super(context, c, true);
@@ -62,7 +69,9 @@ public class QuotesAdapter extends CursorAdapter {
         viewHolder.addFavorite = (ImageButton) view.findViewById(R.id.add_favorite);
         viewHolder.plus = view.findViewById(R.id.plus);
         viewHolder.minus = view.findViewById(R.id.minus);
-        viewHolder.bayan = view.findViewById(R.id.bayan);
+        viewHolder.bayan = view.findViewById(R.id.boyan);
+        viewHolder.share = view.findViewById(R.id.share);
+        viewHolder.quoteContainer = view.findViewById(R.id.quote_container);
         view.setTag(viewHolder);
         return view;
     }
@@ -80,34 +89,38 @@ public class QuotesAdapter extends CursorAdapter {
         viewHolder.innerId = cursor.getLong(cursor.getColumnIndex(DbHelper.QUOTE_ID));
         viewHolder.rating.setText(cursor.getString(cursor.getColumnIndex(DbHelper.QUOTE_RATING)));
         if (mDbHelper.isFavorite(id)) {
-            viewHolder.addFavorite.setImageResource(R.drawable.ic_action_favorite_red);
+            viewHolder.addFavorite.setImageResource(favoriteFill);
         } else {
-            viewHolder.addFavorite.setImageResource(R.drawable.ic_action_favorite);
+            viewHolder.addFavorite.setImageResource(favoriteEmpty);
         }
-        viewHolder.addFavorite.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onFavoriteClick(id, viewHolder, context);
+                switch (v.getId()) {
+                    case R.id.add_favorite:
+                        onFavoriteClick(id, viewHolder, context);
+                        break;
+                    case R.id.plus:
+                        sendRulez(viewHolder.publicId, RulezType.RULEZ);
+                        break;
+                    case R.id.minus:
+                        sendRulez(viewHolder.publicId, RulezType.SUX);
+                        break;
+                    case R.id.boyan:
+                        sendRulez(viewHolder.publicId, RulezType.BAYAN);
+                        break;
+                    case R.id.share:
+                        share(context, viewHolder);
+                        break;
+                }
             }
-        });
-        viewHolder.plus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendRulez(viewHolder.publicId, RulezType.RULEZ);
-            }
-        });
-        viewHolder.minus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendRulez(viewHolder.publicId, RulezType.SUX);
-            }
-        });
-        viewHolder.minus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendRulez(viewHolder.publicId, RulezType.BAYAN);
-            }
-        });
+        };
+        viewHolder.addFavorite.setOnClickListener(clickListener);
+        viewHolder.plus.setOnClickListener(clickListener);
+        viewHolder.minus.setOnClickListener(clickListener);
+        viewHolder.bayan.setOnClickListener(clickListener);
+        viewHolder.share.setOnClickListener(clickListener);
+
         if (isAnimationEnabled) {
             if (animatedPosition < cursor.getPosition()) {
                 AnimatorSet animatorSet = new AnimatorSet();
@@ -120,15 +133,27 @@ public class QuotesAdapter extends CursorAdapter {
         }
     }
 
+    protected void share(Context context, ViewHolder viewHolder) {
+        viewHolder.quoteContainer.setDrawingCacheEnabled(true);
+        Bitmap bitmap = viewHolder.quoteContainer.getDrawingCache();
+        ShareDialog shareDialog = ShareDialog.newInstance(bitmap,
+                viewHolder.publicId,
+                viewHolder.text.getText().toString());
+        if (context instanceof FragmentActivity) {
+            FragmentActivity fragmentActivity = (FragmentActivity) context;
+            shareDialog.show(fragmentActivity.getSupportFragmentManager(), "share-dialog");
+        }
+    }
+
     protected void onFavoriteClick(String id, ViewHolder viewHolder, Context context) {
         if (mDbHelper.isFavorite(id)) {
             mDbHelper.removeFromFavorite(viewHolder.publicId);
-            Toast.makeText(context, R.string.removed_to_favorites, Toast.LENGTH_LONG).show();
-            viewHolder.addFavorite.setImageResource(R.drawable.ic_action_favorite);
+            Toast.makeText(context, R.string.removed_to_favorites, Toast.LENGTH_SHORT).show();
+            viewHolder.addFavorite.setImageResource(favoriteEmpty);
         } else {
             mDbHelper.addToFavorite(viewHolder.publicId);
-            Toast.makeText(context, R.string.added_to_favorites, Toast.LENGTH_LONG).show();
-            viewHolder.addFavorite.setImageResource(R.drawable.ic_action_favorite_red);
+            Toast.makeText(context, R.string.added_to_favorites, Toast.LENGTH_SHORT).show();
+            viewHolder.addFavorite.setImageResource(favoriteFill);
         }
     }
 
@@ -155,8 +180,18 @@ public class QuotesAdapter extends CursorAdapter {
         public View plus;
         public View minus;
         public View bayan;
+        public View share;
+        public View quoteContainer;
 
         public String publicId;
         public long innerId;
+    }
+
+    public int getTextSize() {
+        return textSize;
+    }
+
+    public void setTextSize(int textSize) {
+        this.textSize = textSize;
     }
 }

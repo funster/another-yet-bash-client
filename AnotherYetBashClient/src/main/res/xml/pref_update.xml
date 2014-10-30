@@ -1,4 +1,5 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <CheckBoxPreference
         android:key="@string/enable_list_item_animation_key"
@@ -24,6 +25,15 @@
             android:title="@string/auto_update_wife_title"
             android:summary="@string/auto_update_wifi_summary"
             android:defaultValue="true" />
+
+        <ru.aim.anotheryetbashclient.NumberPickerPreference
+            android:dependency="@string/auto_update_enable_key"
+            android:key="@string/auto_update_depth_key"
+            android:title="@string/auto_update_depth_title"
+            android:summary="@string/auto_update_depth_summary"
+            app:default_value="1"
+            app:max="10"
+            app:min="1" />
 
     </PreferenceCategory>
 

@@ -15,7 +15,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String QUOTE_DEFAULT_TABLE = "quotes";
     public static final String QUOTE_ABYSS_TABLE = "quotes_abyss";
     public static final String QUOTE_FAVORITES_TABLE = "quotes_favorites";
-    public static final String QUOTE_FRESH_TABLE = "quotes_fresh";
+    public static final String QUOTE_OFFLINE_TABLE = "quotes_fresh";
     public static final String QUOTE_ID = "_id";
     public static final String QUOTE_PUBLIC_ID = "quote_public_id";
     public static final String QUOTE_DATE = "quote_date";
@@ -46,7 +46,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         createTable(sqLiteDatabase, QUOTE_DEFAULT_TABLE);
         createTable(sqLiteDatabase, QUOTE_FAVORITES_TABLE);
-        createTable(sqLiteDatabase, QUOTE_FRESH_TABLE);
+        createTable(sqLiteDatabase, QUOTE_OFFLINE_TABLE);
     }
 
     void createTable(SQLiteDatabase sqLiteDatabase, String tableName) {
@@ -121,8 +121,8 @@ public class DbHelper extends SQLiteOpenHelper {
         return selectAll(QUOTE_FAVORITES_TABLE);
     }
 
-    public Cursor selectFromFresh() {
-        return selectAll(QUOTE_FRESH_TABLE);
+    public Cursor selectFromOffline() {
+        return selectAll(QUOTE_OFFLINE_TABLE);
     }
 
     public Cursor getUnread() {
@@ -159,8 +159,8 @@ public class DbHelper extends SQLiteOpenHelper {
         return addQuote(QUOTE_DEFAULT_TABLE, values);
     }
 
-    public long addQuoteToFresh(ContentValues values) {
-        return addQuote(QUOTE_FRESH_TABLE, values);
+    public long addQuoteToOffline(ContentValues values) {
+        return addQuote(QUOTE_OFFLINE_TABLE, values);
     }
 
     private Cursor getQuotesFromDefault(String... quotes) {
@@ -179,7 +179,7 @@ public class DbHelper extends SQLiteOpenHelper {
         Cursor cursor = getQuotesFromDefault(quotes);
         if (cursor.getCount() == 0) {
             cursor.close();
-            cursor = getQuotes(QUOTE_FRESH_TABLE, quotes);
+            cursor = getQuotes(QUOTE_OFFLINE_TABLE, quotes);
         }
         return cursor;
     }
@@ -207,6 +207,12 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         assert db != null;
         return db.query(tableName, null, null, null, null, null, null);
+    }
+
+    public Cursor selectFromOffline(int page) {
+        SQLiteDatabase db = getReadableDatabase();
+        assert db != null;
+        return db.query(QUOTE_OFFLINE_TABLE, null, QUOTE_FLAG + " = ?", new String[]{Integer.toString(page)}, null, null, null);
     }
 
     public Cursor selectFromAbyss() {
@@ -266,10 +272,19 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public boolean isEmptyFreshTable() {
-        return isEmptyTable(QUOTE_FRESH_TABLE);
+        return isEmptyTable(QUOTE_OFFLINE_TABLE);
     }
 
-    public void clearFresh() {
-        clearTable(QUOTE_FRESH_TABLE);
+    public void clearOffline() {
+        clearTable(QUOTE_OFFLINE_TABLE);
+    }
+
+    public int getOfflinePages() {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select max(" + QUOTE_FLAG + ") from " + QUOTE_OFFLINE_TABLE, null);
+        cursor.moveToFirst();
+        int result = (int) cursor.getLong(0);
+        cursor.close();
+        return result;
     }
 }

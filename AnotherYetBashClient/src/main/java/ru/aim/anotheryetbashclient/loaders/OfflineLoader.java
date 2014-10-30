@@ -2,15 +2,23 @@ package ru.aim.anotheryetbashclient.loaders;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Bundle;
 
 public class OfflineLoader extends AbstractLoader<Cursor> {
 
-    public OfflineLoader(Context context) {
+    int page = 0;
+
+    public OfflineLoader(Context context, Bundle bundle) {
         super(context);
+        page = bundle.getInt("page", 0);
     }
 
     @Override
     public Cursor doInBackground() throws Exception {
-        return getDbHelper().selectFromFresh();
+        if (page == -1) {
+            return getDbHelper().selectFromOffline();
+        } else {
+            return getDbHelper().selectFromOffline(page);
+        }
     }
 }

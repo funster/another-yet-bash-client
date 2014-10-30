@@ -8,47 +8,58 @@
 
     <Button
         android:id="@+id/plus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:textStyle="bold"
+        android:layout_height="48dp"
         android:background="@drawable/btn_borderless"
-        android:padding="12dp"
         android:text="@string/plus"
+        android:contentDescription="@string/like"
         android:textAppearance="@android:style/TextAppearance.Large" />
 
     <TextView
         android:id="@+id/rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/btn_borderless"
-        android:padding="12dp"
         android:text="@string/sample_number"
-        android:textAppearance="@android:style/TextAppearance.Medium" />
-
-    <Button
-        android:id="@+id/minus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/btn_borderless"
-        android:padding="12dp"
-        android:text="@string/minus"
+        android:textStyle="bold"
+        android:contentDescription="@string/rating"
         android:textAppearance="@android:style/TextAppearance.Large" />
 
     <Button
-        android:id="@+id/bayan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:id="@+id/minus"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:background="@drawable/btn_borderless"
-        android:padding="12dp"
+        android:text="@string/minus"
+        android:contentDescription="@string/dont_like"
+        android:textAppearance="@android:style/TextAppearance.Large" />
+
+    <Button
+        android:id="@+id/boyan"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/btn_borderless"
         android:text="@string/boyan"
+        android:contentDescription="@string/boyan_desc"
         android:textAppearance="@android:style/TextAppearance.Large" />
 
     <ImageButton
+        android:padding="8dp"
         android:id="@+id/add_favorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/btn_borderless"
         android:contentDescription="@string/add_to_favorites"
-        android:padding="12dp"
-        android:src="@drawable/ic_action_favorite" />
+        android:src="@drawable/ic_star_outline_white_38dp" />
+
+    <ImageButton
+        android:padding="8dp"
+        android:id="@+id/share"
+        android:background="@drawable/btn_borderless"
+        android:src="@drawable/ic_share_white_36dp"
+        android:contentDescription="@string/share_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

@@ -30,12 +30,6 @@ public class FreshFragment extends AbstractFragment implements SimpleLoaderCallb
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        getLoaderManager().initLoader(FreshLoader.ID, Bundle.EMPTY, this);
-    }
-
-    @Override
     public void onManualUpdate() {
         restartLoader(Bundle.EMPTY);
     }
@@ -54,6 +48,11 @@ public class FreshFragment extends AbstractFragment implements SimpleLoaderCallb
     @Override
     public int getType() {
         return ActionsAndIntents.TYPE_NEW;
+    }
+
+    @Override
+    protected void initLoader() {
+        getLoaderManager().initLoader(FreshLoader.ID, Bundle.EMPTY, this);
     }
 
     @Override

@@ -24,14 +24,13 @@ public class FavoritesFragment extends AbstractFragment
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        getLoaderManager().initLoader(1, Bundle.EMPTY, this);
+    public int getType() {
+        return ActionsAndIntents.TYPE_FAVORITES;
     }
 
     @Override
-    public int getType() {
-        return ActionsAndIntents.TYPE_FAVORITES;
+    protected void initLoader() {
+        getLoaderManager().initLoader(1, Bundle.EMPTY, this);
     }
 
     @Override

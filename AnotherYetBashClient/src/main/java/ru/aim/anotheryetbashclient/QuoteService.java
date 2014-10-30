@@ -1,18 +1,15 @@
 package ru.aim.anotheryetbashclient;
 
 import android.app.IntentService;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Bundle;
 
-import java.util.Calendar;
-
-import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.helper.L;
-import ru.aim.anotheryetbashclient.loaders.FreshLoader;
+import ru.aim.anotheryetbashclient.helper.Utils;
+import ru.aim.anotheryetbashclient.helper.actions.ActionFactory;
+import ru.aim.anotheryetbashclient.helper.actions.OfflineDownloaderAction;
 
 public class QuoteService extends IntentService {
 
@@ -25,9 +22,12 @@ public class QuoteService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         L.d(TAG, "Service rises");
-        boolean onlyWifi = SettingsHelper.isUpdateOnlyWifiEnabled(this);
-
-        if (onlyWifi) {
+        if (Utils.isNetworkNotAvailable(this)) {
+            L.d(TAG, "Network not available, so exit now");
+            return;
+        }
+        boolean onlyByWifi = SettingsHelper.isUpdateOnlyByWifi(this);
+        if (onlyByWifi) {
             ConnectivityManager connMgr = (ConnectivityManager)
                     getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -42,21 +42,12 @@ public class QuoteService extends IntentService {
             }
         }
 
-        DbHelper dbHelper = new DbHelper(this);
-        dbHelper.clearFresh();
-        FreshLoader freshLoader = new FreshLoader(this, Bundle.EMPTY) {
-            @Override
-            protected void addQuote(ContentValues contentValues) {
-                getDbHelper().addQuoteToFresh(contentValues);
-            }
-        };
-        freshLoader.setDbHelper(dbHelper);
-        freshLoader.setFromService(true);
+        ActionFactory actionFactory = new ActionFactory(this);
+        OfflineDownloaderAction action = actionFactory.build(OfflineDownloaderAction.class);
         try {
-            freshLoader.doInBackground();
-            SettingsHelper.writeTimestamp(this, Calendar.getInstance().getTimeInMillis());
+            action.execute();
         } catch (Exception e) {
-            L.e(TAG, "Error while getting new quotes", e);
+            L.e(TAG, "Error while downloading offline quotes", e);
         }
     }
 }

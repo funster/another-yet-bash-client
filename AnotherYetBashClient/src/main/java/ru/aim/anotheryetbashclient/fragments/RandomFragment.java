@@ -19,12 +19,6 @@ public class RandomFragment extends AbstractFragment implements SimpleLoaderCall
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        getLoaderManager().initLoader(RandomLoader.ID, Bundle.EMPTY, this);
-    }
-
-    @Override
     public void onManualUpdate() {
         setRefreshing(true);
         getLoaderManager().getLoader(RandomLoader.ID).forceLoad();
@@ -33,6 +27,11 @@ public class RandomFragment extends AbstractFragment implements SimpleLoaderCall
     @Override
     public int getType() {
         return ActionsAndIntents.TYPE_RANDOM;
+    }
+
+    @Override
+    protected void initLoader() {
+        getLoaderManager().initLoader(RandomLoader.ID, Bundle.EMPTY, this);
     }
 
     @Override

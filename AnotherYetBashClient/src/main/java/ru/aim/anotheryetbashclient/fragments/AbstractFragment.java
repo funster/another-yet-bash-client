@@ -11,7 +11,9 @@ import android.widget.CursorAdapter;
 import android.widget.ListView;
 
 import ru.aim.anotheryetbashclient.MainActivity;
+import ru.aim.anotheryetbashclient.QuotesAdapter;
 import ru.aim.anotheryetbashclient.R;
+import ru.aim.anotheryetbashclient.SettingsHelper;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 
 import static ru.aim.anotheryetbashclient.helper.Utils.setItemsVisibility;
@@ -74,6 +76,23 @@ public abstract class AbstractFragment extends RefreshFragment implements Adapte
         CursorAdapter adapter = getCursorAdapter();
         if (adapter != null) {
             adapter.swapCursor(null);
+        }
+    }
+
+    protected void initLoader() {
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getListAdapter() instanceof QuotesAdapter) {
+            QuotesAdapter adapter = (QuotesAdapter) getListAdapter();
+            if (SettingsHelper.getFontSize(getActivity()) != adapter.getTextSize()) {
+                initLoader();
+            }
+        }
+        if (getListAdapter() == null) {
+            initLoader();
         }
     }
 

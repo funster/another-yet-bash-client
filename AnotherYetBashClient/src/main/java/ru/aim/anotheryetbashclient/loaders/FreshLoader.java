@@ -31,8 +31,8 @@ import static ru.aim.anotheryetbashclient.loaders.Package.wrapWithRoot;
  */
 public class FreshLoader extends AbstractLoader<FreshResult> {
 
-    static final String ROOT_PAGE = wrapWithRoot("");
-    static final String NEXT_PAGE = wrapWithRoot("index/%s");
+    public static final String ROOT_PAGE = wrapWithRoot("");
+    public static final String NEXT_PAGE = wrapWithRoot("index/%s");
     boolean fromService;
 
     public static final int ID = ActionsAndIntents.TYPE_NEW;
@@ -50,12 +50,12 @@ public class FreshLoader extends AbstractLoader<FreshResult> {
             throw new RuntimeException(getContext().getString(R.string.error_no_connection));
         }
         FreshResult result = new FreshResult();
-        String uri = getUrl();
+        String url = getUrl();
 
-        HttpGet httpRequest = new HttpGet(uri);
+        HttpGet httpRequest = new HttpGet(url);
         BashApplication app = (BashApplication) getContext().getApplicationContext();
         HttpResponse httpResponse = app.getHttpClient().execute(httpRequest);
-        Document document = Jsoup.parse(httpResponse.getEntity().getContent(), getCharsetFromResponse(httpResponse), uri);
+        Document document = Jsoup.parse(httpResponse.getEntity().getContent(), getCharsetFromResponse(httpResponse), url);
         if (mCurrentPage != -1) {
             Elements elements = document.select("input[class=page]");
             String page = null;
@@ -71,7 +71,7 @@ public class FreshLoader extends AbstractLoader<FreshResult> {
         L.d(TAG, "Quotes size " + quotesElements.size());
         getDbHelper().clearDefault();
         if (!fromService && isFirstPage()) {
-            getDbHelper().clearFresh();
+            getDbHelper().clearOffline();
         }
         for (Element e : quotesElements) {
             Elements idElements = e.select("a[class=id]");
@@ -90,7 +90,7 @@ public class FreshLoader extends AbstractLoader<FreshResult> {
                     L.d(TAG, "Insert new item: " + values);
                     addQuote(values);
                     if (!fromService && isFirstPage()) {
-                        getDbHelper().addQuoteToFresh(values);
+                        getDbHelper().addQuoteToOffline(values);
                     }
                 }
             }

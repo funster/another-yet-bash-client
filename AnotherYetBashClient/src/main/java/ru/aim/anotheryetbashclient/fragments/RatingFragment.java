@@ -27,14 +27,13 @@ public class RatingFragment extends AbstractFragment implements SimpleLoaderCall
         return ActionsAndIntents.TYPE_BY_RATING;
     }
 
-    int currentPage = 1;
-    int maxPage;
-
     @Override
-    public void onResume() {
-        super.onResume();
+    protected void initLoader() {
         getLoaderManager().initLoader(FreshLoader.ID, Bundle.EMPTY, this);
     }
+
+    int currentPage = 1;
+    int maxPage;
 
     @Override
     public void onManualUpdate() {

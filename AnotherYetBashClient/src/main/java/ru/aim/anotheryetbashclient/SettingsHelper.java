@@ -5,14 +5,20 @@ import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.preference.PreferenceManager;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 
 /**
  *
  */
-public class SettingsHelper {
+public final class SettingsHelper {
 
     public static final String TYPE_ID = "typeId";
+
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm");
 
     private SettingsHelper() {
     }
@@ -73,6 +79,13 @@ public class SettingsHelper {
         return TimePreference.getMinute(hourString);
     }
 
+    public static String getUpdateTime(Context context) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, getUpdateHour(context));
+        calendar.set(Calendar.MINUTE, getUpdateMinute(context));
+        return DATE_FORMAT.format(calendar.getTime());
+    }
+
     public static void writeTimestamp(Context context, long timestamp) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (timestamp == 0) {
@@ -88,8 +101,13 @@ public class SettingsHelper {
         return preferences.getLong(context.getString(R.string.auto_update_timestamp_key), 0);
     }
 
-    public static boolean isUpdateOnlyWifiEnabled(Context context) {
+    public static boolean isUpdateOnlyByWifi(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getBoolean(context.getString(R.string.auto_update_wifi_key), true);
+    }
+
+    public static int getOfflinePages(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getInt(context.getString(R.string.auto_update_depth_key), 1);
     }
 }

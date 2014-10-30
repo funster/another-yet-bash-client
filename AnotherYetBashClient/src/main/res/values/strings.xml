@@ -81,7 +81,7 @@
     <string name="font_size_title">Размер шрифта</string>
     <string name="font_size_example">Пример текста, %s</string>
     <string name="load_error">Ошибка при получении данных.</string>
-    <string name="auto_update_summary">Новые цитаты будут загружаться автоматически в указанное время</string>
+    <string name="auto_update_summary">Новые цитаты будут загружаться автоматически в %s</string>
     <string name="auto_update_title">Время обновления</string>
     <string name="auto_update_time_key">auto_update_time</string>
     <string name="auto_update_enable_key">auto_update_enable</string>
@@ -106,5 +106,20 @@
     <string name="support_email">anotheryetandroidbashclient@gmail.com</string>
     <string name="support_email_subject">Поддержка клиента Bash.im для Android</string>
     <string name="bash_url">http://bash.im</string>
+    <string name="rating">Рейтинг</string>
+    <string name="boyan_desc">Боян</string>
+    <string name="share_desc">Поделиться</string>
+    <string name="copied_to_clipboard">Скопировано в буфер обмена</string>
+    <string name="quote_will_be_in_gallery">Цитата появится в галерее</string>
+    <string name="error_share_quote">Не удалось поделиться цитатой.</string>
+    <string-array name="share_types">
+        <item>Изображением</item>
+        <item>Текстом</item>
+        <item>Ссылкой</item>
+        <item>Буфер обмена</item>
+    </string-array>
+    <string name="auto_update_depth_key">auto_update_depth_key</string>
+    <string name="auto_update_depth_title">Количество страниц</string>
+    <string name="auto_update_depth_summary">Количество страниц, которое будет загружено в автоматическом режиме: %s</string>
 
 </resources>
