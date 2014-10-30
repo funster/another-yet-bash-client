@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DbHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "DbHelper";
+    private static final boolean DEBUG = false;
 
     public static final String DB_NAME = "quote_db";
     public static final String QUOTE_DEFAULT_TABLE = "quotes";
@@ -224,7 +225,9 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public long addQuote(String tableName, ContentValues values) {
-        L.d(TAG, "Add new quotes to " + tableName + " values: " + values);
+        if (DEBUG) {
+            L.d(TAG, "Add new quotes to " + tableName + " values: " + values);
+        }
         SQLiteDatabase db = getWritableDatabase();
         assert db != null;
         long id = db.insert(tableName, null, values);

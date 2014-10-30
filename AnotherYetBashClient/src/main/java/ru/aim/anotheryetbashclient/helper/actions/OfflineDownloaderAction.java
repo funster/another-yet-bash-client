@@ -41,6 +41,7 @@ public class OfflineDownloaderAction extends AbstractAction {
                 url = String.format(NEXT_PAGE, maxPage - i);
             }
             HttpGet httpRequest = new HttpGet(url);
+            L.d(TAG, "Requesting page: " + url);
             HttpResponse httpResponse = getHttpClient().execute(httpRequest);
             Document document = Jsoup.parse(httpResponse.getEntity().getContent(), getCharsetFromResponse(httpResponse), url);
             if (i == 0) {
@@ -68,7 +69,6 @@ public class OfflineDownloaderAction extends AbstractAction {
                     values.put(DbHelper.QUOTE_RATING, ratingElements.html().trim());
                     values.put(DbHelper.QUOTE_TEXT, textElements.html().trim());
                     values.put(DbHelper.QUOTE_FLAG, i);
-                    L.d(TAG, "Insert new item: " + values);
                     getDbHelper().addQuoteToOffline(values);
                 }
             }

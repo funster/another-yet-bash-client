@@ -42,6 +42,9 @@ public class OfflineFragment extends AbstractFragment implements LoaderManager.L
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        LocalBroadcastManager manager = LocalBroadcastManager.getInstance(getActivity());
+        manager.registerReceiver(refreshReceiver, new IntentFilter(OfflineDownloaderAction.UPDATE_COMPLETED));
+
         getListView().setEmptyView(view.findViewById(android.R.id.empty));
         date = (TextView) view.findViewById(R.id.update_date);
         TextView emptyTextView = (TextView) view.findViewById(android.R.id.empty);
@@ -117,23 +120,26 @@ public class OfflineFragment extends AbstractFragment implements LoaderManager.L
     BroadcastReceiver refreshReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            initPages();
-            getActivity().invalidateOptionsMenu();
-            initLoader();
+            run(new Runnable() {
+                @Override
+                public void run() {
+                    initPages();
+                    getActivity().invalidateOptionsMenu();
+                    initLoader();
+                }
+            });
         }
     };
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
+        super.onDestroy();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(refreshReceiver);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        LocalBroadcastManager manager = LocalBroadcastManager.getInstance(getActivity());
-        manager.registerReceiver(refreshReceiver, new IntentFilter(OfflineDownloaderAction.UPDATE_COMPLETED));
     }
 
     @SuppressWarnings("ConstantConditions")
