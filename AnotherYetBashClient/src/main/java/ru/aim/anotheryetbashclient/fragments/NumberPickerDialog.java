@@ -41,6 +41,7 @@ public class NumberPickerDialog extends DialogFragment implements DialogInterfac
         builder.setView(view);
         builder.setTitle(R.string.select_page);
         builder.setPositiveButton(R.string.ok, this);
+        builder.setNegativeButton(R.string.cancel, null);
         return builder.create();
     }
 
