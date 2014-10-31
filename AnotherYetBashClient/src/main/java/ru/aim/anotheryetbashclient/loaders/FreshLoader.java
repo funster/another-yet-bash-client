@@ -33,15 +33,16 @@ public class FreshLoader extends AbstractLoader<FreshResult> {
 
     public static final String ROOT_PAGE = wrapWithRoot("");
     public static final String NEXT_PAGE = wrapWithRoot("index/%s");
-    boolean fromService;
 
     public static final int ID = ActionsAndIntents.TYPE_NEW;
 
     int mCurrentPage;
+    int mMaxPage;
 
     public FreshLoader(Context context, Bundle bundle) {
         super(context);
         mCurrentPage = bundle.getInt(ActionsAndIntents.CURRENT_PAGE, 0);
+        mMaxPage = bundle.getInt(ActionsAndIntents.MAX_PAGE, 0);
     }
 
     @Override
@@ -49,9 +50,12 @@ public class FreshLoader extends AbstractLoader<FreshResult> {
         if (Utils.isNetworkNotAvailable(getContext())) {
             throw new RuntimeException(getContext().getString(R.string.error_no_connection));
         }
+
+        boolean wasOfflineUpdated = false;
+        int maxOfflineInSettingsPages = SettingsHelper.getOfflinePages(getContext());
+
         FreshResult result = new FreshResult();
         String url = getUrl();
-
         HttpGet httpRequest = new HttpGet(url);
         BashApplication app = (BashApplication) getContext().getApplicationContext();
         HttpResponse httpResponse = app.getHttpClient().execute(httpRequest);
@@ -65,14 +69,21 @@ public class FreshLoader extends AbstractLoader<FreshResult> {
             if (!TextUtils.isEmpty(page)) {
                 result.currentPage = Integer.parseInt(page);
                 result.maxPage = result.currentPage;
+                if (mCurrentPage == 0) {
+                    mMaxPage = result.maxPage;
+                }
             }
         }
         Elements quotesElements = document.select("div[class=quote]");
         L.d(TAG, "Quotes size " + quotesElements.size());
         getDbHelper().clearDefault();
-        if (!fromService && isFirstPage()) {
-            getDbHelper().clearOffline();
+
+        int curOfflinePage = 0;
+        if (mCurrentPage != mMaxPage && mCurrentPage != 0) {
+            curOfflinePage = mMaxPage - mCurrentPage;
         }
+
+        boolean wasOfflinePageDeleted = false;
         for (Element e : quotesElements) {
             Elements idElements = e.select("a[class=id]");
             Elements dateElements = e.select("span[class=date]");
@@ -80,22 +91,31 @@ public class FreshLoader extends AbstractLoader<FreshResult> {
             Elements ratingElements = e.select("span[class=rating]");
             if (!textElements.isEmpty()) {
                 String id = idElements.html();
+                ContentValues values = new ContentValues();
+                values.put(QUOTE_PUBLIC_ID, idElements.html());
+                values.put(DbHelper.QUOTE_DATE, dateElements.html());
+                values.put(DbHelper.QUOTE_IS_NEW, 1);
+                values.put(DbHelper.QUOTE_RATING, ratingElements.html().trim());
+                values.put(DbHelper.QUOTE_TEXT, textElements.html().trim());
                 if (getDbHelper().notExists(id)) {
-                    ContentValues values = new ContentValues();
-                    values.put(QUOTE_PUBLIC_ID, idElements.html());
-                    values.put(DbHelper.QUOTE_DATE, dateElements.html());
-                    values.put(DbHelper.QUOTE_IS_NEW, 1);
-                    values.put(DbHelper.QUOTE_RATING, ratingElements.html().trim());
-                    values.put(DbHelper.QUOTE_TEXT, textElements.html().trim());
-                    L.d(TAG, "Insert new item: " + values);
                     addQuote(values);
-                    if (!fromService && isFirstPage()) {
+                    if (isFirstPage()) {
                         getDbHelper().addQuoteToOffline(values);
                     }
                 }
+                if (curOfflinePage < maxOfflineInSettingsPages) {
+                    if (!wasOfflinePageDeleted) {
+                        L.d(TAG, "Removing offline page: " + curOfflinePage);
+                        getDbHelper().deleteOfflinePage(curOfflinePage);
+                        wasOfflinePageDeleted = true;
+                    }
+                    values.put(DbHelper.QUOTE_FLAG, curOfflinePage);
+                    getDbHelper().addQuoteToOffline(values);
+                    wasOfflineUpdated = true;
+                }
             }
         }
-        if (!fromService && isFirstPage()) {
+        if (wasOfflineUpdated) {
             SettingsHelper.writeTimestamp(getContext(), Calendar.getInstance().getTimeInMillis());
         }
         result.cursor = getDbHelper().selectFromDefaultTable();
@@ -108,10 +128,6 @@ public class FreshLoader extends AbstractLoader<FreshResult> {
 
     boolean isFirstPage() {
         return mCurrentPage == 0;
-    }
-
-    public void setFromService(boolean fromService) {
-        this.fromService = fromService;
     }
 
     protected String getUrl() {

@@ -18,7 +18,12 @@ public class OfflineLoader extends AbstractLoader<Cursor> {
         if (page == -1) {
             return getDbHelper().selectFromOffline();
         } else {
-            return getDbHelper().selectFromOffline(page);
+            Cursor result = getDbHelper().selectFromOffline(page);
+            if (result.getCount() == 0) {
+                result.close();
+                return getDbHelper().selectFromOffline();
+            }
+            return result;
         }
     }
 }

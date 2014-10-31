@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.Button;
 
 import ru.aim.anotheryetbashclient.R;
 import ru.aim.anotheryetbashclient.SwipeRefreshUtils;
@@ -14,10 +14,10 @@ import static ru.aim.anotheryetbashclient.helper.Utils.isNetworkAvailable;
 @SuppressWarnings("unused")
 public abstract class RefreshFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    private boolean itemsVisible;
-    private SwipeRefreshLayout refreshLayout;
-    private TextView emptyView;
-    private View progressView;
+    protected boolean itemsVisible;
+    protected SwipeRefreshLayout refreshLayout;
+    protected View emptyView;
+    protected View progressView;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -25,12 +25,22 @@ public abstract class RefreshFragment extends BaseFragment implements SwipeRefre
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         refreshLayout.setOnRefreshListener(this);
         SwipeRefreshUtils.applyStyle(refreshLayout);
-        emptyView = (TextView) view.findViewById(android.R.id.empty);
+        emptyView = view.findViewById(android.R.id.empty);
         progressView = view.findViewById(android.R.id.progress);
+        Button refreshButton = (Button) view.findViewById(R.id.refresh_button);
+        if (refreshButton != null) {
+            refreshButton.setOnClickListener(refreshListener);
+        }
     }
 
+    View.OnClickListener refreshListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            onManualUpdate();
+        }
+    };
+
     protected void setRefreshing(boolean value) {
-        refreshLayout.setRefreshing(value);
         getMainActivity().setMenuItemsVisible(!value);
         if (isEmptyList()) {
             if (value) {
@@ -40,6 +50,9 @@ public abstract class RefreshFragment extends BaseFragment implements SwipeRefre
                 progressView.setVisibility(View.GONE);
                 emptyView.setVisibility(View.VISIBLE);
             }
+        }
+        if (progressView.getVisibility() != View.VISIBLE) {
+            refreshLayout.setRefreshing(value);
         }
     }
 
@@ -69,7 +82,7 @@ public abstract class RefreshFragment extends BaseFragment implements SwipeRefre
     }
 
     public boolean isItemsVisible() {
-        return itemsVisible && !refreshLayout.isRefreshing() && isOnline();
+        return itemsVisible && !(refreshLayout.isRefreshing() || progressView.getVisibility() == View.VISIBLE) && isOnline();
     }
 
     protected boolean isOffline() {

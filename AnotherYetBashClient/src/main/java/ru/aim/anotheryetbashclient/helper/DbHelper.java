@@ -290,4 +290,9 @@ public class DbHelper extends SQLiteOpenHelper {
         cursor.close();
         return result;
     }
+
+    public int deleteOfflinePage(int page) {
+        SQLiteDatabase db = getWritableDatabase();
+        return db.delete(QUOTE_OFFLINE_TABLE, QUOTE_FLAG + " = ?", new String[]{Integer.toString(page)});
+    }
 }

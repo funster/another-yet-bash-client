@@ -18,6 +18,7 @@ import ru.aim.anotheryetbashclient.loaders.SimpleLoaderCallbacks;
 import ru.aim.anotheryetbashclient.loaders.SimpleResult;
 
 import static ru.aim.anotheryetbashclient.ActionsAndIntents.CURRENT_PAGE;
+import static ru.aim.anotheryetbashclient.ActionsAndIntents.MAX_PAGE;
 
 public class FreshFragment extends AbstractFragment implements SimpleLoaderCallbacks<FreshResult> {
 
@@ -37,6 +38,7 @@ public class FreshFragment extends AbstractFragment implements SimpleLoaderCallb
     Bundle buildArguments() {
         Bundle bundle = new Bundle();
         bundle.putInt(CURRENT_PAGE, currentPage);
+        bundle.putInt(MAX_PAGE, maxPage);
         return bundle;
     }
 

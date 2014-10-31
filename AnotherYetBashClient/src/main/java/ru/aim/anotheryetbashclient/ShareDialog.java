@@ -68,11 +68,20 @@ public class ShareDialog extends DialogFragment implements DialogInterface.OnCli
                     sharingIntent.setType("image/jpeg");
                     String fileName = getCleanId(publicId) + ".jpg";
                     String url = insertImage(getActivity().getContentResolver(), bitmap, fileName, publicId);
-                    Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                    String realPath = getRealPathFromUri(getActivity(), Uri.parse(url));
-                    File imageFile = new File(realPath);
-                    intent.setData(Uri.fromFile(imageFile));
-                    getActivity().sendBroadcast(intent);
+                    if (url != null) {
+                        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                        String realPath = getRealPathFromUri(getActivity(), Uri.parse(url));
+                        File imageFile = new File(realPath);
+                        intent.setData(Uri.fromFile(imageFile));
+                        getActivity().sendBroadcast(intent);
+                    } else {
+                        File file = getFile(fileName);
+                        if (file.exists()) {
+                            url = Uri.fromFile(file).toString();
+                        } else {
+                            Toast.makeText(getActivity(), R.string.error_share_quote, Toast.LENGTH_SHORT).show();
+                        }
+                    }
                     sharingIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(url));
                     sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, publicId);
                     getActivity().startActivity(Intent.createChooser(sharingIntent, getActivity().getString(R.string.share_desc)));
@@ -100,6 +109,12 @@ public class ShareDialog extends DialogFragment implements DialogInterface.OnCli
                 Toast.makeText(getActivity(), R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    File getFile(String fileName) {
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + File.separator + getString(R.string.app_name));
+        return new File(myDir, fileName);
     }
 
     String saveBitmap(Bitmap bitmap, String fileName) {
@@ -163,7 +178,6 @@ public class ShareDialog extends DialogFragment implements DialogInterface.OnCli
         }
 
         return stringUrl;
-
     }
 
     static String getCleanId(String id) {

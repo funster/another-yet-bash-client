@@ -47,7 +47,7 @@ public class OfflineFragment extends AbstractFragment implements LoaderManager.L
 
         getListView().setEmptyView(view.findViewById(android.R.id.empty));
         date = (TextView) view.findViewById(R.id.update_date);
-        TextView emptyTextView = (TextView) view.findViewById(android.R.id.empty);
+        TextView emptyTextView = (TextView) view.findViewById(R.id.empty_text);
         emptyTextView.setText(R.string.offline_hint);
         initPages();
     }
@@ -83,6 +83,7 @@ public class OfflineFragment extends AbstractFragment implements LoaderManager.L
     public void onManualUpdate() {
         if (Utils.isNetworkNotAvailable(getActivity())) {
             Toast.makeText(getActivity(), R.string.error_no_connection, Toast.LENGTH_LONG).show();
+            refreshLayout.setRefreshing(false);
             return;
         }
         setRefreshing(true);
@@ -101,6 +102,7 @@ public class OfflineFragment extends AbstractFragment implements LoaderManager.L
         if (result.containsError()) {
             showWarning(getActivity(), result.getError().getMessage());
         } else {
+            safeSwap();
             ListAdapter listAdapter = new QuotesAdapter(getDbHelper(), getActivity(), result.getResult());
             setListAdapter(listAdapter);
             setMenuItemsVisibility(true);
@@ -125,7 +127,7 @@ public class OfflineFragment extends AbstractFragment implements LoaderManager.L
                 public void run() {
                     initPages();
                     getActivity().invalidateOptionsMenu();
-                    initLoader();
+                    restartLoader(buildArguments());
                 }
             });
         }
@@ -135,11 +137,6 @@ public class OfflineFragment extends AbstractFragment implements LoaderManager.L
     public void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(refreshReceiver);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -206,5 +203,10 @@ public class OfflineFragment extends AbstractFragment implements LoaderManager.L
         super.onMessageReceived(message);
         currentPage = (Integer) message;
         restartLoader(buildArguments());
+    }
+
+    @Override
+    public boolean isItemsVisible() {
+        return itemsVisible && !(refreshLayout.isRefreshing() || progressView.getVisibility() == View.VISIBLE);
     }
 }

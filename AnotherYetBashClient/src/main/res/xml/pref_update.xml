@@ -27,7 +27,6 @@
             android:defaultValue="true" />
 
         <ru.aim.anotheryetbashclient.NumberPickerPreference
-            android:dependency="@string/auto_update_enable_key"
             android:key="@string/auto_update_depth_key"
             android:title="@string/auto_update_depth_title"
             android:summary="@string/auto_update_depth_summary"
