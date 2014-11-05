@@ -20,6 +20,6 @@
     -->
     <instrumentation
         android:name="android.test.InstrumentationTestRunner"
-        android:targetPackage="ru.pavelshackih.anotheryetbashclient" />
+        android:targetPackage="ru.aim.anotheryetbashclient" />
 
 </manifest>
