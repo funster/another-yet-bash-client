@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="listItemSubtitle" parent="android:TextAppearance.Small">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="listItemNew" parent="android:TextAppearance.Small">
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+</resources>

@@ -4,13 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
-import ru.aim.anotheryetbashclient.fragments.BestFragment;
+import ru.aim.anotheryetbashclient.fragments.DateResult;
 
 import static ru.aim.anotheryetbashclient.loaders.Package.wrapWithRoot;
 
@@ -27,7 +25,7 @@ public class BestLoader extends QuoteLoader {
 
     public BestLoader(Context context, Bundle bundle) {
         super(context);
-        BestFragment.DateResult dateResult = (BestFragment.DateResult) bundle.getSerializable("dateResult");
+        DateResult dateResult = (DateResult) bundle.getSerializable("dateResult");
         if (dateResult != null && !dateResult.isToday()) {
             year = Integer.toString(dateResult.year);
             month = Integer.toString(dateResult.month);

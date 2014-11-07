@@ -4,12 +4,13 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListAdapter;
-import android.widget.SearchView;
 
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.QuotesAdapter;
@@ -44,7 +45,7 @@ public class SearchFragment extends AbstractFragment implements
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.search, menu);
         final MenuItem menuItem = menu.findItem(R.id.search);
-        searchView = (SearchView) menuItem.getActionView();
+        searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
         searchView.setQueryHint(getString(R.string.search_hint));
         searchView.setOnQueryTextListener(this);
         menuItem.expandActionView();

@@ -2,13 +2,7 @@ package ru.aim.anotheryetbashclient;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.*;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -18,14 +12,14 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
+import ru.aim.anotheryetbashclient.helper.L;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Date;
-
-import ru.aim.anotheryetbashclient.helper.L;
 
 public class ShareDialog extends DialogFragment implements DialogInterface.OnClickListener {
 
@@ -54,7 +48,9 @@ public class ShareDialog extends DialogFragment implements DialogInterface.OnCli
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.share_desc);
-        builder.setItems(getActivity().getResources().getTextArray(R.array.share_types), this);
+        String[] items = TextUtils.isEmpty(publicId) ?
+                getResources().getStringArray(R.array.share_types_short) : getResources().getStringArray(R.array.share_types);
+        builder.setItems(items, this);
         return builder.create();
     }
 
@@ -97,18 +93,30 @@ public class ShareDialog extends DialogFragment implements DialogInterface.OnCli
                 startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.share_desc)));
                 break;
             case 2:
-                sharingIntent.setType("text/plain");
-                String url = getString(R.string.bash_url) + "/" + getCleanId(publicId);
-                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, url);
-                startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.share_desc)));
+                if (TextUtils.isEmpty(publicId)) {
+                    copyToClipboard();
+                } else {
+                    shareLink(sharingIntent);
+                }
                 break;
             case 3:
-                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(publicId, text);
-                clipboard.setPrimaryClip(clip);
-                Toast.makeText(getActivity(), R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
+                copyToClipboard();
                 break;
         }
+    }
+
+    private void shareLink(Intent sharingIntent) {
+        sharingIntent.setType("text/plain");
+        String url = getString(R.string.bash_url) + "/" + getCleanId(publicId);
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, url);
+        startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.share_desc)));
+    }
+
+    private void copyToClipboard() {
+        ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText(publicId, text);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(getActivity(), R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
     }
 
     File getFile(String fileName) {

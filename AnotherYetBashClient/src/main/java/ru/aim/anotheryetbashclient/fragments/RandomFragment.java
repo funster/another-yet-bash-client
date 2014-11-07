@@ -4,7 +4,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.content.Loader;
 import android.widget.ListAdapter;
-
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.QuotesAdapter;
 import ru.aim.anotheryetbashclient.loaders.RandomLoader;
@@ -12,11 +11,6 @@ import ru.aim.anotheryetbashclient.loaders.SimpleLoaderCallbacks;
 import ru.aim.anotheryetbashclient.loaders.SimpleResult;
 
 public class RandomFragment extends AbstractFragment implements SimpleLoaderCallbacks<Cursor> {
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public void onManualUpdate() {
@@ -54,5 +48,6 @@ public class RandomFragment extends AbstractFragment implements SimpleLoaderCall
 
     @Override
     public void onLoaderReset(Loader<SimpleResult<Cursor>> loader) {
+        safeSwap();
     }
 }

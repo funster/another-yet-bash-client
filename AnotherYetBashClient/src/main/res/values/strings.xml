@@ -13,6 +13,9 @@
         <item>По рейтингу</item>
         <item>Поиск</item>
         <item>Избранное</item>
+        <item>Бездна</item>
+        <item>Топ Бездны</item>
+        <item>Лучшее Бездны</item>
         <item>Оффлайн - Новые</item>
     </string-array>
 
@@ -118,8 +121,14 @@
         <item>Ссылкой</item>
         <item>Буфер обмена</item>
     </string-array>
+    <string-array name="share_types_short">
+        <item>Изображением</item>
+        <item>Текстом</item>
+        <item>Буфер обмена</item>
+    </string-array>
     <string name="auto_update_depth_key">auto_update_depth_key</string>
     <string name="auto_update_depth_title">Количество страниц</string>
     <string name="auto_update_depth_summary">Количество страниц, которое будет загружено в автоматическом режиме: %s</string>
+    <string name="set_date">Укажите дату</string>
 
 </resources>

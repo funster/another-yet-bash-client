@@ -7,11 +7,11 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +19,6 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import ru.aim.anotheryetbashclient.fragments.AbstractFragment;
 import ru.aim.anotheryetbashclient.fragments.FragmentsFactory;
 import ru.aim.anotheryetbashclient.helper.Utils;
@@ -30,7 +29,7 @@ import static ru.aim.anotheryetbashclient.SettingsHelper.saveType;
 /**
  *
  */
-public class MainActivity extends RulezActivity implements AdapterView.OnItemClickListener {
+public class MainActivity extends RulezActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
 
     public static final int BLUR_DURATION = 500;
 
@@ -60,7 +59,6 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(this,
                 mDrawerLayout,
-                R.drawable.ic_drawer,
                 R.string.drawer_open,
                 R.string.drawer_close) {
 
@@ -94,14 +92,16 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
         IntentFilter intentFilter1 = new IntentFilter(ActionsAndIntents.NOTIFY);
         localBroadcastManager.registerReceiver(notifyBroadcastReceiver, intentFilter1);
 
-        assert getActionBar() != null;
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        assert getSupportActionBar() != null;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         if (savedInstanceState == null && SettingsHelper.isPreloadedAvailable(this)) {
             currentTypeId = ActionsAndIntents.TYPE_OFFLINE;
         }
         setFragment();
+
+        findViewById(R.id.action_settings).setOnClickListener(this);
     }
 
     AbstractFragment getCurrentFragment() {
@@ -117,18 +117,6 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
         super.onDestroy();
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
         localBroadcastManager.unregisterReceiver(notifyBroadcastReceiver);
-    }
-
-    @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        if (item.getItemId() == R.id.action_refresh) {
-            getCurrentFragment().onManualUpdate();
-            return true;
-        } else if (item.getItemId() == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-            return true;
-        }
-        return super.onMenuItemSelected(featureId, item);
     }
 
     @Override
@@ -191,5 +179,17 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
             getCurrentFragment().setMenuItemsVisibility(visible);
         }
         invalidateOptionsMenu();
+    }
+
+    public int getCurrentTypeId() {
+        return currentTypeId;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.action_settings) {
+            mDrawerLayout.closeDrawers();
+            startActivity(new Intent(this, SettingsActivity.class));
+        }
     }
 }

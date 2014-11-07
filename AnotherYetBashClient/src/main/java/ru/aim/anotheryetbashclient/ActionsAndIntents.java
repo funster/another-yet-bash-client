@@ -36,12 +36,12 @@ public class ActionsAndIntents {
     public static final int TYPE_RANDOM = 1;
     public static final int TYPE_BEST = 2;
     public static final int TYPE_BY_RATING = 3;
-    public static final int TYPE_ABYSS = 12;
-    public static final int TYPE_TOP_ABYSS = 8;
-    public static final int TYPE_BEST_ABYSS = 7;
-    public static final int TYPE_OFFLINE = 6;
+    public static final int TYPE_ABYSS = 6;
+    public static final int TYPE_TOP_ABYSS = 7;
+    public static final int TYPE_BEST_ABYSS = 8;
+    public static final int TYPE_OFFLINE = 9;
     public static final int TYPE_FAVORITES = 5;
-    public static final int TYPE_RULEZ = 10;
+    public static final int TYPE_RULEZ = 12;
     public static final int TYPE_SUX = 11;
     public static final int TYPE_SEARCH = 4;
 

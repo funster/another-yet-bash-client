@@ -9,9 +9,9 @@ public class SwipeRefreshUtils {
 
     public static void applyStyle(SwipeRefreshLayout refreshLayout) {
         refreshLayout.setColorSchemeResources(
-                R.color.default_app_color,
-                R.color.default_app_color,
-                R.color.default_app_color,
-                R.color.default_app_color);
+                R.color.app_colorPrimary,
+                R.color.app_colorPrimary,
+                R.color.app_colorPrimary,
+                R.color.app_colorPrimary);
     }
 }

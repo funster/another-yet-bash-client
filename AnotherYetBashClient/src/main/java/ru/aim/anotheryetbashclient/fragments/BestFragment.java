@@ -1,26 +1,12 @@
 package ru.aim.anotheryetbashclient.fragments;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.content.Loader;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.ListAdapter;
-import android.widget.NumberPicker;
 import android.widget.TextView;
-
-import java.io.Serializable;
-import java.util.Calendar;
-
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.QuotesAdapter;
 import ru.aim.anotheryetbashclient.R;
@@ -55,7 +41,13 @@ public class BestFragment extends AbstractFragment implements SimpleLoaderCallba
     @Override
     public void onManualUpdate() {
         setRefreshing(true);
-        getLoaderManager().restartLoader(BestLoader.ID, Bundle.EMPTY, this);
+        getLoaderManager().restartLoader(BestLoader.ID, buildArgs(), this);
+    }
+
+    Bundle buildArgs() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("dateResult", dateResult);
+        return bundle;
     }
 
     @Override
@@ -83,6 +75,7 @@ public class BestFragment extends AbstractFragment implements SimpleLoaderCallba
 
     @Override
     public void onLoaderReset(Loader<SimpleResult<Cursor>> loader) {
+        safeSwap();
     }
 
     @Override
@@ -102,7 +95,7 @@ public class BestFragment extends AbstractFragment implements SimpleLoaderCallba
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_today) {
-            DateDialog dateDialog = new DateDialog();
+            DateDialog dateDialog = new CustomDateDialog();
             dateDialog.show(getFragmentManager(), "dateDialog");
             return true;
         }
@@ -116,9 +109,7 @@ public class BestFragment extends AbstractFragment implements SimpleLoaderCallba
             setRefreshing(true);
             dateResult = (DateResult) message;
             getActivity().invalidateOptionsMenu();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("dateResult", dateResult);
-            getLoaderManager().restartLoader(BestLoader.ID, bundle, this);
+            getLoaderManager().restartLoader(BestLoader.ID, buildArgs(), this);
         }
     }
 
@@ -128,76 +119,11 @@ public class BestFragment extends AbstractFragment implements SimpleLoaderCallba
         outState.putSerializable("dateResult", dateResult);
     }
 
-    public static class DateResult implements Serializable {
-        public int year = -1;
-        public int month = -1;
-
-        public boolean isToday() {
-            return year == -1 && month == -1;
-        }
-    }
-
-    public static class DateDialog extends DialogFragment implements DialogInterface.OnClickListener, NumberPicker.OnValueChangeListener {
-
-        Calendar now = Calendar.getInstance();
-        NumberPicker year;
-        NumberPicker month;
-
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            View view = View.inflate(getActivity(), R.layout.custom_date_picker, null);
-
-            year = (NumberPicker) view.findViewById(R.id.year);
-            year.setMaxValue(now.get(Calendar.YEAR));
-            year.setMinValue(2004);
-            year.setValue(year.getMaxValue());
-            year.setOnValueChangedListener(this);
-            month = (NumberPicker) view.findViewById(R.id.month);
-            month.setMaxValue(12);
-            month.setMinValue(1);
-            month.setDisplayedValues(getActivity().getResources().getStringArray(R.array.months));
-            checkMonthInCurrentYear();
-            month.setValue(month.getMaxValue());
-
-            builder.setView(view);
-            builder.setPositiveButton(R.string.ok, this);
-            builder.setNeutralButton(R.string.today, this);
-            builder.setTitle(R.string.choose_period);
-            return builder.create();
-        }
+    public static class CustomDateDialog extends DateDialog {
 
         @Override
-        public void onClick(DialogInterface dialog, int which) {
-            DateResult dateResult = new DateResult();
-            if (which == AlertDialog.BUTTON_NEUTRAL) {
-                // today
-                dateResult.year = -1;
-                dateResult.month = -1;
-            } else if (which == AlertDialog.BUTTON_POSITIVE) {
-                // custom date
-                dateResult.year = year.getValue();
-                dateResult.month = month.getValue();
-            }
-            sendMessage(getActivity(), BestFragment.class, dateResult);
-        }
-
-        @Override
-        public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-            checkMonthInCurrentYear();
-        }
-
-        void checkMonthInCurrentYear() {
-            if (year.getValue() == now.get(Calendar.YEAR)) {
-                int value = month.getValue();
-                month.setMaxValue(now.get(Calendar.MONTH) + 1);
-                if (value > month.getMaxValue()) {
-                    month.setValue(month.getMaxValue());
-                }
-            } else {
-                month.setMaxValue(12);
-            }
+        Class<? extends BaseFragment> sendTo() {
+            return BestFragment.class;
         }
     }
 
@@ -227,6 +153,7 @@ public class BestFragment extends AbstractFragment implements SimpleLoaderCallba
 
         @Override
         public int getCount() {
+            if (getCursor() == null) return 0;
             return getCursor().getCount() + 2;
         }
 

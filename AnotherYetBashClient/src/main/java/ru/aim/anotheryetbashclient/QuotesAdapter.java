@@ -14,9 +14,7 @@ import android.widget.CursorAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.daimajia.swipe.SwipeLayout;
-
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.loaders.RulezType;
 
@@ -30,9 +28,8 @@ public class QuotesAdapter extends CursorAdapter {
     protected int animatedPosition = -1;
     protected DbHelper mDbHelper;
     protected boolean isAnimationEnabled;
-    protected RulezActivity rulezActivity;
     protected int textSize;
-    protected Context mContext;
+    protected MainActivity mContext;
 
     int favoriteFill = R.drawable.ic_star_white_38dp;
     int favoriteEmpty = R.drawable.ic_star_outline_white_38dp;
@@ -40,12 +37,9 @@ public class QuotesAdapter extends CursorAdapter {
     public QuotesAdapter(DbHelper dbHelper, Context context, Cursor c) {
         super(context, c, true);
         this.mDbHelper = dbHelper;
-        this.mContext = context;
+        this.mContext = (MainActivity) context;
         isAnimationEnabled = SettingsHelper.isItemAnimationEnabled(context);
         textSize = SettingsHelper.getFontSize(context);
-        if (context instanceof RulezActivity) {
-            rulezActivity = (RulezActivity) context;
-        }
     }
 
     @Override
@@ -158,9 +152,7 @@ public class QuotesAdapter extends CursorAdapter {
     }
 
     void sendRulez(String id, RulezType type) {
-        if (rulezActivity != null) {
-            rulezActivity.sendRulez(id, type);
-        }
+        mContext.sendRulez(id, type);
     }
 
     @Override
@@ -189,9 +181,5 @@ public class QuotesAdapter extends CursorAdapter {
 
     public int getTextSize() {
         return textSize;
-    }
-
-    public void setTextSize(int textSize) {
-        this.textSize = textSize;
     }
 }

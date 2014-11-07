@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBarActivity;
 import android.widget.Toast;
 
 import ru.aim.anotheryetbashclient.loaders.RulezLoader;
@@ -12,7 +13,7 @@ import ru.aim.anotheryetbashclient.loaders.SimpleResult;
 
 import static ru.aim.anotheryetbashclient.loaders.RulezLoader.RulezResult;
 
-public abstract class RulezActivity extends FragmentActivity {
+public abstract class RulezActivity extends ActionBarActivity {
 
     public void sendRulez(String id, RulezType type) {
         if (id.contains("#")) {

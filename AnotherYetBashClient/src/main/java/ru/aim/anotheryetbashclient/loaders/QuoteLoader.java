@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.http.AndroidHttpClient;
-
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -12,13 +12,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import java.io.IOException;
-
 import ru.aim.anotheryetbashclient.BashApplication;
 import ru.aim.anotheryetbashclient.R;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.helper.Utils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.zip.GZIPInputStream;
 
 import static ru.aim.anotheryetbashclient.helper.DbHelper.QUOTE_PUBLIC_ID;
 import static ru.aim.anotheryetbashclient.loaders.Package.getCharsetFromResponse;
@@ -35,8 +36,8 @@ public abstract class QuoteLoader extends AbstractLoader<Cursor> {
     }
 
     protected void onEachElement(Element e, int flag) {
-        Elements idElements = e.select("a[class=id]");
-        Elements dateElements = e.select("span[class=date]");
+        Elements idElements = selectId(e);
+        Elements dateElements = selectDate(e);
         Elements textElements = e.select("div[class=text]");
         Elements ratingElements = e.select("span[class=rating]");
         if (!textElements.isEmpty()) {
@@ -49,6 +50,14 @@ public abstract class QuoteLoader extends AbstractLoader<Cursor> {
             values.put(DbHelper.QUOTE_FLAG, flag);
             saveQuote(values);
         }
+    }
+
+    protected Elements selectDate(Element e) {
+        return e.select("span[class=date]");
+    }
+
+    protected Elements selectId(Element e) {
+        return e.select("a[class=id]");
     }
 
     @Override
@@ -70,7 +79,7 @@ public abstract class QuoteLoader extends AbstractLoader<Cursor> {
         HttpUriRequest httpRequest = getHttpRequest();
         HttpResponse httpResponse = getHttpClient().execute(httpRequest);
         String encoding = getCharsetFromResponse(httpResponse);
-        return Jsoup.parse(httpResponse.getEntity().getContent(), encoding, getUrl());
+        return Jsoup.parse(getInputStream(httpResponse), encoding, getUrl());
     }
 
     protected void saveQuote(ContentValues values) {
@@ -84,7 +93,18 @@ public abstract class QuoteLoader extends AbstractLoader<Cursor> {
     }
 
     protected HttpUriRequest getHttpRequest() {
-        return new HttpGet(getUrl());
+        HttpGet httpGet = new HttpGet(getUrl());
+        AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpGet);
+        return httpGet;
+    }
+
+    static InputStream getInputStream(HttpResponse httpResponse) throws IOException {
+        InputStream inputStream = httpResponse.getEntity().getContent();
+        Header contentEncoding = httpResponse.getFirstHeader("Content-Encoding");
+        if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
+            inputStream = new GZIPInputStream(inputStream);
+        }
+        return inputStream;
     }
 
     protected abstract String getUrl();
