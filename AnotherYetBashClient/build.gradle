@@ -29,7 +29,7 @@ android {
 
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled false
             proguardFile 'proguard.cfg'
             signingConfig android.signingConfigs.release
         }
