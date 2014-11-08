@@ -22,6 +22,7 @@ import static ru.aim.anotheryetbashclient.helper.DbHelper.QUOTE_PUBLIC_ID;
 import static ru.aim.anotheryetbashclient.loaders.FreshLoader.NEXT_PAGE;
 import static ru.aim.anotheryetbashclient.loaders.FreshLoader.ROOT_PAGE;
 import static ru.aim.anotheryetbashclient.loaders.Package.getCharsetFromResponse;
+import static ru.aim.anotheryetbashclient.loaders.QuoteLoader.getInputStream;
 
 public class OfflineDownloaderAction extends AbstractAction {
 
@@ -40,10 +41,10 @@ public class OfflineDownloaderAction extends AbstractAction {
             } else {
                 url = String.format(NEXT_PAGE, maxPage - i);
             }
-            HttpGet httpRequest = new HttpGet(url);
+            HttpGet httpRequest = buildGetRequest(url);
             L.d(TAG, "Requesting page: " + url);
             HttpResponse httpResponse = getHttpClient().execute(httpRequest);
-            Document document = Jsoup.parse(httpResponse.getEntity().getContent(), getCharsetFromResponse(httpResponse), url);
+            Document document = Jsoup.parse(getInputStream(httpResponse), getCharsetFromResponse(httpResponse), url);
             if (i == 0) {
                 Elements elements = document.select("input[class=page]");
                 String page = null;

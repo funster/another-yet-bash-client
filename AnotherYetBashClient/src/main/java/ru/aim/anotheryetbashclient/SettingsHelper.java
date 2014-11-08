@@ -110,4 +110,9 @@ public final class SettingsHelper {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getInt(context.getString(R.string.auto_update_depth_key), 1);
     }
+
+    public static boolean isScrollByVolumeEnabled(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getBoolean(context.getString(R.string.enable_scroll_volume), false);
+    }
 }

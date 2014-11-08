@@ -5,13 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
-import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import ru.aim.anotheryetbashclient.fragments.AbstractFragment;
 import ru.aim.anotheryetbashclient.fragments.FragmentsFactory;
 import ru.aim.anotheryetbashclient.helper.Utils;
@@ -31,18 +33,17 @@ import static ru.aim.anotheryetbashclient.SettingsHelper.saveType;
  */
 public class MainActivity extends RulezActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
 
-    public static final int BLUR_DURATION = 500;
-
     FrameLayout mainFrame;
     ListView mTypesListView;
     DrawerLayout mDrawerLayout;
     ActionBarDrawerToggle mDrawerToggle;
     MenuItemsAdapter adapter;
-    TransitionDrawable cache;
     boolean hideAdditionalMenu;
 
     int currentTypeId;
     final String fragmentKey = "fragmentKey";
+    ListFragment mListFragment;
+    boolean mScrollByVolumeEnabled;
 
     BroadcastReceiver notifyBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -139,6 +140,9 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
     void setFragment() {
         updateHeader(this, currentTypeId);
         Fragment fragment = FragmentsFactory.getFragment(currentTypeId);
+        if (fragment instanceof ListFragment) {
+            mListFragment = (ListFragment) fragment;
+        }
         getSupportFragmentManager().beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .replace(R.id.main_frame, fragment, fragmentKey)
@@ -181,15 +185,31 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
         invalidateOptionsMenu();
     }
 
-    public int getCurrentTypeId() {
-        return currentTypeId;
-    }
-
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.action_settings) {
             mDrawerLayout.closeDrawers();
             startActivity(new Intent(this, SettingsActivity.class));
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (mScrollByVolumeEnabled && mListFragment != null) {
+            if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+                mListFragment.getListView().smoothScrollByOffset(1);
+                return true;
+            } else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+                mListFragment.getListView().smoothScrollByOffset(-1);
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mScrollByVolumeEnabled = SettingsHelper.isScrollByVolumeEnabled(this);
     }
 }

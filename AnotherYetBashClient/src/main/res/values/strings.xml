@@ -130,5 +130,8 @@
     <string name="auto_update_depth_title">Количество страниц</string>
     <string name="auto_update_depth_summary">Количество страниц, которое будет загружено в автоматическом режиме: %s</string>
     <string name="set_date">Укажите дату</string>
+    <string name="enable_scroll_volume">enable_scroll_volume</string>
+    <string name="enable_scroll_volume_title">Прокрутка</string>
+    <string name="enable_scroll_volume_summary">Использовать клавиши громкости для прокрутки списка цитат</string>
 
 </resources>

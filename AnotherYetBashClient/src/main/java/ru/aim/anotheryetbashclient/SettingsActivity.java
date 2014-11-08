@@ -41,6 +41,7 @@ public class SettingsActivity extends ActionBarActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+
             addPreferencesFromResource(R.xml.pref_general);
             addPreferencesFromResource(R.xml.pref_update);
             addPreferencesFromResource(R.xml.pref_about);
@@ -58,10 +59,8 @@ public class SettingsActivity extends ActionBarActivity {
             try {
                 String versionName = getActivity().getPackageManager()
                         .getPackageInfo(getActivity().getPackageName(), 0).versionName;
-                if (BuildConfig.DEBUG) {
-                    versionName += " (" + getActivity().getPackageManager().
-                            getPackageInfo(getActivity().getPackageName(), 0).versionCode + ")";
-                }
+                versionName += " (" + getActivity().getPackageManager().
+                        getPackageInfo(getActivity().getPackageName(), 0).versionCode + ")";
                 versionPreference.setSummary(getString(R.string.version_summary, versionName));
                 versionPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override

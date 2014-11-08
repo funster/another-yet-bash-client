@@ -1,9 +1,11 @@
 package ru.aim.anotheryetbashclient.helper.actions;
 
 import android.content.Context;
+import android.net.http.AndroidHttpClient;
 import android.os.Bundle;
 
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 
@@ -49,5 +51,11 @@ public abstract class AbstractAction implements IAction, IContextAware, IDbAware
     @Override
     public void setBundle(Bundle bundle) {
         this.mArguments = bundle;
+    }
+
+    HttpGet buildGetRequest(String url) {
+        HttpGet httpRequest = new HttpGet(url);
+        AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpRequest);
+        return httpRequest;
     }
 }

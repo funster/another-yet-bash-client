@@ -2,6 +2,8 @@ package ru.aim.anotheryetbashclient;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.Preference;
@@ -64,7 +66,7 @@ public class FontPreference extends Preference implements SeekBar.OnSeekBarChang
         seekBar.setMax(mMaxValue - mMinValue);
         seekBar.setEnabled(isEnabled());
         exampleTextView = (TextView) view.findViewById(R.id.summary);
-        applyFontSize();
+        applyFontSize(mProgress);
     }
 
     @Override
@@ -122,18 +124,20 @@ public class FontPreference extends Preference implements SeekBar.OnSeekBarChang
         int progress = seekBar.getProgress();
         if (progress != mProgress) {
             if (callChangeListener(progress)) {
-                setProgress(progress, false);
+                setProgress(progress, true);
             } else {
                 seekBar.setProgress(mProgress);
             }
         }
-        applyFontSize();
+        applyFontSize(progress);
     }
 
-    void applyFontSize() {
-        int inSp = seekBar.getProgress() + mMinValue;
+    void applyFontSize(int progress) {
+        final int inSp = progress + mMinValue;
+        Handler handler = new Handler(Looper.getMainLooper());
         exampleTextView.setTextSize(inSp);
         exampleTextView.setText(getContext().getString(R.string.font_size_example, inSp));
+        exampleTextView.getParent().requestLayout();
     }
 
     @Override

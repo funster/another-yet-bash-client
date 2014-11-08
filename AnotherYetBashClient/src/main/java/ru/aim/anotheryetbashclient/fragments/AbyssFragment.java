@@ -6,7 +6,10 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.widget.ListAdapter;
+
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.QuotesAdapter;
 import ru.aim.anotheryetbashclient.ShareDialog;
@@ -18,7 +21,9 @@ import ru.aim.anotheryetbashclient.loaders.SimpleResult;
 /**
  *
  */
-public class AbyssFragment extends AbstractFragment implements SimpleLoaderCallbacks<Cursor> {
+public class AbyssFragment extends AbstractFragment implements SimpleLoaderCallbacks<Cursor>, SearchView.OnQueryTextListener {
+
+    SearchView searchView;
 
     @Override
     public void onManualUpdate() {
@@ -39,7 +44,7 @@ public class AbyssFragment extends AbstractFragment implements SimpleLoaderCallb
     @Override
     public Loader<SimpleResult<Cursor>> onCreateLoader(int id, Bundle args) {
         setRefreshing(true);
-        return new AbyssLoader(getActivity());
+        return new AbyssLoader(getActivity(), args);
     }
 
     @Override
@@ -57,6 +62,27 @@ public class AbyssFragment extends AbstractFragment implements SimpleLoaderCallb
     @Override
     public void onLoaderReset(Loader<SimpleResult<Cursor>> loader) {
         safeSwap();
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        sendRequest();
+        searchView.clearFocus();
+        return false;
+    }
+
+    void sendRequest() {
+        if (!TextUtils.isEmpty(searchView.getQuery())) {
+            setRefreshing(true);
+            Bundle bundle = new Bundle();
+            bundle.putString("search", searchView.getQuery().toString());
+            getLoaderManager().restartLoader(AbyssLoader.ID, bundle, this);
+        }
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        return false;
     }
 
     static class AbyssAdapter extends QuotesAdapter {

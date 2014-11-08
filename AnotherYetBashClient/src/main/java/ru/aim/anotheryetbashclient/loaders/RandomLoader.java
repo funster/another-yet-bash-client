@@ -44,7 +44,7 @@ public class RandomLoader extends QuoteLoader {
         if (refs.size() > 0) {
             return refs.get(0).attr("href");
         } else {
-            throw new AssertionError();
+            return null;
         }
     }
 }

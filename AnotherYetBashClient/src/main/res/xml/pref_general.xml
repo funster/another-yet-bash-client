@@ -1,14 +1,20 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ru.aim.anotheryetbashclient.FontPreference
-            android:max="24"
-            android:key="font_size"
-            android:title="Font size"
-            android:summary="Set font size"/>
+        android:max="24"
+        android:key="font_size"
+        android:title="Font size"
+        android:summary="Set font size" />
 
     <CheckBoxPreference
-            android:key="@string/enable_list_item_animation_key"
-            android:title="@string/enable_list_item_animation_title"
-            android:defaultValue="true"/>
+        android:key="@string/enable_list_item_animation_key"
+        android:title="@string/enable_list_item_animation_title"
+        android:defaultValue="true" />
+
+    <CheckBoxPreference
+        android:key="@string/enable_scroll_volume"
+        android:title="@string/enable_scroll_volume_title"
+        android:summary="@string/enable_scroll_volume_summary"
+        android:defaultValue="false" />
 
 </PreferenceScreen>

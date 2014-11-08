@@ -2,11 +2,15 @@ package ru.aim.anotheryetbashclient.loaders;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.os.Bundle;
 import android.text.TextUtils;
+
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 
+import static ru.aim.anotheryetbashclient.helper.Utils.encode;
 import static ru.aim.anotheryetbashclient.loaders.Package.wrapWithRoot;
 import static ru.aim.anotheryetbashclient.loaders.Package.wrapWithRootWithoutSlash;
 
@@ -19,14 +23,20 @@ public class AbyssLoader extends RandomLoader {
 
     static final String URL = wrapWithRoot("abyss");
     static final String MORE_URL = wrapWithRootWithoutSlash("%s");
+    static final String SEARCH_URL = wrapWithRoot("abyss?text=%s");
 
-    public AbyssLoader(Context context) {
+    String search;
+
+    public AbyssLoader(Context context, Bundle bundle) {
         super(context);
+        search = bundle.getString("search");
     }
 
     @Override
     protected String getUrl() {
-        if (!TextUtils.isEmpty(more)) {
+        if (!TextUtils.isEmpty(search)) {
+            return  String.format(SEARCH_URL, encode(search));
+        } else if (!TextUtils.isEmpty(more)) {
             return String.format(MORE_URL, more);
         } else {
             return URL;
