@@ -11,9 +11,16 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.Loader;
-import android.view.*;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ListAdapter;
+
+import java.util.Calendar;
+
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.QuotesAdapter;
 import ru.aim.anotheryetbashclient.R;
@@ -23,8 +30,6 @@ import ru.aim.anotheryetbashclient.loaders.AbyssBestLoader;
 import ru.aim.anotheryetbashclient.loaders.BestLoader;
 import ru.aim.anotheryetbashclient.loaders.SimpleLoaderCallbacks;
 import ru.aim.anotheryetbashclient.loaders.SimpleResult;
-
-import java.util.Calendar;
 
 /**
  *
@@ -126,7 +131,7 @@ public class AbyssBestFragment extends AbstractFragment implements SimpleLoaderC
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             dateResult = (DateResult) getArguments().getSerializable("dateResult");
             DatePickerDialog dialog;
-            if (dateResult.isSet()) {
+            if (!dateResult.isToday()) {
                 dialog = new DatePickerDialog(getActivity(), this, dateResult.year, dateResult.month, dateResult.day);
             } else {
                 dialog = new DatePickerDialog(getActivity(), this,
