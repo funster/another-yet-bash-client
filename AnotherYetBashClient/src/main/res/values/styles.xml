@@ -5,6 +5,7 @@
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="Theme.AppCompat">
+
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -14,19 +15,52 @@
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-        <!--<item name="colorPrimary">@color/app_colorPrimary</item>-->
-        <!-- colorPrimaryDark is used for the status bar -->
-        <!--<item name="colorPrimaryDark">@color/app_colorPrimaryDark</item>-->
-        <!-- colorAccent is used as the default value for colorControlActivated
-             which is used to tint widgets -->
-        <!--<item name="colorAccent">@color/app_colorAccent</item>-->
+        <!-- theme colors -->
+        <item name="colorPrimary">@color/app_color_primary_dark</item>
+        <item name="colorPrimaryDark">@color/app_color_primary_dark</item>
+        <item name="@android:attr/windowBackground">@color/app_color_primary_dark</item>
+
+        <item name="@android:attr/activatedBackgroundIndicator">@drawable/list_selector_dark</item>
+
+        <!-- drawables -->
+        <item name="settings_icon">@drawable/ic_settings_white_24dp</item>
+        <item name="share_icon">@drawable/ic_share_white_36dp</item>
+        <item name="favorite_empty_icon">@drawable/ic_star_outline_white_38dp</item>
+        <item name="favorite_full_icon">@drawable/ic_star_white_38dp</item>
+        <item name="btn_borderless">@drawable/btn_borderless</item>
     </style>
 
+
+    <style name="AppBaseTheme.Light" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Application light theme. -->
+    </style>
+
+    <style name="AppTheme.Light" parent="AppBaseTheme.Light">
+        <!-- theme colors -->
+        <item name="colorPrimary">@color/app_colorPrimary</item>
+        <item name="colorPrimaryDark">@color/app_colorPrimaryDark</item>
+
+        <item name="@android:attr/activatedBackgroundIndicator">@drawable/list_selector_light</item>
+
+        <!-- drawables -->
+        <item name="settings_icon">@drawable/ic_settings_black_24dp</item>
+        <item name="share_icon">@drawable/ic_share_black_36dp</item>
+        <item name="favorite_empty_icon">@drawable/ic_star_outline_black_38dp</item>
+        <item name="favorite_full_icon">@drawable/ic_star_black_38dp</item>
+        <item name="btn_borderless">@drawable/btn_borderless_light</item>
+        <!-- customize the color palette -->
+    </style>
 
     <style name="listItemText" parent="android:TextAppearance.Medium">
         <item name="android:textSize">16sp</item>
     </style>
 
+    <declare-styleable name="AppBaseTheme">
+        <attr name="settings_icon" format="reference" />
+        <attr name="share_icon" format="reference" />
+        <attr name="favorite_empty_icon" format="reference" />
+        <attr name="favorite_full_icon" format="reference" />
+        <attr name="btn_borderless" format="reference" />
+    </declare-styleable>
 
 </resources>

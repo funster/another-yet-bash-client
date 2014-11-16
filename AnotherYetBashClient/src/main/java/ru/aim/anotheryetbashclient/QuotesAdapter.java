@@ -14,7 +14,9 @@ import android.widget.CursorAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.daimajia.swipe.SwipeLayout;
+
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.loaders.RulezType;
 
@@ -31,8 +33,8 @@ public class QuotesAdapter extends CursorAdapter {
     protected int textSize;
     protected MainActivity mContext;
 
-    int favoriteFill = R.drawable.ic_star_white_38dp;
-    int favoriteEmpty = R.drawable.ic_star_outline_white_38dp;
+    int favoriteFill;
+    int favoriteEmpty;
 
     public QuotesAdapter(DbHelper dbHelper, Context context, Cursor c) {
         super(context, c, true);
@@ -40,6 +42,8 @@ public class QuotesAdapter extends CursorAdapter {
         this.mContext = (MainActivity) context;
         isAnimationEnabled = SettingsHelper.isItemAnimationEnabled(context);
         textSize = SettingsHelper.getFontSize(context);
+        favoriteFill = AttributeUtils.resolveResource(context, R.attr.favorite_full_icon);
+        favoriteEmpty = AttributeUtils.resolveResource(context, R.attr.favorite_empty_icon);
     }
 
     @Override

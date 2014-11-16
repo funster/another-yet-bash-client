@@ -16,7 +16,7 @@
         <item>Бездна</item>
         <item>Топ Бездны</item>
         <item>Лучшее Бездны</item>
-        <item>Оффлайн - Новые</item>
+        <item>Оффлайн</item>
     </string-array>
 
     <string-array name="item_menu">
@@ -133,5 +133,12 @@
     <string name="enable_scroll_volume">enable_scroll_volume</string>
     <string name="enable_scroll_volume_title">Прокрутка</string>
     <string name="enable_scroll_volume_summary">Использовать клавиши громкости для прокрутки списка цитат</string>
-
+    <string name="select_theme_key">select_theme_key</string>
+    <string name="select_theme_title">Тема приложения</string>
+    <string name="select_theme_dark">Тёмная</string>
+    <string name="select_theme_light">Светлая</string>
+    <string-array name="listArray">
+        <item>Тёмная</item>
+        <item>Светлая</item>
+    </string-array>
 </resources>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.preference.PreferenceManager;
+import android.support.annotation.StyleRes;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -114,5 +115,13 @@ public final class SettingsHelper {
     public static boolean isScrollByVolumeEnabled(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getBoolean(context.getString(R.string.enable_scroll_volume), false);
+    }
+
+    @StyleRes
+    public static int getTheme(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String defaultTheme = context.getString(R.string.select_theme_light);
+        String theme = preferences.getString(context.getString(R.string.select_theme_key), defaultTheme);
+        return defaultTheme.equals(theme) ? R.style.AppTheme_Light : R.style.AppTheme;
     }
 }

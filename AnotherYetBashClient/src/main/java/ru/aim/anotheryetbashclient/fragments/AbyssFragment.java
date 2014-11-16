@@ -28,7 +28,11 @@ public class AbyssFragment extends AbstractFragment implements SimpleLoaderCallb
     @Override
     public void onManualUpdate() {
         setRefreshing(true);
-        getLoaderManager().getLoader(AbyssLoader.ID).forceLoad();
+        if (getLoaderManager().getLoader(AbyssLoader.ID) == null) {
+            initLoader();
+        } else {
+            getLoaderManager().getLoader(AbyssLoader.ID).forceLoad();
+        }
     }
 
     @Override

@@ -22,7 +22,11 @@ public class AbyssTopFragment extends AbstractFragment implements SimpleLoaderCa
     @Override
     public void onManualUpdate() {
         setRefreshing(true);
-        getLoaderManager().getLoader(AbyssTopLoader.ID).forceLoad();
+        if (getLoaderManager().getLoader(AbyssTopLoader.ID) == null) {
+           initLoader();
+        } else {
+            getLoaderManager().getLoader(AbyssTopLoader.ID).forceLoad();
+        }
     }
 
     @Override

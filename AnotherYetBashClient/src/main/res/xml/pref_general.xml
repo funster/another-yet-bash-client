@@ -17,4 +17,12 @@
         android:summary="@string/enable_scroll_volume_summary"
         android:defaultValue="false" />
 
+    <ListPreference
+        android:key="@string/select_theme_key"
+        android:title="@string/select_theme_title"
+        android:summary="@string/select_theme_light"
+        android:entries="@array/listArray"
+        android:defaultValue="@string/select_theme_light"
+        android:entryValues="@array/listArray" />
+
 </PreferenceScreen>

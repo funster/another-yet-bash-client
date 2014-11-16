@@ -17,7 +17,7 @@ import ru.aim.anotheryetbashclient.helper.L;
 @SuppressWarnings("unused")
 public abstract class BaseFragment extends ListFragment {
 
-    public static String TAG = "BaseFragment";
+    static String TAG = "BaseFragment";
     private List<Runnable> pausedActions = new ArrayList<Runnable>();
 
     protected void run(Runnable runnable) {
@@ -36,6 +36,16 @@ public abstract class BaseFragment extends ListFragment {
             pausedActions.get(i).run();
         }
         pausedActions.clear();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 
     public static void sendMessage(FragmentManager manager, Class<? extends BaseFragment> to, Object message) {
@@ -69,8 +79,6 @@ public abstract class BaseFragment extends ListFragment {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                // SimpleDialog simpleDialog = SimpleDialog.newInstance(message);
-                // simpleDialog.show(fragmentManager);
                 Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
             }
         });

@@ -2,6 +2,7 @@ package ru.aim.anotheryetbashclient.fragments;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -83,8 +84,8 @@ public abstract class AbstractFragment extends RefreshFragment implements Adapte
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         if (getListAdapter() instanceof QuotesAdapter) {
             QuotesAdapter adapter = (QuotesAdapter) getListAdapter();
             if (SettingsHelper.getFontSize(getActivity()) != adapter.getTextSize()) {

@@ -1,17 +1,18 @@
 package ru.aim.anotheryetbashclient;
 
+import android.app.Fragment;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 
 /**
  *
  */
-public class SettingsActivity extends ActionBarActivity {
+public class SettingsActivity extends ThemedActivity {
 
     public static final String LIST_ITEM_ANIMATION = "enable_list_item_animation";
 
@@ -20,9 +21,12 @@ public class SettingsActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.frame_container);
 
-        getFragmentManager().beginTransaction().
-                add(R.id.container, new SettingsFragment())
-                .commit();
+        Fragment fragment = getFragmentManager().findFragmentByTag("container");
+        if (fragment == null) {
+            getFragmentManager().beginTransaction().
+                    add(R.id.container, new SettingsFragment(), "container")
+                    .commit();
+        }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -41,7 +45,6 @@ public class SettingsActivity extends ActionBarActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
             addPreferencesFromResource(R.xml.pref_general);
             addPreferencesFromResource(R.xml.pref_update);
             addPreferencesFromResource(R.xml.pref_about);
@@ -72,6 +75,22 @@ public class SettingsActivity extends ActionBarActivity {
                 });
             } catch (PackageManager.NameNotFoundException ignored) {
             }
+
+            final ListPreference listPreference = (ListPreference) findPreference(getString(R.string.select_theme_key));
+            final String beforeValue = listPreference.getValue();
+            listPreference.setSummary(beforeValue);
+            listPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if (!beforeValue.equals(newValue)) {
+                        if (getActivity() instanceof ThemedActivity) {
+                            listPreference.setSummary((String) newValue);
+                            ThemedActivity.sendChangeTheme(getActivity());
+                        }
+                    }
+                    return true;
+                }
+            });
         }
 
         @Override

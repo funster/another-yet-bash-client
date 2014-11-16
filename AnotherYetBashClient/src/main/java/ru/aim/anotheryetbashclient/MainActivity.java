@@ -100,7 +100,15 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
         if (savedInstanceState == null && SettingsHelper.isPreloadedAvailable(this)) {
             currentTypeId = ActionsAndIntents.TYPE_OFFLINE;
         }
-        setFragment();
+
+        if (savedInstanceState != null) {
+            currentTypeId = savedInstanceState.getInt("type");
+            updateHeader(this, currentTypeId);
+        }
+
+        if (savedInstanceState == null) {
+            setFragment();
+        }
 
         findViewById(R.id.action_settings).setOnClickListener(this);
     }
@@ -205,6 +213,12 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("type", currentTypeId);
     }
 
     @Override

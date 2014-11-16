@@ -15,7 +15,11 @@ public class RandomFragment extends AbstractFragment implements SimpleLoaderCall
     @Override
     public void onManualUpdate() {
         setRefreshing(true);
-        getLoaderManager().getLoader(RandomLoader.ID).forceLoad();
+        if (getLoaderManager().getLoader(RandomLoader.ID) == null) {
+            getLoaderManager().initLoader(RandomLoader.ID, Bundle.EMPTY, this);
+        } else {
+            getLoaderManager().getLoader(RandomLoader.ID).forceLoad();
+        }
     }
 
     @Override
