@@ -28,6 +28,7 @@
         <item name="favorite_empty_icon">@drawable/ic_star_outline_white_38dp</item>
         <item name="favorite_full_icon">@drawable/ic_star_white_38dp</item>
         <item name="btn_borderless">@drawable/btn_borderless</item>
+        <item name="ripple">@color/ripple_material_dark</item>
     </style>
 
 
@@ -48,6 +49,7 @@
         <item name="favorite_empty_icon">@drawable/ic_star_outline_black_38dp</item>
         <item name="favorite_full_icon">@drawable/ic_star_black_38dp</item>
         <item name="btn_borderless">@drawable/btn_borderless_light</item>
+        <item name="ripple">@color/ripple_material_light</item>
         <!-- customize the color palette -->
     </style>
 
@@ -61,6 +63,7 @@
         <attr name="favorite_empty_icon" format="reference" />
         <attr name="favorite_full_icon" format="reference" />
         <attr name="btn_borderless" format="reference" />
+        <attr name="ripple" format="color"/>
     </declare-styleable>
 
 </resources>

@@ -84,14 +84,24 @@ public abstract class AbstractFragment extends RefreshFragment implements Adapte
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onResume() {
+        super.onResume();
+        refreshFonts();
+    }
+
+    void refreshFonts() {
         if (getListAdapter() instanceof QuotesAdapter) {
             QuotesAdapter adapter = (QuotesAdapter) getListAdapter();
             if (SettingsHelper.getFontSize(getActivity()) != adapter.getTextSize()) {
                 initLoader();
             }
         }
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        refreshFonts();
         if (getListAdapter() == null) {
             initLoader();
         }
