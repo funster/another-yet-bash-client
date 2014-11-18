@@ -8,5 +8,6 @@
     <color name="material_green_A200">#69F0AE</color>
 
     <color name="app_color_primary_dark">#000000</color>
+    <color name="black">#000000</color>
 
 </resources>

@@ -132,8 +132,18 @@ public class QuotesAdapter extends CursorAdapter {
     }
 
     protected void share(Context context, ViewHolder viewHolder) {
-        viewHolder.quoteContainer.setDrawingCacheEnabled(true);
-        Bitmap bitmap = viewHolder.quoteContainer.getDrawingCache();
+        View quoteView = LayoutInflater.from(context).inflate(R.layout.simple_quote, null);
+        TextView tmpTextView = (TextView) quoteView.findViewById(android.R.id.text2);
+        tmpTextView.setText(viewHolder.id.getText());
+        tmpTextView = (TextView) quoteView.findViewById(android.R.id.text1);
+        tmpTextView.setText(viewHolder.date.getText());
+        tmpTextView = (TextView) quoteView.findViewById(R.id.text);
+        tmpTextView.setText(viewHolder.text.getText());
+        quoteView.setDrawingCacheEnabled(true);
+        quoteView.measure(View.MeasureSpec.makeMeasureSpec(800, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        quoteView.layout(0, 0, quoteView.getMeasuredWidth(), quoteView.getMeasuredHeight());
+        Bitmap bitmap = quoteView.getDrawingCache(true);
         ShareDialog shareDialog = ShareDialog.newInstance(bitmap,
                 viewHolder.publicId,
                 viewHolder.text.getText().toString());
