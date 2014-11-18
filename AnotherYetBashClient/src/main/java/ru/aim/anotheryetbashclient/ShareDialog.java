@@ -2,7 +2,13 @@ package ru.aim.anotheryetbashclient;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.*;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -15,11 +21,12 @@ import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
-import ru.aim.anotheryetbashclient.helper.L;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Date;
+
+import ru.aim.anotheryetbashclient.helper.L;
 
 public class ShareDialog extends DialogFragment implements DialogInterface.OnClickListener {
 
@@ -189,7 +196,10 @@ public class ShareDialog extends DialogFragment implements DialogInterface.OnCli
     }
 
     static String getCleanId(String id) {
-        return id.replace("#", "");
+        if (TextUtils.isEmpty(id)) {
+            Date cur = new Date();
+            return "" + cur.getTime();
+        } else return id.replace("#", "");
     }
 
     public static String getRealPathFromUri(Context context, Uri contentUri) {

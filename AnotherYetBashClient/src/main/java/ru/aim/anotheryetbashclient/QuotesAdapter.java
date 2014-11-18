@@ -131,8 +131,8 @@ public class QuotesAdapter extends CursorAdapter {
         }
     }
 
-    protected void share(Context context, ViewHolder viewHolder) {
-        View quoteView = LayoutInflater.from(context).inflate(R.layout.simple_quote, null);
+    protected Bitmap buildQuoteBitmap(ViewHolder viewHolder) {
+        View quoteView = LayoutInflater.from(mContext).inflate(R.layout.simple_quote, null);
         TextView tmpTextView = (TextView) quoteView.findViewById(android.R.id.text2);
         tmpTextView.setText(viewHolder.id.getText());
         tmpTextView = (TextView) quoteView.findViewById(android.R.id.text1);
@@ -143,8 +143,11 @@ public class QuotesAdapter extends CursorAdapter {
         quoteView.measure(View.MeasureSpec.makeMeasureSpec(800, View.MeasureSpec.EXACTLY),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         quoteView.layout(0, 0, quoteView.getMeasuredWidth(), quoteView.getMeasuredHeight());
-        Bitmap bitmap = quoteView.getDrawingCache(true);
-        ShareDialog shareDialog = ShareDialog.newInstance(bitmap,
+        return quoteView.getDrawingCache(true);
+    }
+
+    protected void share(Context context, ViewHolder viewHolder) {
+        ShareDialog shareDialog = ShareDialog.newInstance(buildQuoteBitmap(viewHolder),
                 viewHolder.publicId,
                 viewHolder.text.getText().toString());
         if (context instanceof FragmentActivity) {

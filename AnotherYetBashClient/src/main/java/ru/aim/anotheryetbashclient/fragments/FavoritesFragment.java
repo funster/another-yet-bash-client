@@ -87,8 +87,7 @@ public class FavoritesFragment extends AbstractFragment
 
         @Override
         protected void share(Context context, ViewHolder viewHolder) {
-            viewHolder.quoteContainer.setDrawingCacheEnabled(true);
-            Bitmap bitmap = viewHolder.quoteContainer.getDrawingCache();
+            Bitmap bitmap = buildQuoteBitmap(viewHolder);
             ShareDialog shareDialog = ShareDialog.newInstance(bitmap, null,
                     viewHolder.text.getText().toString());
             if (context instanceof FragmentActivity) {
