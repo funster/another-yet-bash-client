@@ -96,4 +96,8 @@ public abstract class RefreshFragment extends BaseFragment implements SwipeRefre
     public boolean isRefreshing() {
         return refreshLayout == null || refreshLayout.isRefreshing();
     }
+
+    public SwipeRefreshLayout getRefreshLayout() {
+        return refreshLayout;
+    }
 }

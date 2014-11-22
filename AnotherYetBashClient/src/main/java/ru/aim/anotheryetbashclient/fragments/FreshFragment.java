@@ -85,6 +85,7 @@ public class FreshFragment extends AbstractFragment implements SimpleLoaderCallb
 
     @Override
     public void onLoaderReset(Loader<SimpleResult<FreshResult>> loader) {
+        safeSwap();
     }
 
     @SuppressWarnings("ConstantConditions")

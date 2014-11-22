@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.swipe.SimpleSwipeListener;
 import com.daimajia.swipe.SwipeLayout;
 
 import ru.aim.anotheryetbashclient.helper.DbHelper;
@@ -51,6 +52,7 @@ public class QuotesAdapter extends CursorAdapter {
         View view = LayoutInflater.from(context).inflate(R.layout.list_item, viewGroup, false);
         assert view != null;
         SwipeLayout swipeLayout = (SwipeLayout) view;
+        swipeLayout.addSwipeListener(swipeListener);
         swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         swipeLayout.setDragEdge(SwipeLayout.DragEdge.Right);
 
@@ -199,4 +201,18 @@ public class QuotesAdapter extends CursorAdapter {
     public int getTextSize() {
         return textSize;
     }
+
+    SwipeLayout.SwipeListener swipeListener = new SimpleSwipeListener() {
+        @Override
+        public void onOpen(SwipeLayout layout) {
+            super.onOpen(layout);
+            mContext.getRefreshFragment().getRefreshLayout().setEnabled(false);
+        }
+
+        @Override
+        public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
+            super.onHandRelease(layout, xvel, yvel);
+            mContext.getRefreshFragment().getRefreshLayout().setEnabled(true);
+        }
+    };
 }

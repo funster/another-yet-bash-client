@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import ru.aim.anotheryetbashclient.fragments.AbstractFragment;
 import ru.aim.anotheryetbashclient.fragments.FragmentsFactory;
+import ru.aim.anotheryetbashclient.fragments.RefreshFragment;
 import ru.aim.anotheryetbashclient.helper.Utils;
 
 import static ru.aim.anotheryetbashclient.Package.updateHeader;
@@ -42,7 +43,7 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
 
     int currentTypeId;
     final String fragmentKey = "fragmentKey";
-    ListFragment mListFragment;
+    RefreshFragment mListFragment;
     boolean mScrollByVolumeEnabled;
 
     BroadcastReceiver notifyBroadcastReceiver = new BroadcastReceiver() {
@@ -149,7 +150,7 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
         updateHeader(this, currentTypeId);
         Fragment fragment = FragmentsFactory.getFragment(currentTypeId);
         if (fragment instanceof ListFragment) {
-            mListFragment = (ListFragment) fragment;
+            mListFragment = (RefreshFragment) fragment;
         }
         getSupportFragmentManager().beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
@@ -225,5 +226,9 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
     protected void onResume() {
         super.onResume();
         mScrollByVolumeEnabled = SettingsHelper.isScrollByVolumeEnabled(this);
+    }
+
+    public RefreshFragment getRefreshFragment() {
+        return mListFragment;
     }
 }
