@@ -203,9 +203,10 @@ public class QuotesAdapter extends CursorAdapter {
     }
 
     SwipeLayout.SwipeListener swipeListener = new SimpleSwipeListener() {
+
         @Override
-        public void onOpen(SwipeLayout layout) {
-            super.onOpen(layout);
+        public void onStartOpen(SwipeLayout layout) {
+            super.onStartOpen(layout);
             if (mContext.getRefreshFragment().getRefreshLayout() != null) {
                 mContext.getRefreshFragment().getRefreshLayout().setEnabled(false);
             }
