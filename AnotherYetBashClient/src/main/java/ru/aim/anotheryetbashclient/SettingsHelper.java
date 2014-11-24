@@ -124,4 +124,14 @@ public final class SettingsHelper {
         String theme = preferences.getString(context.getString(R.string.select_theme_key), defaultTheme);
         return defaultTheme.equals(theme) ? R.style.AppTheme_Light : R.style.AppTheme;
     }
+
+    public static boolean isKeepScreenEnabled(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getBoolean(context.getString(R.string.keep_screen_key), false);
+    }
+
+    public static boolean isChangeOrientationEnabled(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getBoolean(context.getString(R.string.change_orientation_key), false);
+    }
 }

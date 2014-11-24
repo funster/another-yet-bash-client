@@ -91,6 +91,21 @@ public class SettingsActivity extends ThemedActivity {
                     return true;
                 }
             });
+
+            CheckBoxPreference orientationChangePreference = (CheckBoxPreference) findPreference(getString(R.string.change_orientation_key));
+            orientationChangePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    boolean boolValue = (Boolean) newValue;
+                    SettingsActivity settingsActivity = (SettingsActivity) getActivity();
+                    if (boolValue) {
+                        settingsActivity.lockScreen();
+                    } else {
+                        settingsActivity.unlockScreen();
+                    }
+                    return true;
+                }
+            });
         }
 
         @Override

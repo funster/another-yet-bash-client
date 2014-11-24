@@ -16,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -34,6 +35,8 @@ import static ru.aim.anotheryetbashclient.SettingsHelper.saveType;
  */
 public class MainActivity extends RulezActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
 
+    public final static String FRAGMENT_KEY = "FRAGMENT_KEY";
+
     FrameLayout mainFrame;
     ListView mTypesListView;
     DrawerLayout mDrawerLayout;
@@ -42,7 +45,6 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
     boolean hideAdditionalMenu;
 
     int currentTypeId;
-    final String fragmentKey = "fragmentKey";
     RefreshFragment mListFragment;
     boolean mScrollByVolumeEnabled;
 
@@ -109,13 +111,15 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
 
         if (savedInstanceState == null) {
             setFragment();
+        } else {
+            mListFragment = (RefreshFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_KEY);
         }
 
         findViewById(R.id.action_settings).setOnClickListener(this);
     }
 
     AbstractFragment getCurrentFragment() {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(fragmentKey);
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_KEY);
         if (fragment instanceof AbstractFragment) {
             return (AbstractFragment) fragment;
         }
@@ -154,7 +158,7 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
         }
         getSupportFragmentManager().beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .replace(R.id.main_frame, fragment, fragmentKey)
+                .replace(R.id.main_frame, fragment, FRAGMENT_KEY)
                 .commit();
     }
 
@@ -226,6 +230,11 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
     protected void onResume() {
         super.onResume();
         mScrollByVolumeEnabled = SettingsHelper.isScrollByVolumeEnabled(this);
+        if (SettingsHelper.isKeepScreenEnabled(this)) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
     }
 
     public RefreshFragment getRefreshFragment() {

@@ -206,13 +206,17 @@ public class QuotesAdapter extends CursorAdapter {
         @Override
         public void onOpen(SwipeLayout layout) {
             super.onOpen(layout);
-            mContext.getRefreshFragment().getRefreshLayout().setEnabled(false);
+            if (mContext.getRefreshFragment().getRefreshLayout() != null) {
+                mContext.getRefreshFragment().getRefreshLayout().setEnabled(false);
+            }
         }
 
         @Override
         public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
             super.onHandRelease(layout, xvel, yvel);
-            mContext.getRefreshFragment().getRefreshLayout().setEnabled(true);
+            if (mContext.getRefreshFragment().getRefreshLayout() != null) {
+                mContext.getRefreshFragment().getRefreshLayout().setEnabled(true);
+            }
         }
     };
 }

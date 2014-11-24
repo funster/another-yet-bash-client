@@ -25,4 +25,16 @@
         android:defaultValue="@string/select_theme_light"
         android:entryValues="@array/listArray" />
 
+    <CheckBoxPreference
+        android:key="@string/change_orientation_key"
+        android:title="@string/change_orientation_title"
+        android:summary="@string/change_orientation_summary"
+        android:defaultValue="false" />
+
+    <CheckBoxPreference
+        android:key="@string/keep_screen_key"
+        android:title="@string/keep_screen_title"
+        android:summary="@string/keep_screen_summary"
+        android:defaultValue="false" />
+
 </PreferenceScreen>

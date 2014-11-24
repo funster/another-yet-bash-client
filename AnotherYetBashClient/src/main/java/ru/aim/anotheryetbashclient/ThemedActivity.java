@@ -7,7 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 
-public class ThemedActivity extends AbstractActivity {
+public abstract class ThemedActivity extends OrientationActivity {
 
     public static final String CHANGE_THEME_ACTION = "ru.aim.anotheryetbashclient.CHANGE_THEME_ACTION";
 

@@ -137,6 +137,12 @@
     <string name="select_theme_title">Тема приложения</string>
     <string name="select_theme_dark">Тёмная</string>
     <string name="select_theme_light">Светлая</string>
+    <string name="change_orientation_key">change_orientation_key</string>
+    <string name="change_orientation_title">Отключить поворот</string>
+    <string name="change_orientation_summary">Отключить смену ориентации экрана при повороте</string>
+    <string name="keep_screen_key">keep_screen_key</string>
+    <string name="keep_screen_title">Не отключать экран</string>
+    <string name="keep_screen_summary">Не отключать экран при чтении</string>
     <string-array name="listArray">
         <item>Тёмная</item>
         <item>Светлая</item>
