@@ -1,0 +1,11 @@
+machine:
+  environment:
+    ANDROID_HOME: /home/ubuntu/android
+dependencies:
+ cache_directories:
+    - ~/.android
+    - ~/android
+  pre:
+    - echo y | android update sdk --no-ui --filter "android-21"
+    - echo y | android update sdk --no-ui --all --filter "build-tools-21.1.1"
+    - echo y | android update sdk --no-ui --all --filter "support"
