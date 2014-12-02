@@ -8,6 +8,10 @@ dependencies {
     compile "com.daimajia.swipelayout:library:1.1.7@aar"
 }
 
+def getReleaseKeyStore() { file(System.properties['user.home'] + "/.android/alpha.keystore") }
+
+def isReleaseKeyStoreExists() { getReleaseKeyStore().exists() }
+
 android {
     compileSdkVersion 21
     buildToolsVersion '21.1.1'
@@ -21,7 +25,7 @@ android {
 
     signingConfigs {
         release {
-            storeFile file(System.properties['user.home'] + "/.android/alpha.keystore")
+            storeFile getReleaseKeyStore()
             storePassword 'uthvbjyf'
             keyAlias 'defaultkey'
             keyPassword 'uthvbjyf'
@@ -33,7 +37,10 @@ android {
             minifyEnabled false
             shrinkResources false
             proguardFile 'proguard.cfg'
-            signingConfig android.signingConfigs.release
+            if (isReleaseKeyStoreExists())
+                signingConfig android.signingConfigs.release
+            else
+                signingConfig android.signingConfigs.debug
         }
     }
 
