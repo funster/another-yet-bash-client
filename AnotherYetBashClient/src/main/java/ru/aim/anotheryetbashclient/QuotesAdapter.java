@@ -20,6 +20,7 @@ import com.daimajia.swipe.SwipeLayout;
 
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.loaders.RulezType;
+import ru.aim.anotheryetbashclient.settings.SettingsHelper;
 
 /**
  *

@@ -1,5 +1,6 @@
 package ru.aim.anotheryetbashclient.helper;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -113,6 +114,7 @@ public final class Utils {
         localBroadcastManager.sendBroadcast(new Intent(ActionsAndIntents.NOTIFY).putExtra(ActionsAndIntents.MESSAGE, message));
     }
 
+    @SuppressWarnings("deprecation")
     public static Bitmap takeScreenShot(Activity activity) {
         View view = activity.getWindow().getDecorView();
         view.setDrawingCacheEnabled(true);
@@ -157,6 +159,7 @@ public final class Utils {
         return new TransitionDrawable(drawables);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public static Bitmap renderScriptBlur(Context context, Bitmap input, float radius) {
         Bitmap output = Bitmap.createBitmap(input);
         RenderScript rs = RenderScript.create(context);

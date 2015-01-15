@@ -1,4 +1,4 @@
-package ru.aim.anotheryetbashclient;
+package ru.aim.anotheryetbashclient.settings;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -6,6 +6,9 @@ import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TimePicker;
+
+import ru.aim.anotheryetbashclient.AlarmReceiver;
+import ru.aim.anotheryetbashclient.R;
 
 public class TimePreference extends DialogPreference {
 

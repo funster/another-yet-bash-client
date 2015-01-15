@@ -36,7 +36,6 @@ import ru.aim.anotheryetbashclient.loaders.SimpleResult;
  */
 public class AbyssBestFragment extends AbstractFragment implements SimpleLoaderCallbacks<Cursor> {
 
-    Calendar calendar = Calendar.getInstance();
     DateResult dateResult = new DateResult();
 
     @Override

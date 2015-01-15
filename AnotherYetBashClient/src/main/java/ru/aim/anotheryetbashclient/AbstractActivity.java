@@ -1,6 +1,5 @@
 package ru.aim.anotheryetbashclient;
 
-import android.os.Build;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 
@@ -25,18 +24,13 @@ public class AbstractActivity extends ActionBarActivity {
         //noinspection ForLoopReplaceableByForEach
         for (int i = 0; i < actions.size(); i++) {
             Handler handler = new Handler();
+            final Runnable runnable = actions.get(i);
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-                        finish();
-                        startActivity(getIntent());
-                    } else {
-                        recreate();
-                    }
+                    runnable.run();
                 }
             }, 1);
-            actions.get(i).run();
         }
         actions.clear();
     }

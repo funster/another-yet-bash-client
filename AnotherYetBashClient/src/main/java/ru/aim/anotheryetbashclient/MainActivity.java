@@ -12,6 +12,7 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,9 +27,12 @@ import ru.aim.anotheryetbashclient.fragments.AbstractFragment;
 import ru.aim.anotheryetbashclient.fragments.FragmentsFactory;
 import ru.aim.anotheryetbashclient.fragments.RefreshFragment;
 import ru.aim.anotheryetbashclient.helper.Utils;
+import ru.aim.anotheryetbashclient.settings.SettingsActivity;
+import ru.aim.anotheryetbashclient.settings.SettingsHelper;
+import ru.aim.anotheryetbashclient.support.RulezActivity;
 
 import static ru.aim.anotheryetbashclient.Package.updateHeader;
-import static ru.aim.anotheryetbashclient.SettingsHelper.saveType;
+import static ru.aim.anotheryetbashclient.settings.SettingsHelper.saveType;
 
 /**
  *
@@ -59,27 +63,31 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         mainFrame = (FrameLayout) findViewById(R.id.main_frame);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this,
-                mDrawerLayout,
-                R.string.drawer_open,
-                R.string.drawer_close) {
+        if (mDrawerLayout != null) {
+            mDrawerToggle = new ActionBarDrawerToggle(this,
+                    mDrawerLayout,
+                    R.string.drawer_open,
+                    R.string.drawer_close) {
 
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                setMenuItemsVisible(true);
-                super.onDrawerClosed(drawerView);
-            }
+                @Override
+                public void onDrawerClosed(View drawerView) {
+                    setMenuItemsVisible(true);
+                    super.onDrawerClosed(drawerView);
+                }
 
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                setMenuItemsVisible(false);
-                super.onDrawerOpened(drawerView);
-            }
-        };
-        // Set the drawer toggle as the DrawerListener
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+                @Override
+                public void onDrawerOpened(View drawerView) {
+                    setMenuItemsVisible(false);
+                    super.onDrawerOpened(drawerView);
+                }
+            };
+            // Set the drawer toggle as the DrawerListener
+            mDrawerLayout.setDrawerListener(mDrawerToggle);
+        }
 
         mTypesListView = (ListView) findViewById(R.id.types);
         adapter = new MenuItemsAdapter(this, R.layout.menu_item);
@@ -97,8 +105,10 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
         localBroadcastManager.registerReceiver(notifyBroadcastReceiver, intentFilter1);
 
         assert getSupportActionBar() != null;
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        if (mDrawerLayout != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }
 
         if (savedInstanceState == null && SettingsHelper.isPreloadedAvailable(this)) {
             currentTypeId = ActionsAndIntents.TYPE_OFFLINE;
@@ -147,7 +157,9 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
             currentTypeId = position;
             setFragment();
         }
-        mDrawerLayout.closeDrawers();
+        if (mDrawerLayout != null) {
+            mDrawerLayout.closeDrawers();
+        }
     }
 
     void setFragment() {
@@ -171,7 +183,7 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //noinspection SimplifiableIfStatement
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
+        if (mDrawerToggle != null && mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -181,13 +193,17 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
+        if (mDrawerToggle != null) {
+            mDrawerToggle.syncState();
+        }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
+        if (mDrawerToggle != null) {
+            mDrawerToggle.onConfigurationChanged(newConfig);
+        }
     }
 
     public void setMenuItemsVisible(boolean visible) {
@@ -201,7 +217,9 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.action_settings) {
-            mDrawerLayout.closeDrawers();
+            if (mDrawerLayout != null) {
+                mDrawerLayout.closeDrawers();
+            }
             startActivity(new Intent(this, SettingsActivity.class));
         }
     }

@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-<FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v7.widget.Toolbar
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:background="?android:windowBackground"
+        app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:id="@+id/toolbar" />
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:id="@+id/container"
         android:orientation="vertical"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

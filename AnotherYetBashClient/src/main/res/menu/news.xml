@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-            android:id="@+id/action_back"
-            android:icon="@drawable/ic_action_back"
-            android:title="@string/back"
-            app:showAsAction="always"/>
+        android:id="@+id/action_back"
+        android:icon="?attr/back_arrow_icon"
+        android:title="@string/back"
+        app:showAsAction="always" />
 
     <item
-            android:id="@+id/action_page"
-            android:title=""
-            app:showAsAction="always"/>
+        android:id="@+id/action_page"
+        android:title=""
+        app:showAsAction="always" />
 
     <item
-            android:id="@+id/action_forward"
-            android:icon="@drawable/ic_action_forward"
-            android:title="@string/forward"
-            app:showAsAction="always"/>
+        android:id="@+id/action_forward"
+        android:icon="?attr/forward_arrow_icon"
+        android:title="@string/forward"
+        app:showAsAction="always" />
 
 </menu>

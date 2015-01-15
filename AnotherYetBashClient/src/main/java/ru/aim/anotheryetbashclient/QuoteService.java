@@ -10,6 +10,7 @@ import ru.aim.anotheryetbashclient.helper.L;
 import ru.aim.anotheryetbashclient.helper.Utils;
 import ru.aim.anotheryetbashclient.helper.actions.ActionFactory;
 import ru.aim.anotheryetbashclient.helper.actions.OfflineDownloaderAction;
+import ru.aim.anotheryetbashclient.settings.SettingsHelper;
 
 public class QuoteService extends IntentService {
 

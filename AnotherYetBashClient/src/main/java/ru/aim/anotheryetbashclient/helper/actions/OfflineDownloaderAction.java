@@ -14,7 +14,7 @@ import org.jsoup.select.Elements;
 
 import java.util.Calendar;
 
-import ru.aim.anotheryetbashclient.SettingsHelper;
+import ru.aim.anotheryetbashclient.settings.SettingsHelper;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.helper.L;
 

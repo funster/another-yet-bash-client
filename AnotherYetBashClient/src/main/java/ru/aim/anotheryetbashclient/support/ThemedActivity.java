@@ -1,11 +1,14 @@
-package ru.aim.anotheryetbashclient;
+package ru.aim.anotheryetbashclient.support;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+
+import ru.aim.anotheryetbashclient.settings.SettingsHelper;
 
 public abstract class ThemedActivity extends OrientationActivity {
 
@@ -17,7 +20,12 @@ public abstract class ThemedActivity extends OrientationActivity {
             submitAction(new Runnable() {
                 @Override
                 public void run() {
-                    recreate();
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                        finish();
+                        startActivity(getIntent());
+                    } else {
+                        recreate();
+                    }
                 }
             });
         }

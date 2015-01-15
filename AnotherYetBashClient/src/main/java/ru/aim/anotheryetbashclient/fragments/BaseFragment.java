@@ -1,11 +1,14 @@
 package ru.aim.anotheryetbashclient.fragments;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
+import android.widget.ListAdapter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -18,13 +21,34 @@ import ru.aim.anotheryetbashclient.helper.L;
 public abstract class BaseFragment extends ListFragment {
 
     static String TAG = "BaseFragment";
-    private List<Runnable> pausedActions = new ArrayList<Runnable>();
+
+    private static final String LIST_VIEW_STATE = "listViewState";
+
+    private List<Runnable> mPausedActions = new ArrayList<Runnable>();
+    private Parcelable mListViewState;
 
     protected void run(Runnable runnable) {
         if (isResumed()) {
             runnable.run();
         } else {
-            pausedActions.add(runnable);
+            mPausedActions.add(runnable);
+        }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            mListViewState = savedInstanceState.getParcelable(LIST_VIEW_STATE);
+        }
+    }
+
+    @Override
+    public void setListAdapter(ListAdapter adapter) {
+        super.setListAdapter(adapter);
+        if (getListView() != null && mListViewState != null) {
+            getListView().onRestoreInstanceState(mListViewState);
+            mListViewState = null;
         }
     }
 
@@ -32,10 +56,10 @@ public abstract class BaseFragment extends ListFragment {
     public void onResume() {
         super.onResume();
         //noinspection ForLoopReplaceableByForEach
-        for (int i = 0; i < pausedActions.size(); i++) {
-            pausedActions.get(i).run();
+        for (int i = 0; i < mPausedActions.size(); i++) {
+            mPausedActions.get(i).run();
         }
-        pausedActions.clear();
+        mPausedActions.clear();
     }
 
     @Override
@@ -82,5 +106,13 @@ public abstract class BaseFragment extends ListFragment {
                 Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (getListView() != null) {
+            outState.putParcelable(LIST_VIEW_STATE, getListView().onSaveInstanceState());
+        }
     }
 }

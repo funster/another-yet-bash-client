@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:layout_height="128dp"
+        android:layout_width="match_parent"
+        android:background="?attr/colorPrimary"
+        android:id="@+id/header" />
+
+    <FrameLayout
+        android:id="@+id/menu_items"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignBottom="@+id/header"
+        android:layout_alignLeft="@+id/types"
+        android:layout_alignStart="@+id/types"
+        android:layout_alignRight="@+id/types"
+        android:layout_alignEnd="@+id/types">
+
+        <ImageButton
+            android:layout_marginLeft="16dp"
+            android:layout_gravity="center_vertical|left"
+            android:background="@null"
+            android:id="@+id/action_settings"
+            android:contentDescription="@string/action_settings"
+            android:src="?attr/settings_icon_reverse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </FrameLayout>
+
+    <ListView
+        android:elevation="4dp"
+        android:layout_marginLeft="64dp"
+        android:layout_marginBottom="12dp"
+        android:layout_gravity="start"
+        android:id="@+id/types"
+        android:orientation="vertical"
+        android:layout_width="240dp"
+        android:background="?android:attr/windowBackground"
+        android:layout_below="@+id/header"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:elevation="6dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="64dp"
+        android:layout_marginRight="64dp"
+        android:background="?android:windowBackground"
+        android:layout_toRightOf="@+id/types"
+        android:layout_toEndOf="@+id/types">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:background="?android:windowBackground"
+            app:theme="@style/AppActionBar.Light"
+            android:id="@+id/toolbar" />
+
+        <FrameLayout
+            android:id="@+id/main_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+</RelativeLayout>

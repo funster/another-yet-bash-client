@@ -14,7 +14,7 @@ import android.widget.ListView;
 import ru.aim.anotheryetbashclient.MainActivity;
 import ru.aim.anotheryetbashclient.QuotesAdapter;
 import ru.aim.anotheryetbashclient.R;
-import ru.aim.anotheryetbashclient.SettingsHelper;
+import ru.aim.anotheryetbashclient.settings.SettingsHelper;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 
 import static ru.aim.anotheryetbashclient.helper.Utils.setItemsVisibility;

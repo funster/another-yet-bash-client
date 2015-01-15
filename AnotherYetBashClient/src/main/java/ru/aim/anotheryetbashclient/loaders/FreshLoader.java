@@ -18,7 +18,7 @@ import java.util.Calendar;
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.BashApplication;
 import ru.aim.anotheryetbashclient.R;
-import ru.aim.anotheryetbashclient.SettingsHelper;
+import ru.aim.anotheryetbashclient.settings.SettingsHelper;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.helper.L;
 import ru.aim.anotheryetbashclient.helper.Utils;

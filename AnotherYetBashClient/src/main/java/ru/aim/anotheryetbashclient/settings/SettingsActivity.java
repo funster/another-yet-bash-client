@@ -1,4 +1,4 @@
-package ru.aim.anotheryetbashclient;
+package ru.aim.anotheryetbashclient.settings;
 
 import android.app.Fragment;
 import android.content.pm.PackageManager;
@@ -7,7 +7,13 @@ import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+
+import ru.aim.anotheryetbashclient.AboutDialog;
+import ru.aim.anotheryetbashclient.AlarmReceiver;
+import ru.aim.anotheryetbashclient.R;
+import ru.aim.anotheryetbashclient.support.ThemedActivity;
 
 /**
  *
@@ -20,6 +26,8 @@ public class SettingsActivity extends ThemedActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.frame_container);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         Fragment fragment = getFragmentManager().findFragmentByTag("container");
         if (fragment == null) {

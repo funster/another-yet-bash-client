@@ -13,10 +13,15 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final boolean DEBUG = false;
 
     public static final String DB_NAME = "quote_db";
+
+    /* TABLES */
     public static final String QUOTE_DEFAULT_TABLE = "quotes";
     public static final String QUOTE_ABYSS_TABLE = "quotes_abyss";
     public static final String QUOTE_FAVORITES_TABLE = "quotes_favorites";
     public static final String QUOTE_OFFLINE_TABLE = "quotes_fresh";
+    public static final String QUOTE_MAIN_TABLE = "quotes_main";
+
+    /* FIELDS */
     public static final String QUOTE_ID = "_id";
     public static final String QUOTE_PUBLIC_ID = "quote_public_id";
     public static final String QUOTE_DATE = "quote_date";
@@ -24,9 +29,10 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String QUOTE_FLAG = "quote_flag";
     public static final String QUOTE_TEXT = "quote_text";
     public static final String QUOTE_RATING = "quote_rating";
+    public static final String QUOTE_TYPE = "quote_type";
 
     public DbHelper(Context context) {
-        super(context, DB_NAME, null, 1);
+        super(context, DB_NAME, null, 2);
     }
 
     static String makePlaceholders(int len) {
@@ -48,18 +54,26 @@ public class DbHelper extends SQLiteOpenHelper {
         createTable(sqLiteDatabase, QUOTE_DEFAULT_TABLE);
         createTable(sqLiteDatabase, QUOTE_FAVORITES_TABLE);
         createTable(sqLiteDatabase, QUOTE_OFFLINE_TABLE);
+        createTable(sqLiteDatabase, QUOTE_MAIN_TABLE);
     }
 
     void createTable(SQLiteDatabase sqLiteDatabase, String tableName) {
         sqLiteDatabase.execSQL("CREATE TABLE " + tableName +
                 " (" + QUOTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                QUOTE_PUBLIC_ID + " TEXT, " + QUOTE_DATE + " TEXT, " +
-                QUOTE_IS_NEW + " INTEGER, " + QUOTE_FLAG + " INTEGER," +
-                QUOTE_RATING + " TEXT, " + QUOTE_TEXT + " TEXT)");
+                QUOTE_PUBLIC_ID + " TEXT, " +
+                QUOTE_DATE + " TEXT, " +
+                QUOTE_IS_NEW + " INTEGER, " +
+                QUOTE_FLAG + " INTEGER," +
+                QUOTE_TYPE + " INTEGER," +
+                QUOTE_RATING + " TEXT, " +
+                QUOTE_TEXT + " TEXT)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i2) {
+        if (i2 == 2) {
+            createTable(sqLiteDatabase, QUOTE_MAIN_TABLE);
+        }
     }
 
     public void markRead(long innerId) {

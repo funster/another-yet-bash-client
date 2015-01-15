@@ -1,6 +1,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ru.aim.anotheryetbashclient.FontPreference
+    <ru.aim.anotheryetbashclient.settings.FontPreference
         android:max="24"
         android:key="font_size"
         android:title="Font size"

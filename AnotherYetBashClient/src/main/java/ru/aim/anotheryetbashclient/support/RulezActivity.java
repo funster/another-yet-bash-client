@@ -1,10 +1,11 @@
-package ru.aim.anotheryetbashclient;
+package ru.aim.anotheryetbashclient.support;
 
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.widget.Toast;
 
+import ru.aim.anotheryetbashclient.R;
 import ru.aim.anotheryetbashclient.loaders.RulezLoader;
 import ru.aim.anotheryetbashclient.loaders.RulezType;
 import ru.aim.anotheryetbashclient.loaders.SimpleResult;

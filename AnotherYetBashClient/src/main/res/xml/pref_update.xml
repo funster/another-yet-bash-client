@@ -8,9 +8,9 @@
         <CheckBoxPreference
             android:key="@string/auto_update_enable_key"
             android:title="@string/auto_update_enable_title"
-            android:defaultValue="false" />
+            android:defaultValue="true" />
 
-        <ru.aim.anotheryetbashclient.TimePreference
+        <ru.aim.anotheryetbashclient.settings.TimePreference
             android:dependency="@string/auto_update_enable_key"
             android:key="@string/auto_update_time_key"
             android:summary="@string/auto_update_summary"
@@ -23,7 +23,7 @@
             android:summary="@string/auto_update_wifi_summary"
             android:defaultValue="true" />
 
-        <ru.aim.anotheryetbashclient.NumberPickerPreference
+        <ru.aim.anotheryetbashclient.settings.NumberPickerPreference
             android:key="@string/auto_update_depth_key"
             android:title="@string/auto_update_depth_title"
             android:summary="@string/auto_update_depth_summary"

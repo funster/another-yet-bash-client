@@ -1,9 +1,12 @@
-package ru.aim.anotheryetbashclient;
+package ru.aim.anotheryetbashclient.support;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.view.Surface;
 import android.view.WindowManager;
+
+import ru.aim.anotheryetbashclient.AbstractActivity;
+import ru.aim.anotheryetbashclient.settings.SettingsHelper;
 
 public abstract class OrientationActivity extends AbstractActivity {
 

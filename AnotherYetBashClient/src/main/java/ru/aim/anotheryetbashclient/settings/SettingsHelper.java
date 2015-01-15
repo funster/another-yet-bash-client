@@ -1,4 +1,4 @@
-package ru.aim.anotheryetbashclient;
+package ru.aim.anotheryetbashclient.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import ru.aim.anotheryetbashclient.R;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 
 /**
@@ -56,7 +57,7 @@ public final class SettingsHelper {
 
     public static boolean isUpdateEnabled(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.getBoolean(context.getString(R.string.auto_update_enable_key), false);
+        return preferences.getBoolean(context.getString(R.string.auto_update_enable_key), true);
     }
 
     public static boolean isPreloadedAvailable(Context context) {

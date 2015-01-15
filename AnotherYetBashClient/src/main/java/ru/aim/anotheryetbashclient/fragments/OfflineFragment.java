@@ -26,7 +26,7 @@ import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.QuoteService;
 import ru.aim.anotheryetbashclient.QuotesAdapter;
 import ru.aim.anotheryetbashclient.R;
-import ru.aim.anotheryetbashclient.SettingsHelper;
+import ru.aim.anotheryetbashclient.settings.SettingsHelper;
 import ru.aim.anotheryetbashclient.helper.Utils;
 import ru.aim.anotheryetbashclient.helper.actions.OfflineDownloaderAction;
 import ru.aim.anotheryetbashclient.loaders.OfflineLoader;
