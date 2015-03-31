@@ -88,6 +88,7 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
             // Set the drawer toggle as the DrawerListener
             mDrawerLayout.setDrawerListener(mDrawerToggle);
         }
+        mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(AttrUtils.resolveResource(this, R.attr.colorPrimaryDark)));
 
         mTypesListView = (ListView) findViewById(R.id.types);
         adapter = new MenuItemsAdapter(this, R.layout.menu_item);
@@ -207,6 +208,9 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
     }
 
     public void setMenuItemsVisible(boolean visible) {
+        if (!Utils.isNetworkAvailable(this)) {
+            return;
+        }
         hideAdditionalMenu = !visible;
         if (getCurrentFragment() != null) {
             getCurrentFragment().setMenuItemsVisibility(visible);

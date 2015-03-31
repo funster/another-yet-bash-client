@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity"
+    android:fitsSystemWindows="true"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -17,6 +18,7 @@
             android:layout_width="match_parent"
             android:background="?attr/colorPrimary"
             app:theme="@style/AppActionBar"
+            android:minHeight="?actionBarSize"
             android:id="@+id/toolbar" />
 
         <FrameLayout
@@ -26,6 +28,16 @@
 
     </LinearLayout>
 
-    <include layout="@layout/menu_layout" />
+    <ru.aim.anotheryetbashclient.views.ScrimInsetsFrameLayout
+        android:id="@+id/scrim_layout"
+        app:insetForeground="#4000"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        android:layout_width="240dp"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/menu_layout" />
+
+    </ru.aim.anotheryetbashclient.views.ScrimInsetsFrameLayout>
 
 </android.support.v4.widget.DrawerLayout>

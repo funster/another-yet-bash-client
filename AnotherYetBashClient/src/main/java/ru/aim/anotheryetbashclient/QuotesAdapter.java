@@ -44,8 +44,8 @@ public class QuotesAdapter extends CursorAdapter {
         this.mContext = (MainActivity) context;
         isAnimationEnabled = SettingsHelper.isItemAnimationEnabled(context);
         textSize = SettingsHelper.getFontSize(context);
-        favoriteFill = AttributeUtils.resolveResource(context, R.attr.favorite_full_icon);
-        favoriteEmpty = AttributeUtils.resolveResource(context, R.attr.favorite_empty_icon);
+        favoriteFill = AttrUtils.resolveResource(context, R.attr.favorite_full_icon);
+        favoriteEmpty = AttrUtils.resolveResource(context, R.attr.favorite_empty_icon);
     }
 
     @Override

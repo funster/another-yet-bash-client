@@ -44,6 +44,10 @@
             android:name=".QuoteService"
             android:exported="false" />
 
+        <service
+            android:name=".async.AsyncService"
+            android:exported="false" />
+
     </application>
 
 </manifest>

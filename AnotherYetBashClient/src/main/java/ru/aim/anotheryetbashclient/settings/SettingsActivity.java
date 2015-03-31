@@ -2,6 +2,7 @@ package ru.aim.anotheryetbashclient.settings;
 
 import android.app.Fragment;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -9,9 +10,12 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
 import ru.aim.anotheryetbashclient.AboutDialog;
 import ru.aim.anotheryetbashclient.AlarmReceiver;
+import ru.aim.anotheryetbashclient.AttrUtils;
 import ru.aim.anotheryetbashclient.R;
 import ru.aim.anotheryetbashclient.support.ThemedActivity;
 
@@ -37,6 +41,12 @@ public class SettingsActivity extends ThemedActivity {
         }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(AttrUtils.resolveResource(this, R.attr.colorPrimaryDark)));
+        }
     }
 
     @Override

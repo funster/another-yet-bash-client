@@ -2,5 +2,6 @@
 <resources>
     <style name="AppBaseTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:navigationBarColor">@color/app_colorPrimary</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 </resources>

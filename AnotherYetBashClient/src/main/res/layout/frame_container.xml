@@ -8,8 +8,9 @@
     <android.support.v7.widget.Toolbar
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:background="?android:windowBackground"
-        app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:background="?attr/colorPrimary"
+        app:theme="@style/AppActionBar"
+        android:minHeight="?actionBarSize"
         android:id="@+id/toolbar" />
 
     <FrameLayout

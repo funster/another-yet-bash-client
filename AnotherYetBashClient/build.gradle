@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 dependencies {
-    compile "com.android.support:support-v4:21.0.+"
-    compile "com.android.support:appcompat-v7:21.0.+"
-    compile "com.android.support:support-annotations:21.0.+"
+    compile "com.android.support:support-v4:22.0.0"
+    compile "com.android.support:appcompat-v7:22.0.0"
+    compile "com.android.support:support-annotations:22.0.0"
     compile "org.jsoup:jsoup:1.7.3"
-    compile "com.daimajia.swipelayout:library:1.1.7@aar"
+    compile "com.daimajia.swipelayout:library:1.1.9@aar"
 }
 
 def getReleaseKeyStore() { file(System.properties['user.home'] + "/.android/alpha.keystore") }
@@ -13,14 +13,14 @@ def getReleaseKeyStore() { file(System.properties['user.home'] + "/.android/alph
 def isReleaseKeyStoreExists() { getReleaseKeyStore().exists() }
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion '21.1.1'
+    compileSdkVersion 22
+    buildToolsVersion '22.0.1'
 
     defaultConfig {
-        versionCode 27
-        versionName '1.4'
+        versionCode 28
+        versionName '2.0'
         minSdkVersion 15
-        targetSdkVersion 21
+        targetSdkVersion 22
     }
 
     signingConfigs {

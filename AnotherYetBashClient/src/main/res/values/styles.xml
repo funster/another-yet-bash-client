@@ -33,6 +33,8 @@
 
         <!-- ab -->
         <item name="actionBarStyle">@style/AppActionBar</item>
+
+        <item name="colorAccent">@android:color/white</item>
     </style>
 
 
@@ -59,6 +61,8 @@
 
         <!-- ab -->
         <item name="actionBarStyle">@style/AppActionBar.Light</item>
+
+        <item name="colorAccent">@color/app_colorPrimary</item>
     </style>
 
     <style name="listItemText" parent="android:TextAppearance.Medium">

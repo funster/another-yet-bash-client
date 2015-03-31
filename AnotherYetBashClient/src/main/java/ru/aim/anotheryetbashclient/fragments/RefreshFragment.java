@@ -1,6 +1,5 @@
 package ru.aim.anotheryetbashclient.fragments;
 
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.MenuItem;
@@ -29,9 +28,6 @@ public abstract class RefreshFragment extends BaseFragment implements SwipeRefre
         SwipeRefreshUtils.applyStyle(refreshLayout);
         emptyView = view.findViewById(android.R.id.empty);
         progressView = (ProgressBar) view.findViewById(android.R.id.progress);
-        progressView.getIndeterminateDrawable().
-                setColorFilter(getResources().getColor(R.color.app_colorPrimary),
-                        PorterDuff.Mode.SRC_ATOP);
         Button refreshButton = (Button) view.findViewById(R.id.refresh_button);
         if (refreshButton != null) {
             refreshButton.setOnClickListener(refreshListener);
