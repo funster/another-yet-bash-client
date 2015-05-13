@@ -2,7 +2,6 @@ package ru.aim.anotheryetbashclient.async;
 
 import android.app.Application;
 
-import com.octo.android.robospice.okhttp.OkHttpSpiceService;
 import com.octo.android.robospice.persistence.CacheManager;
 import com.octo.android.robospice.persistence.exception.CacheCreationException;
 

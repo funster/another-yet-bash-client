@@ -1,7 +1,6 @@
 package ru.aim.anotheryetbashclient.tasks;
 
-import com.octo.android.robospice.request.okhttp.OkHttpSpiceRequest;
-import com.squareup.okhttp.Request;
+import ru.aim.anotheryetbashclient.async.OkHttpSpiceRequest;
 
 public class AbstractSpiceRequest extends OkHttpSpiceRequest<String> {
 
@@ -11,9 +10,6 @@ public class AbstractSpiceRequest extends OkHttpSpiceRequest<String> {
 
     @Override
     public String loadDataFromNetwork() throws Exception {
-
-        Request request = new Request.Builder().
-        getOkHttpClient().newCall()
         return null;
     }
 }
