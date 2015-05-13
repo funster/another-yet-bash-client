@@ -14,6 +14,7 @@ import org.jsoup.select.Elements;
 
 import java.util.Calendar;
 
+import ru.aim.anotheryetbashclient.BuildConfig;
 import ru.aim.anotheryetbashclient.settings.SettingsHelper;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.helper.L;
@@ -24,10 +25,11 @@ import static ru.aim.anotheryetbashclient.loaders.FreshLoader.ROOT_PAGE;
 import static ru.aim.anotheryetbashclient.loaders.Package.getCharsetFromResponse;
 import static ru.aim.anotheryetbashclient.loaders.QuoteLoader.getInputStream;
 
+@Deprecated
 public class OfflineDownloaderAction extends AbstractAction {
 
     private static final String TAG = "OfflineDownloaderAction";
-    public static final String UPDATE_COMPLETED = "ru.aim.anotheryetbashclient.helper.actions.UPDATE_COMPLETED";
+    public static final String UPDATE_COMPLETED = BuildConfig.APPLICATION_ID + ".helper.actions.UPDATE_COMPLETED";
 
     @Override
     public void execute() throws Exception {
@@ -43,7 +45,7 @@ public class OfflineDownloaderAction extends AbstractAction {
             }
             HttpGet httpRequest = buildGetRequest(url);
             L.d(TAG, "Requesting page: " + url);
-            HttpResponse httpResponse = getHttpClient().execute(httpRequest);
+            HttpResponse httpResponse = null;
             Document document = Jsoup.parse(getInputStream(httpResponse), getCharsetFromResponse(httpResponse), url);
             if (i == 0) {
                 Elements elements = document.select("input[class=page]");

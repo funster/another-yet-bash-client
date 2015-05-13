@@ -8,8 +8,8 @@ public class ActionsAndIntents {
      */
     //-----------------------------------------------------------------------
 
-    public static final String REFRESH = "ru.aim.anotheryetbashclient.REFRESH";
-    public static final String NOTIFY = "ru.aim.anotheryetbashclient.NOTIFY";
+    public static final String REFRESH = BuildConfig.APPLICATION_ID + ".REFRESH";
+    public static final String NOTIFY = BuildConfig.APPLICATION_ID + ".NOTIFY";
 
     //-----------------------------------------------------------------------
 

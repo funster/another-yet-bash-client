@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
 
-import ru.aim.anotheryetbashclient.BashApplication;
+import ru.aim.anotheryetbashclient.BashApp;
 import ru.aim.anotheryetbashclient.R;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.helper.Utils;
@@ -118,7 +118,7 @@ public abstract class QuoteLoader extends AbstractLoader<Cursor> {
         if (getContext() == null) {
             return null;
         }
-        BashApplication app = (BashApplication) getContext().getApplicationContext();
+        BashApp app = (BashApp) getContext().getApplicationContext();
         return app.getHttpClient();
     }
 }

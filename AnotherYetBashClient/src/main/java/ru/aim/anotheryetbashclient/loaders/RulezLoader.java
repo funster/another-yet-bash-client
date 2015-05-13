@@ -7,7 +7,7 @@ import android.os.Bundle;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 
-import ru.aim.anotheryetbashclient.BashApplication;
+import ru.aim.anotheryetbashclient.BashApp;
 import ru.aim.anotheryetbashclient.helper.multipart.MultipartEntity;
 import ru.aim.anotheryetbashclient.helper.multipart.Part;
 import ru.aim.anotheryetbashclient.helper.multipart.StringPart;
@@ -57,7 +57,7 @@ public class RulezLoader extends AbstractLoader<RulezLoader.RulezResult> {
         if (getContext() == null) {
             return null;
         }
-        BashApplication app = (BashApplication) getContext().getApplicationContext();
+        BashApp app = (BashApp) getContext().getApplicationContext();
         return app.getHttpClient();
     }
 

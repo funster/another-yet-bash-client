@@ -8,24 +8,22 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 
+import ru.aim.anotheryetbashclient.BuildConfig;
 import ru.aim.anotheryetbashclient.settings.SettingsHelper;
 
 public abstract class ThemedActivity extends OrientationActivity {
 
-    public static final String CHANGE_THEME_ACTION = "ru.aim.anotheryetbashclient.CHANGE_THEME_ACTION";
+    public static final String CHANGE_THEME_ACTION = BuildConfig.APPLICATION_ID + ".CHANGE_THEME_ACTION";
 
     BroadcastReceiver changeThemeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            submitAction(new Runnable() {
-                @Override
-                public void run() {
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-                        finish();
-                        startActivity(getIntent());
-                    } else {
-                        recreate();
-                    }
+            submitAction(() -> {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                    finish();
+                    startActivity(getIntent());
+                } else {
+                    recreate();
                 }
             });
         }

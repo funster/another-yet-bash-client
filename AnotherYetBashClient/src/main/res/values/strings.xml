@@ -32,8 +32,8 @@
     <string name="rulez_confirm">Вам %1$s понравилась цитата %2$s</string>
     <string name="no">не</string>
 
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
+    <string name="drawer_open">Открытие главного меню</string>
+    <string name="drawer_close">Закрытие главного меню</string>
     <string name="updating_fail">Не удалось обновить список цитат.</string>
     <string name="added_to_favorites">Цитата добавлена в избранное</string>
     <string name="removed_to_favorites">Цитата удалена из избранного</string>

@@ -2,8 +2,6 @@ package ru.aim.anotheryetbashclient.tasks;
 
 import android.content.ContentValues;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,12 +11,10 @@ import java.io.IOException;
 
 import ru.aim.anotheryetbashclient.R;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
+import ru.aim.anotheryetbashclient.network.INetworkApi;
 
 import static ru.aim.anotheryetbashclient.helper.DbHelper.QUOTE_PUBLIC_ID;
 import static ru.aim.anotheryetbashclient.helper.Utils.isNetworkNotAvailable;
-import static ru.aim.anotheryetbashclient.loaders.Package.getCharsetFromResponse;
-import static ru.aim.anotheryetbashclient.tasks.Package.getHttpRequest;
-import static ru.aim.anotheryetbashclient.tasks.Package.getInputStream;
 
 public abstract class TemplateTask extends BaseTask {
 
@@ -81,9 +77,7 @@ public abstract class TemplateTask extends BaseTask {
     }
 
     protected Document prepareRequest() throws IOException {
-        HttpUriRequest httpRequest = getHttpRequest(getUrl());
-        HttpResponse httpResponse = getHttpClient().execute(httpRequest);
-        String encoding = getCharsetFromResponse(httpResponse);
-        return Jsoup.parse(getInputStream(httpResponse), encoding, getUrl());
+        INetworkApi.ResponseWrapper response = getNetworkApi().performRequest(getUrl());
+        return Jsoup.parse(response.response, response.charset, getUrl());
     }
 }

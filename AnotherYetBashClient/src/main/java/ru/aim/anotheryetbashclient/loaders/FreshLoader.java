@@ -16,7 +16,7 @@ import org.jsoup.select.Elements;
 import java.util.Calendar;
 
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
-import ru.aim.anotheryetbashclient.BashApplication;
+import ru.aim.anotheryetbashclient.BashApp;
 import ru.aim.anotheryetbashclient.R;
 import ru.aim.anotheryetbashclient.settings.SettingsHelper;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
@@ -60,7 +60,7 @@ public class FreshLoader extends AbstractLoader<FreshResult> {
         String url = getUrl();
         HttpGet httpRequest = new HttpGet(url);
         AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpRequest);
-        BashApplication app = (BashApplication) getContext().getApplicationContext();
+        BashApp app = (BashApp) getContext().getApplicationContext();
         HttpResponse httpResponse = app.getHttpClient().execute(httpRequest);
         Document document = Jsoup.parse(getInputStream(httpResponse), getCharsetFromResponse(httpResponse), url);
         if (mCurrentPage != -1) {

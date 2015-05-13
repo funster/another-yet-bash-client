@@ -1,27 +1,17 @@
 package ru.aim.anotheryetbashclient.tasks;
 
-import android.content.Context;
-
-import org.apache.http.client.HttpClient;
-
-import ru.aim.anotheryetbashclient.BashApplication;
+import ru.aim.anotheryetbashclient.BashApp;
 import ru.aim.anotheryetbashclient.async.AbstractCommand;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
-
-import static ru.aim.anotheryetbashclient.helper.Preconditions.notNull;
+import ru.aim.anotheryetbashclient.network.INetworkApi;
 
 public abstract class BaseTask extends AbstractCommand {
 
-    HttpClient getHttpClient() {
-        Context context = getContext();
-        notNull(context);
-        BashApplication app = (BashApplication) context.getApplicationContext();
-        return app.getHttpClient();
+    INetworkApi getNetworkApi() {
+        return BashApp.getInstance().getDi().networkApi();
     }
 
     DbHelper getDbHelper() {
-        Context context = getContext();
-        notNull(context);
-        return new DbHelper(context);
+        return new DbHelper(getContext());
     }
 }

@@ -1,12 +1,12 @@
 package ru.aim.anotheryetbashclient;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 
 public class AboutDialog extends DialogFragment implements View.OnClickListener {
