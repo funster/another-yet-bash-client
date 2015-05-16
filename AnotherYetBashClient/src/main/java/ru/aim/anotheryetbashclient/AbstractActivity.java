@@ -1,12 +1,13 @@
 package ru.aim.anotheryetbashclient;
 
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractActivity extends AppCompatActivity {
+import ru.aim.anotheryetbashclient.async.SpiceActivity;
+
+public abstract class AbstractActivity extends SpiceActivity {
 
     boolean isResumed = false;
     List<Runnable> actions = new ArrayList<>();
@@ -25,7 +26,12 @@ public abstract class AbstractActivity extends AppCompatActivity {
         for (int i = 0; i < actions.size(); i++) {
             Handler handler = new Handler();
             final Runnable runnable = actions.get(i);
-            handler.postDelayed(runnable::run, 1);
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    runnable.run();
+                }
+            }, 1);
         }
         actions.clear();
     }

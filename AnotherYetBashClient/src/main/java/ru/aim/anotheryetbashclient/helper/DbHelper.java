@@ -6,20 +6,43 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.Arrays;
+import java.util.List;
+
 @SuppressWarnings("unused")
 public class DbHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "DbHelper";
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     public static final String DB_NAME = "quote_db";
 
     /* TABLES */
     public static final String QUOTE_DEFAULT_TABLE = "quotes";
-    public static final String QUOTE_ABYSS_TABLE = "quotes_abyss";
     public static final String QUOTE_FAVORITES_TABLE = "quotes_favorites";
     public static final String QUOTE_OFFLINE_TABLE = "quotes_fresh";
     public static final String QUOTE_MAIN_TABLE = "quotes_main";
+
+    public static final String QUOTE_FRESH_TABLE = "quotes_fresh";
+    public static final String QUOTE_RANDOM_TABLE = "quotes_random";
+    public static final String QUOTE_BEST_TABLE = "quotes_best";
+    public static final String QUOTE_RATING_TABLE = "quotes_rating";
+    public static final String QUOTE_ABYSS_TABLE = "quotes_abyss";
+    public static final String QUOTE_TOP_ABYSS_TABLE = "quotes_top_abyss";
+    public static final String QUOTE_BEST_ABYSS_TABLE = "quotes_best_abyss";
+
+    // default tables list
+    public static List<String> TABLES = Arrays.asList(
+            QUOTE_FAVORITES_TABLE,
+
+            QUOTE_FRESH_TABLE,
+            QUOTE_RANDOM_TABLE,
+            QUOTE_BEST_TABLE,
+            QUOTE_RATING_TABLE,
+            QUOTE_ABYSS_TABLE,
+            QUOTE_TOP_ABYSS_TABLE,
+            QUOTE_BEST_ABYSS_TABLE
+    );
 
     /* FIELDS */
     public static final String QUOTE_ID = "_id";
@@ -30,9 +53,24 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String QUOTE_TEXT = "quote_text";
     public static final String QUOTE_RATING = "quote_rating";
     public static final String QUOTE_TYPE = "quote_type";
+    public static final String QUOTE_PAGE = "quote_page";
 
-    public DbHelper(Context context) {
+
+    private DbHelper(Context context) {
         super(context, DB_NAME, null, 2);
+    }
+
+    private static volatile DbHelper dbHelper;
+
+    public static DbHelper getInstance(Context context) {
+        if (dbHelper == null) {
+            synchronized (DbHelper.class) {
+                if (dbHelper == null) {
+                    dbHelper = new DbHelper(context.getApplicationContext());
+                }
+            }
+        }
+        return dbHelper;
     }
 
     static String makePlaceholders(int len) {
@@ -51,10 +89,9 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        createTable(sqLiteDatabase, QUOTE_DEFAULT_TABLE);
-        createTable(sqLiteDatabase, QUOTE_FAVORITES_TABLE);
-        createTable(sqLiteDatabase, QUOTE_OFFLINE_TABLE);
-        createTable(sqLiteDatabase, QUOTE_MAIN_TABLE);
+        for (String s : TABLES) {
+            createTable(sqLiteDatabase, s);
+        }
     }
 
     void createTable(SQLiteDatabase sqLiteDatabase, String tableName) {
@@ -66,14 +103,16 @@ public class DbHelper extends SQLiteOpenHelper {
                 QUOTE_FLAG + " INTEGER," +
                 QUOTE_TYPE + " INTEGER," +
                 QUOTE_RATING + " TEXT, " +
+                QUOTE_PAGE + " INTEGER, " +
                 QUOTE_TEXT + " TEXT)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i2) {
-        if (i2 == 2) {
-            createTable(sqLiteDatabase, QUOTE_MAIN_TABLE);
+        for (String s : TABLES) {
+            sqLiteDatabase.execSQL("drop table if exists " + s);
         }
+        onCreate(sqLiteDatabase);
     }
 
     public void markRead(long innerId) {
@@ -129,7 +168,6 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         assert db != null;
         db.execSQL("update " + QUOTE_DEFAULT_TABLE + " set " + QUOTE_FLAG + " = " + value + " where " + QUOTE_ID + " = " + innerId);
-        db.close();
     }
 
     public Cursor selectFromFavorites() {

@@ -14,8 +14,8 @@ import android.widget.ListView;
 import ru.aim.anotheryetbashclient.MainActivity;
 import ru.aim.anotheryetbashclient.QuotesAdapter;
 import ru.aim.anotheryetbashclient.R;
-import ru.aim.anotheryetbashclient.settings.SettingsHelper;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
+import ru.aim.anotheryetbashclient.settings.SettingsHelper;
 
 import static ru.aim.anotheryetbashclient.helper.Utils.setItemsVisibility;
 
@@ -36,7 +36,7 @@ public abstract class AbstractFragment extends RefreshFragment implements Adapte
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(getRootLayoutId(), container, false);
         setHasOptionsMenu(true);
-        mDbHelper = new DbHelper(getActivity());
+        mDbHelper = DbHelper.getInstance(getActivity());
         ListView listView = (ListView) root.findViewById(android.R.id.list);
         listView.setOnItemLongClickListener(this);
         return root;
