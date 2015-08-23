@@ -6,6 +6,7 @@ import android.widget.ArrayAdapter;
 /**
  *
  */
+@Deprecated
 public class MenuItemsAdapter extends ArrayAdapter<String> {
 
     public MenuItemsAdapter(Context context, int resource) {

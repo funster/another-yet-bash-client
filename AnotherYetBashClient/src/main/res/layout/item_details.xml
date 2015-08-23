@@ -9,57 +9,57 @@
     <Button
         android:id="@+id/plus"
         android:layout_width="48dp"
-        android:textStyle="bold"
         android:layout_height="48dp"
-        android:background="?attr/btn_borderless"
-        android:text="@string/plus"
+        android:background="?attr/selectableItemBackground"
         android:contentDescription="@string/like"
-        android:textAppearance="@android:style/TextAppearance.Large" />
+        android:text="@string/plus"
+        android:textAppearance="@android:style/TextAppearance.Large"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/sample_number"
-        android:textStyle="bold"
         android:contentDescription="@string/rating"
-        android:textAppearance="@android:style/TextAppearance.Large" />
+        android:text="@string/sample_number"
+        android:textAppearance="@android:style/TextAppearance.Large"
+        android:textStyle="bold" />
 
     <Button
-        android:textStyle="bold"
         android:id="@+id/minus"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:background="?attr/btn_borderless"
-        android:text="@string/minus"
+        android:background="?attr/selectableItemBackground"
         android:contentDescription="@string/dont_like"
-        android:textAppearance="@android:style/TextAppearance.Large" />
+        android:text="@string/minus"
+        android:textAppearance="@android:style/TextAppearance.Large"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/boyan"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:background="?attr/btn_borderless"
-        android:text="@string/boyan"
+        android:background="?attr/selectableItemBackground"
         android:contentDescription="@string/boyan_desc"
+        android:text="@string/boyan"
         android:textAppearance="@android:style/TextAppearance.Large" />
 
     <ImageButton
-        android:padding="8dp"
         android:id="@+id/add_favorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?attr/btn_borderless"
+        android:background="?attr/selectableItemBackground"
         android:contentDescription="@string/add_to_favorites"
+        android:padding="8dp"
         android:src="@drawable/ic_star_outline_white_38dp" />
 
     <ImageButton
-        android:padding="8dp"
         android:id="@+id/share"
-        android:background="?attr/btn_borderless"
-        android:src="?attr/share_icon"
-        android:contentDescription="@string/share_desc"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:contentDescription="@string/share_desc"
+        android:padding="8dp"
+        android:src="?attr/share_icon" />
 
 </LinearLayout>

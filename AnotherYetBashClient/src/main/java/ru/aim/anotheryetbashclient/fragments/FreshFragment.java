@@ -7,11 +7,10 @@ import android.support.v4.content.Loader;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ListAdapter;
 
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
-import ru.aim.anotheryetbashclient.QuotesAdapter;
 import ru.aim.anotheryetbashclient.R;
+import ru.aim.anotheryetbashclient.RecycleQuotesAdapter;
 import ru.aim.anotheryetbashclient.loaders.FreshLoader;
 import ru.aim.anotheryetbashclient.loaders.FreshResult;
 import ru.aim.anotheryetbashclient.loaders.SimpleLoaderCallbacks;
@@ -70,8 +69,8 @@ public class FreshFragment extends AbstractFragment implements SimpleLoaderCallb
             showWarning(getActivity(), data.getError().getMessage());
         } else {
             FreshResult freshResult = data.getResult();
-            ListAdapter listAdapter = new QuotesAdapter(getDbHelper(), getActivity(), freshResult.cursor);
-            setListAdapter(listAdapter);
+            RecycleQuotesAdapter listAdapter = new RecycleQuotesAdapter(getActivity(), freshResult.cursor);
+            setAdapter(listAdapter);
             currentPage = freshResult.currentPage;
             if (freshResult.maxPage > maxPage) {
                 maxPage = data.getResult().maxPage;

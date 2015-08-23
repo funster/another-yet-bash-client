@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/group_main"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_fresh"
+            android:checked="true"
+            android:title="Новые" />
+        <item
+            android:id="@+id/nav_random"
+            android:title="Случайные" />
+        <item
+            android:id="@+id/nav_best"
+            android:title="Лучшие" />
+        <item
+            android:id="@+id/nav_by_rating"
+            android:title="По рейтингу" />
+        <item
+            android:id="@+id/nav_search"
+            android:title="Поиск" />
+        <item
+            android:id="@+id/nav_fav"
+            android:title="Избранное" />
+        <item
+            android:id="@+id/nav_abyss"
+            android:title="Бездна" />
+        <item
+            android:id="@+id/nav_top_abyss"
+            android:title="Топ Бездны" />
+        <item
+            android:id="@+id/nav_best_abyss"
+            android:title="Лучшее Бездны" />
+        <item
+            android:id="@+id/nav_offline"
+            android:title="Оффлайн" />
+    </group>
+
+    <group
+        android:id="@+id/group_settings">
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="?attr/settings_icon"
+            android:title="@string/action_settings" />
+    </group>
+
+</menu>

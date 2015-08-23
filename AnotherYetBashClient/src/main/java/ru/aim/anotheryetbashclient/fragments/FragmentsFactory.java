@@ -9,7 +9,7 @@ import ru.aim.anotheryetbashclient.ActionsAndIntents;
  */
 public final class FragmentsFactory {
 
-    static SparseArray<Class<?>> map = new SparseArray<Class<?>>();
+    static SparseArray<Class<?>> map = new SparseArray<>();
 
     static {
         map.put(ActionsAndIntents.TYPE_NEW, FreshFragment.class);
@@ -18,7 +18,6 @@ public final class FragmentsFactory {
         map.put(ActionsAndIntents.TYPE_BY_RATING, RatingFragment.class);
         map.put(ActionsAndIntents.TYPE_SEARCH, SearchFragment.class);
         map.put(ActionsAndIntents.TYPE_FAVORITES, FavoritesFragment.class);
-        map.put(ActionsAndIntents.TYPE_OFFLINE, OfflineFragment.class);
         map.put(ActionsAndIntents.TYPE_ABYSS, AbyssFragment.class);
         map.put(ActionsAndIntents.TYPE_TOP_ABYSS, AbyssTopFragment.class);
         map.put(ActionsAndIntents.TYPE_BEST_ABYSS, AbyssBestFragment.class);

@@ -2,31 +2,27 @@ package ru.aim.anotheryetbashclient.loaders;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.net.http.AndroidHttpClient;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Calendar;
 
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
-import ru.aim.anotheryetbashclient.BashApp;
 import ru.aim.anotheryetbashclient.R;
-import ru.aim.anotheryetbashclient.settings.SettingsHelper;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.helper.L;
 import ru.aim.anotheryetbashclient.helper.Utils;
+import ru.aim.anotheryetbashclient.settings.SettingsHelper;
 
 import static ru.aim.anotheryetbashclient.helper.DbHelper.QUOTE_PUBLIC_ID;
-import static ru.aim.anotheryetbashclient.loaders.Package.getCharsetFromResponse;
 import static ru.aim.anotheryetbashclient.loaders.Package.wrapWithRoot;
-import static ru.aim.anotheryetbashclient.loaders.QuoteLoader.getInputStream;
 
 /**
  *
@@ -58,11 +54,9 @@ public class FreshLoader extends AbstractLoader<FreshResult> {
 
         FreshResult result = new FreshResult();
         String url = getUrl();
-        HttpGet httpRequest = new HttpGet(url);
-        AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpRequest);
-        BashApp app = (BashApp) getContext().getApplicationContext();
-        HttpResponse httpResponse = app.getHttpClient().execute(httpRequest);
-        Document document = Jsoup.parse(getInputStream(httpResponse), getCharsetFromResponse(httpResponse), url);
+        URLConnection httpConnection = new URL(url).openConnection();
+        httpConnection.connect();
+        Document document = Jsoup.parse(httpConnection.getInputStream(), httpConnection.getContentEncoding(), url);
         if (mCurrentPage != -1) {
             Elements elements = document.select("input[class=page]");
             String page = null;

@@ -8,14 +8,11 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.CursorAdapter;
-import android.widget.ListView;
 
 import ru.aim.anotheryetbashclient.MainActivity;
-import ru.aim.anotheryetbashclient.QuotesAdapter;
 import ru.aim.anotheryetbashclient.R;
+import ru.aim.anotheryetbashclient.RecycleQuotesAdapter;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
-import ru.aim.anotheryetbashclient.settings.SettingsHelper;
 
 import static ru.aim.anotheryetbashclient.helper.Utils.setItemsVisibility;
 
@@ -37,8 +34,8 @@ public abstract class AbstractFragment extends RefreshFragment implements Adapte
         View root = inflater.inflate(getRootLayoutId(), container, false);
         setHasOptionsMenu(true);
         mDbHelper = DbHelper.getInstance(getActivity());
-        ListView listView = (ListView) root.findViewById(android.R.id.list);
-        listView.setOnItemLongClickListener(this);
+//        ListView listView = (ListView) root.findViewById(android.R.id.list);
+//        listView.setOnItemLongClickListener(this);
         return root;
     }
 
@@ -66,15 +63,15 @@ public abstract class AbstractFragment extends RefreshFragment implements Adapte
         }
     }
 
-    public CursorAdapter getCursorAdapter() {
-        if (getListAdapter() == null) {
+    public RecycleQuotesAdapter getCursorAdapter() {
+        if (getAdapter() == null) {
             return null;
         }
-        return (CursorAdapter) getListAdapter();
+        return getAdapter();
     }
 
     void safeSwap() {
-        CursorAdapter adapter = getCursorAdapter();
+        RecycleQuotesAdapter adapter = getCursorAdapter();
         if (adapter != null) {
             adapter.swapCursor(null);
         }
@@ -90,11 +87,11 @@ public abstract class AbstractFragment extends RefreshFragment implements Adapte
     }
 
     void refreshFonts() {
-        if (getListAdapter() instanceof QuotesAdapter) {
-            QuotesAdapter adapter = (QuotesAdapter) getListAdapter();
-            if (SettingsHelper.getFontSize(getActivity()) != adapter.getTextSize()) {
-                initLoader();
-            }
+        if (getAdapter() != null) {
+            RecycleQuotesAdapter adapter = (RecycleQuotesAdapter) getAdapter();
+//            if (SettingsHelper.getFontSize(getActivity()) != adapter.getTextSize()) {
+//                initLoader();
+//            }
         }
     }
 
@@ -102,7 +99,7 @@ public abstract class AbstractFragment extends RefreshFragment implements Adapte
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         refreshFonts();
-        if (getListAdapter() == null) {
+        if (getAdapter() == null) {
             initLoader();
         }
     }

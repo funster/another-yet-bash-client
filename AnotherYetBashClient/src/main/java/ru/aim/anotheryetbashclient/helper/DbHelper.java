@@ -9,13 +9,16 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.Arrays;
 import java.util.List;
 
-@SuppressWarnings("unused")
+import ru.aim.anotheryetbashclient.BashApp;
+import ru.aim.anotheryetbashclient.QType;
+
 public class DbHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "DbHelper";
     private static final boolean DEBUG = true;
 
     public static final String DB_NAME = "quote_db";
+    public static final int DB_VERSION = 4;
 
     /* TABLES */
     public static final String QUOTE_DEFAULT_TABLE = "quotes";
@@ -33,8 +36,8 @@ public class DbHelper extends SQLiteOpenHelper {
 
     // default tables list
     public static List<String> TABLES = Arrays.asList(
+            QUOTE_DEFAULT_TABLE,
             QUOTE_FAVORITES_TABLE,
-
             QUOTE_FRESH_TABLE,
             QUOTE_RANDOM_TABLE,
             QUOTE_BEST_TABLE,
@@ -55,9 +58,8 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String QUOTE_TYPE = "quote_type";
     public static final String QUOTE_PAGE = "quote_page";
 
-
-    private DbHelper(Context context) {
-        super(context, DB_NAME, null, 2);
+    public DbHelper(Context context) {
+        super(context, DB_NAME, null, DB_VERSION);
     }
 
     private static volatile DbHelper dbHelper;
@@ -71,6 +73,10 @@ public class DbHelper extends SQLiteOpenHelper {
             }
         }
         return dbHelper;
+    }
+
+    public static DbHelper getInstance() {
+        return getInstance(BashApp.getInstance());
     }
 
     static String makePlaceholders(int len) {
@@ -119,7 +125,6 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         assert db != null;
         db.execSQL("update " + QUOTE_DEFAULT_TABLE + " set " + QUOTE_IS_NEW + " = 0 where " + QUOTE_ID + " = " + innerId);
-        db.close();
     }
 
     public void addToFavorite(String publicId) {
@@ -136,7 +141,7 @@ public class DbHelper extends SQLiteOpenHelper {
             SQLiteDatabase db = getWritableDatabase();
             assert db != null;
             db.insert(QUOTE_FAVORITES_TABLE, null, contentValues);
-            db.close();
+
         }
     }
 
@@ -146,7 +151,7 @@ public class DbHelper extends SQLiteOpenHelper {
         if (isFavorite(publicId)) {
             db.delete(QUOTE_FAVORITES_TABLE, QUOTE_PUBLIC_ID + " = ?", new String[]{publicId});
         }
-        db.close();
+
     }
 
     public boolean isFavorite(String publicId) {
@@ -200,7 +205,7 @@ public class DbHelper extends SQLiteOpenHelper {
         cursor.moveToFirst();
         long count = cursor.getLong(0);
         cursor.close();
-        db.close();
+
         return count != 0;
     }
 
@@ -237,19 +242,13 @@ public class DbHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public void clearAbyss() {
-        clearTable(QUOTE_ABYSS_TABLE);
-    }
-
     public void clearDefault() {
         clearTable(QUOTE_DEFAULT_TABLE);
     }
 
     public void clearTable(String tableName) {
         SQLiteDatabase db = getWritableDatabase();
-        assert db != null;
         db.delete(tableName, null, null);
-        db.close();
     }
 
     public Cursor selectFromDefaultTable() {
@@ -268,30 +267,19 @@ public class DbHelper extends SQLiteOpenHelper {
         return db.query(QUOTE_OFFLINE_TABLE, null, QUOTE_FLAG + " = ?", new String[]{Integer.toString(page)}, null, null, null);
     }
 
-    public Cursor selectFromAbyss() {
-        return selectAll(QUOTE_ABYSS_TABLE);
-    }
-
-    public void addQuoteToAbyss(ContentValues values) {
-        addQuote(QUOTE_ABYSS_TABLE, values);
-    }
-
     public long addQuote(String tableName, ContentValues values) {
         if (DEBUG) {
             L.d(TAG, "Add new quotes to " + tableName + " values: " + values);
         }
         SQLiteDatabase db = getWritableDatabase();
         assert db != null;
-        long id = db.insert(tableName, null, values);
-        db.close();
-        return id;
+        return db.insert(tableName, null, values);
     }
 
     public void updateQuote(ContentValues contentValues) {
         SQLiteDatabase db = getWritableDatabase();
         assert db != null;
         db.update(QUOTE_DEFAULT_TABLE, contentValues, QUOTE_PUBLIC_ID + " = ?", new String[]{contentValues.getAsString(QUOTE_PUBLIC_ID)});
-        db.close();
     }
 
     public void incrementRating(String publicId) {
@@ -312,17 +300,19 @@ public class DbHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(DbHelper.QUOTE_RATING, value);
         db.update(QUOTE_DEFAULT_TABLE, values, QUOTE_PUBLIC_ID + " = ?", new String[]{publicId});
-        db.close();
     }
 
     public boolean isEmptyTable(String tableName) {
         SQLiteDatabase db = getReadableDatabase();
-        assert db != null;
-        final Cursor cursor = db.rawQuery("select count(*) from " + tableName, null);
-        cursor.moveToFirst();
-        long count = cursor.getLong(0);
-        cursor.close();
-        db.close();
+        Cursor cursor = null;
+        long count = 0;
+        try {
+            cursor = db.rawQuery("select count(*) from " + tableName, null);
+            cursor.moveToFirst();
+            count = cursor.getLong(0);
+        } finally {
+            close(cursor);
+        }
         return count == 0;
     }
 
@@ -330,21 +320,41 @@ public class DbHelper extends SQLiteOpenHelper {
         return isEmptyTable(QUOTE_OFFLINE_TABLE);
     }
 
-    public void clearOffline() {
-        clearTable(QUOTE_OFFLINE_TABLE);
-    }
-
-    public int getOfflinePages() {
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("select max(" + QUOTE_FLAG + ") from " + QUOTE_OFFLINE_TABLE, null);
-        cursor.moveToFirst();
-        int result = (int) cursor.getLong(0);
-        cursor.close();
-        return result;
-    }
-
     public int deleteOfflinePage(int page) {
         SQLiteDatabase db = getWritableDatabase();
         return db.delete(QUOTE_OFFLINE_TABLE, QUOTE_FLAG + " = ?", new String[]{Integer.toString(page)});
+    }
+
+    // dao
+    public void save(QType type, ContentValues values) {
+        if (exists(type, QUOTE_PUBLIC_ID)) {
+            getWritableDatabase().update(type.getTableName(), values, QUOTE_PUBLIC_ID + " = ?", new String[]{values.getAsString(QUOTE_PUBLIC_ID)});
+        } else {
+            getWritableDatabase().insert(type.getTableName(), null, values);
+        }
+    }
+
+    public Cursor findByPublicId(QType type, String publicId) {
+        SQLiteDatabase db = getReadableDatabase();
+        return db.rawQuery("select * from " + type.getTableName() + " where " + QUOTE_PUBLIC_ID + " = ?", new String[]{publicId});
+    }
+
+    public boolean exists(QType type, String publicId) {
+        Cursor cursor = findByPublicId(type, publicId);
+        try {
+            return cursor.getCount() > 0;
+        } finally {
+            close(cursor);
+        }
+    }
+
+
+    static void close(Cursor cursor) {
+        try {
+            if (cursor != null) {
+                cursor.close();
+            }
+        } catch (Exception ignored) {
+        }
     }
 }

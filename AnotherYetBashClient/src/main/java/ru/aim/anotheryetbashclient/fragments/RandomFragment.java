@@ -3,9 +3,9 @@ package ru.aim.anotheryetbashclient.fragments;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.content.Loader;
-import android.widget.ListAdapter;
+
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
-import ru.aim.anotheryetbashclient.QuotesAdapter;
+import ru.aim.anotheryetbashclient.RecycleQuotesAdapter;
 import ru.aim.anotheryetbashclient.loaders.RandomLoader;
 import ru.aim.anotheryetbashclient.loaders.SimpleLoaderCallbacks;
 import ru.aim.anotheryetbashclient.loaders.SimpleResult;
@@ -44,8 +44,8 @@ public class RandomFragment extends AbstractFragment implements SimpleLoaderCall
         if (data.containsError()) {
             showWarning(getActivity(), data.getError().getMessage());
         } else {
-            ListAdapter listAdapter = new QuotesAdapter(getDbHelper(), getActivity(), data.getResult());
-            setListAdapter(listAdapter);
+            RecycleQuotesAdapter listAdapter = new RecycleQuotesAdapter(getActivity(), data.getResult());
+            setAdapter(listAdapter);
             setMenuItemsVisibility(true);
         }
     }

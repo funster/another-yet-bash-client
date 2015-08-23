@@ -1,5 +1,6 @@
 package ru.aim.anotheryetbashclient;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -63,35 +65,22 @@ public class ShareDialog extends DialogFragment implements DialogInterface.OnCli
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
-        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        final Intent sharingIntent = new Intent(Intent.ACTION_SEND);
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, publicId);
         switch (which) {
             case 0:
-                try {
-                    sharingIntent.setType("image/jpeg");
-                    String fileName = getCleanId(publicId) + ".jpg";
-                    String url = insertImage(getActivity().getContentResolver(), bitmap, fileName, publicId);
-                    if (url != null) {
-                        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                        String realPath = getRealPathFromUri(getActivity(), Uri.parse(url));
-                        File imageFile = new File(realPath);
-                        intent.setData(Uri.fromFile(imageFile));
-                        getActivity().sendBroadcast(intent);
-                    } else {
-                        File file = getFile(fileName);
-                        if (file.exists()) {
-                            url = Uri.fromFile(file).toString();
-                        } else {
-                            Toast.makeText(getActivity(), R.string.error_share_quote, Toast.LENGTH_SHORT).show();
+                if (!PermissionsUtil.isWriteExternalAllowed(getContext())) {
+                    ActivityCompat.requestPermissions(getActivity(),
+                            new String[]{PermissionsUtil.EXTERNAL_STORAGE},
+                            PermissionsUtil.EXTERNAL_STORAGE_REQUEST);
+                    AbstractActivity.addPermAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            shareImage(sharingIntent);
                         }
-                    }
-                    sharingIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(url));
-                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, publicId);
-                    getActivity().startActivity(Intent.createChooser(sharingIntent, getActivity().getString(R.string.share_desc)));
-                    Toast.makeText(getActivity(), R.string.quote_will_be_in_gallery, Toast.LENGTH_SHORT).show();
-                } catch (Exception e) {
-                    L.e(TAG, "Error while trying share quote", e);
-                    Toast.makeText(getActivity(), R.string.error_share_quote, Toast.LENGTH_SHORT).show();
+                    });
+                } else {
+                    shareImage(sharingIntent);
                 }
                 break;
             case 1:
@@ -112,6 +101,35 @@ public class ShareDialog extends DialogFragment implements DialogInterface.OnCli
         }
     }
 
+    static void shareImage(Activity activity, Intent sharingIntent) {
+        try {
+            sharingIntent.setType("image/jpeg");
+            String fileName = getCleanId(publicId) + ".jpg";
+            String url = insertImage(activity.getContentResolver(), bitmap, fileName, publicId);
+            if (url != null) {
+                Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                String realPath = getRealPathFromUri(getActivity(), Uri.parse(url));
+                File imageFile = new File(realPath);
+                intent.setData(Uri.fromFile(imageFile));
+                activity.sendBroadcast(intent);
+            } else {
+                File file = getFile(fileName);
+                if (file.exists()) {
+                    url = Uri.fromFile(file).toString();
+                } else {
+                    Toast.makeText(activity, R.string.error_share_quote, Toast.LENGTH_SHORT).show();
+                }
+            }
+            sharingIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(url));
+            sharingIntent.putExtra(Intent.EXTRA_SUBJECT, publicId);
+            activity.startActivity(Intent.createChooser(sharingIntent, getActivity().getString(R.string.share_desc)));
+            Toast.makeText(activity, R.string.quote_will_be_in_gallery, Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            L.e(TAG, "Error while trying share quote", e);
+            Toast.makeText(activity, R.string.error_share_quote, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void shareLink(Intent sharingIntent) {
         sharingIntent.setType("text/plain");
         String url = getString(R.string.bash_url) + "/" + getCleanId(publicId);
@@ -126,13 +144,13 @@ public class ShareDialog extends DialogFragment implements DialogInterface.OnCli
         Toast.makeText(getActivity(), R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
     }
 
-    File getFile(String fileName) {
+    static File getFile(String fileName) {
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + File.separator + getString(R.string.app_name));
         return new File(myDir, fileName);
     }
 
-    String saveBitmap(Bitmap bitmap, String fileName) {
+    static String saveBitmap(Bitmap bitmap, String fileName) {
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + File.separator + getString(R.string.app_name));
         myDir.mkdirs();
@@ -161,7 +179,7 @@ public class ShareDialog extends DialogFragment implements DialogInterface.OnCli
         }
     }
 
-    String insertImage(ContentResolver cr, Bitmap source,
+    static String insertImage(ContentResolver cr, Bitmap source,
                        String title, String description) {
 
         String path = saveBitmap(source, title);

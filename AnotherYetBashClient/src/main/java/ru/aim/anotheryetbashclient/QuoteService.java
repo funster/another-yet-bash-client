@@ -8,10 +8,9 @@ import android.net.NetworkInfo;
 
 import ru.aim.anotheryetbashclient.helper.L;
 import ru.aim.anotheryetbashclient.helper.Utils;
-import ru.aim.anotheryetbashclient.helper.actions.ActionFactory;
-import ru.aim.anotheryetbashclient.helper.actions.OfflineDownloaderAction;
 import ru.aim.anotheryetbashclient.settings.SettingsHelper;
 
+@Deprecated
 public class QuoteService extends IntentService {
 
     private static final String TAG = "QuoteService";
@@ -41,14 +40,6 @@ public class QuoteService extends IntentService {
                 L.d(TAG, "Wifi not connected!2");
                 return;
             }
-        }
-
-        ActionFactory actionFactory = new ActionFactory(this);
-        OfflineDownloaderAction action = actionFactory.build(OfflineDownloaderAction.class);
-        try {
-            action.execute();
-        } catch (Exception e) {
-            L.e(TAG, "Error while downloading offline quotes", e);
         }
     }
 }

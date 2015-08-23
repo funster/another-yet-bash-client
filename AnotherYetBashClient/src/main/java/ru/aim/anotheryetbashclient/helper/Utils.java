@@ -11,7 +11,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.http.AndroidHttpClient;
 import android.os.Build;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
@@ -25,8 +24,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.apache.http.client.methods.HttpGet;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +35,6 @@ import java.util.List;
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.R;
 
-@SuppressWarnings("unused")
 public final class Utils {
 
     public static final String UTF_8 = "UTF-8";
@@ -68,19 +64,6 @@ public final class Utils {
             }
         }
         return false;
-    }
-
-    public static boolean ping(Context context) {
-        AndroidHttpClient client = AndroidHttpClient.newInstance(Build.DEVICE);
-        HttpGet httpGet = new HttpGet("http:\\google.com");
-        Exception error = null;
-        try {
-            client.execute(httpGet);
-        } catch (IOException e) {
-            L.e(TAG, "Error while trying to ping google", e);
-            error = e;
-        }
-        return error == null;
     }
 
     public static String readFromStream(InputStream is) {

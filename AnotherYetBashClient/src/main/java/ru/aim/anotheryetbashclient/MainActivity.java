@@ -4,13 +4,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
@@ -20,11 +23,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import ru.aim.anotheryetbashclient.fragments.AbstractFragment;
 import ru.aim.anotheryetbashclient.fragments.FragmentsFactory;
+import ru.aim.anotheryetbashclient.fragments.RecycleFragment;
 import ru.aim.anotheryetbashclient.fragments.RefreshFragment;
 import ru.aim.anotheryetbashclient.helper.Utils;
 import ru.aim.anotheryetbashclient.settings.SettingsActivity;
@@ -42,15 +45,14 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
     public final static String FRAGMENT_KEY = "FRAGMENT_KEY";
 
     FrameLayout mainFrame;
-    ListView mTypesListView;
-    DrawerLayout mDrawerLayout;
-    ActionBarDrawerToggle mDrawerToggle;
-    MenuItemsAdapter adapter;
     boolean hideAdditionalMenu;
+    ActionBarDrawerToggle mDrawerToggle;
 
     int currentTypeId;
     RefreshFragment mListFragment;
     boolean mScrollByVolumeEnabled;
+
+    private DrawerLayout mDrawerLayout;
 
     BroadcastReceiver notifyBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -63,9 +65,12 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mainFrame = (FrameLayout) findViewById(R.id.main_frame);
+        final ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (mDrawerLayout != null) {
             mDrawerToggle = new ActionBarDrawerToggle(this,
@@ -88,28 +93,14 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
             // Set the drawer toggle as the DrawerListener
             mDrawerLayout.setDrawerListener(mDrawerToggle);
         }
-        mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(AttrUtils.resolveResource(this, R.attr.colorPrimaryDark)));
 
-        mTypesListView = (ListView) findViewById(R.id.types);
-        adapter = new MenuItemsAdapter(this, R.layout.menu_item);
-        mTypesListView.setAdapter(adapter);
-        mTypesListView.setOnItemClickListener(this);
-        mTypesListView.post(new Runnable() {
-            @Override
-            public void run() {
-                mTypesListView.setItemChecked(currentTypeId, true);
-            }
-        });
+        mainFrame = (FrameLayout) findViewById(R.id.main_frame);
 
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter1 = new IntentFilter(ActionsAndIntents.NOTIFY);
         localBroadcastManager.registerReceiver(notifyBroadcastReceiver, intentFilter1);
 
         assert getSupportActionBar() != null;
-        if (mDrawerLayout != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeButtonEnabled(true);
-        }
 
         if (savedInstanceState == null && SettingsHelper.isPreloadedAvailable(this)) {
             currentTypeId = ActionsAndIntents.TYPE_OFFLINE;
@@ -121,12 +112,35 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
         }
 
         if (savedInstanceState == null) {
+            currentTypeId = ActionsAndIntents.TYPE_NEW;
             setFragment();
         } else {
             mListFragment = (RefreshFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_KEY);
         }
 
-        findViewById(R.id.action_settings).setOnClickListener(this);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        if (navigationView != null) {
+            setupDrawerContent(navigationView);
+        }
+    }
+
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        if (menuItem.getItemId() == R.id.nav_settings) {
+                            menuItem.setChecked(false);
+                            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                        } else {
+                            currentTypeId = menuItem.getItemId();
+                            setFragment();
+                        }
+                        menuItem.setChecked(true);
+                        mDrawerLayout.closeDrawers();
+                        return true;
+                    }
+                });
     }
 
     AbstractFragment getCurrentFragment() {
@@ -166,11 +180,11 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
     void setFragment() {
         updateHeader(this, currentTypeId);
         Fragment fragment = FragmentsFactory.getFragment(currentTypeId);
-        if (fragment instanceof ListFragment) {
+        if (fragment instanceof RecycleFragment) {
             mListFragment = (RefreshFragment) fragment;
         }
         getSupportFragmentManager().beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .replace(R.id.main_frame, fragment, FRAGMENT_KEY)
                 .commit();
     }
@@ -232,10 +246,10 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (mScrollByVolumeEnabled && mListFragment != null) {
             if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
-                mListFragment.getListView().smoothScrollByOffset(1);
+//                mListFragment.getListView().smoothScrollByOffset(1);
                 return true;
             } else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-                mListFragment.getListView().smoothScrollByOffset(-1);
+//                mListFragment.getListView().smoothScrollByOffset(-1);
                 return true;
             }
         }
@@ -261,5 +275,17 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
 
     public RefreshFragment getRefreshFragment() {
         return mListFragment;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PermissionsUtil.EXTERNAL_STORAGE_REQUEST) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                AbstractActivity.runPermActions();
+            } else {
+                clearPermAcitons();
+            }
+        }
     }
 }

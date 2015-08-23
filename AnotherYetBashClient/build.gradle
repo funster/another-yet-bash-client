@@ -1,12 +1,16 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.neenbedankt.android-apt'
+
+repositories {
+    mavenCentral()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+}
 
 dependencies {
     // support
-    compile "com.android.support:support-v4:22.1.1"
-    compile "com.android.support:appcompat-v7:22.1.1"
-    compile "com.android.support:support-annotations:22.1.1"
+    compile 'com.android.support:design:23.0.0'
+    compile 'com.android.support:support-v13:23.0.0'
+    compile 'com.android.support:appcompat-v7:23.0.0'
+    compile 'com.android.support:recyclerview-v7:23.0.0'
 
     // ui
     compile "com.daimajia.swipelayout:library:1.1.9@aar"
@@ -15,6 +19,7 @@ dependencies {
     compile 'com.octo.android.robospice:robospice:1.4.14'
     compile 'com.squareup.okhttp:okhttp:2.3.0'
     compile "org.jsoup:jsoup:1.7.3"
+    compile "com.google.android.gms:play-services-gcm:7.8.0"
 }
 
 def getReleaseKeyStore() { file(System.properties['user.home'] + "/.android/alpha.keystore") }
@@ -22,14 +27,14 @@ def getReleaseKeyStore() { file(System.properties['user.home'] + "/.android/alph
 def isReleaseKeyStoreExists() { getReleaseKeyStore().exists() }
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion '22.0.1'
+    compileSdkVersion 23
+    buildToolsVersion '23.0.0'
 
     defaultConfig {
         versionCode 28
         versionName '2.0'
         minSdkVersion 15
-        targetSdkVersion 22
+        targetSdkVersion 23
     }
 
     signingConfigs {
@@ -51,6 +56,11 @@ android {
             else
                 signingConfig android.signingConfigs.debug
         }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
     }
 
     lintOptions {

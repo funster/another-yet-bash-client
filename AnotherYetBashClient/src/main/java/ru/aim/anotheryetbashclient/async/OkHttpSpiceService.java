@@ -7,9 +7,7 @@ import com.squareup.okhttp.OkHttpClient;
 
 import java.util.Set;
 
-/**
- * Pavel : 14.05.2015.
- */
+
 public abstract class OkHttpSpiceService extends SpiceService {
 
     private OkHttpClient mOkHttpClient;

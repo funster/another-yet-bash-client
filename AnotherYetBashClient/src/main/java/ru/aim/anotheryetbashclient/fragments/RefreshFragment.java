@@ -46,10 +46,10 @@ public abstract class RefreshFragment extends BaseFragment implements SwipeRefre
         if (isEmptyList()) {
             if (value) {
                 progressView.setVisibility(View.VISIBLE);
-                emptyView.setVisibility(View.GONE);
+//                emptyView.setVisibility(View.GONE);
             } else {
                 progressView.setVisibility(View.GONE);
-                emptyView.setVisibility(View.VISIBLE);
+//                emptyView.setVisibility(View.VISIBLE);
             }
         }
         if (progressView.getVisibility() != View.VISIBLE) {
@@ -58,7 +58,7 @@ public abstract class RefreshFragment extends BaseFragment implements SwipeRefre
     }
 
     boolean isEmptyList() {
-        return (getListAdapter() == null || getListAdapter().getCount() == 0) && progressView != null;
+        return (getAdapter() == null || getAdapter().getItemCount() == 0) && progressView != null;
     }
 
     public abstract void onManualUpdate();

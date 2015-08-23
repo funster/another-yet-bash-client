@@ -12,7 +12,7 @@ import com.octo.android.robospice.SpiceService;
  */
 public class SpiceActivity extends AppCompatActivity {
 
-    private final SpiceManager spiceManager = new SpiceManager(SpiceService.class);
+    private final SpiceManager spiceManager = new SpiceManager(NetworkService.class);
 
     @Override
     protected void onStart() {

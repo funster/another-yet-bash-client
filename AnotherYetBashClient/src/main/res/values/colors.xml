@@ -10,4 +10,9 @@
     <color name="app_color_primary_dark">#000000</color>
     <color name="black">#000000</color>
 
+    <!-- according material specs: Dividers are 1dp thick, with an opacity
+         of either 12% black in light themes or 12% white in dark themes.  -->
+    <color name="divider_black">#1effffff</color>
+    <color name="divider_white">#1e000000</color>
+
 </resources>

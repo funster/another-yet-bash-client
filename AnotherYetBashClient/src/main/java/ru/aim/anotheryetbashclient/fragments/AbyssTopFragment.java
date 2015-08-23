@@ -5,11 +5,9 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.content.Loader;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListAdapter;
+
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
-import ru.aim.anotheryetbashclient.QuotesAdapter;
-import ru.aim.anotheryetbashclient.helper.DbHelper;
+import ru.aim.anotheryetbashclient.RecycleQuotesAdapter;
 import ru.aim.anotheryetbashclient.loaders.AbyssTopLoader;
 import ru.aim.anotheryetbashclient.loaders.SimpleLoaderCallbacks;
 import ru.aim.anotheryetbashclient.loaders.SimpleResult;
@@ -23,7 +21,7 @@ public class AbyssTopFragment extends AbstractFragment implements SimpleLoaderCa
     public void onManualUpdate() {
         setRefreshing(true);
         if (getLoaderManager().getLoader(AbyssTopLoader.ID) == null) {
-           initLoader();
+            initLoader();
         } else {
             getLoaderManager().getLoader(AbyssTopLoader.ID).forceLoad();
         }
@@ -51,8 +49,8 @@ public class AbyssTopFragment extends AbstractFragment implements SimpleLoaderCa
         if (data.containsError()) {
             showWarning(getActivity(), data.getError().getMessage());
         } else {
-            ListAdapter listAdapter = new AbyssTopAdapter(getDbHelper(), getActivity(), data.getResult());
-            setListAdapter(listAdapter);
+            RecycleQuotesAdapter listAdapter = new AbyssTopAdapter(getActivity(), data.getResult());
+            setAdapter(listAdapter);
             setMenuItemsVisibility(true);
         }
     }
@@ -62,28 +60,21 @@ public class AbyssTopFragment extends AbstractFragment implements SimpleLoaderCa
         safeSwap();
     }
 
-    static class AbyssTopAdapter extends QuotesAdapter {
+    static class AbyssTopAdapter extends RecycleQuotesAdapter {
 
-        public AbyssTopAdapter(DbHelper dbHelper, Context context, Cursor c) {
-            super(dbHelper, context, c);
+        public AbyssTopAdapter(Context context, Cursor cursor) {
+            super(context, cursor);
         }
 
         @Override
-        public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
-            View view = super.newView(context, cursor, viewGroup);
-            ViewHolder viewHolder = (ViewHolder) view.getTag();
+        public void onBindViewHolder(QuotesViewHolder viewHolder, Cursor cursor) {
+            super.onBindViewHolder(viewHolder, cursor);
             viewHolder.plus.setVisibility(View.GONE);
             viewHolder.minus.setVisibility(View.GONE);
             viewHolder.bayan.setVisibility(View.GONE);
-            return view;
-        }
-
-        @Override
-        public void bindView(View view, Context context, Cursor cursor) {
-            super.bindView(view, context, cursor);
-            ViewHolder viewHolder = (ViewHolder) view.getTag();
             String position = "#" + (cursor.getPosition() + 1);
             viewHolder.id.setText(position);
         }
+
     }
 }

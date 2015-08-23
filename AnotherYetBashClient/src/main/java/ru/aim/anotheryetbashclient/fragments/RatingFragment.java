@@ -7,11 +7,10 @@ import android.support.v4.content.Loader;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ListAdapter;
 
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
-import ru.aim.anotheryetbashclient.QuotesAdapter;
 import ru.aim.anotheryetbashclient.R;
+import ru.aim.anotheryetbashclient.RecycleQuotesAdapter;
 import ru.aim.anotheryetbashclient.loaders.FreshLoader;
 import ru.aim.anotheryetbashclient.loaders.RatingLoader;
 import ru.aim.anotheryetbashclient.loaders.SimpleLoaderCallbacks;
@@ -63,8 +62,8 @@ public class RatingFragment extends AbstractFragment implements SimpleLoaderCall
         if (data.containsError()) {
             showWarning(getActivity(), data.getError().getMessage());
         } else {
-            ListAdapter listAdapter = new QuotesAdapter(getDbHelper(), getActivity(), data.getResult());
-            setListAdapter(listAdapter);
+            RecycleQuotesAdapter listAdapter = new RecycleQuotesAdapter(getActivity(), data.getResult());
+            setAdapter(listAdapter);
             RatingResult ratingResult = (RatingResult) data.getTag();
             if (ratingResult != null) {
                 currentPage = ratingResult.currentPage;

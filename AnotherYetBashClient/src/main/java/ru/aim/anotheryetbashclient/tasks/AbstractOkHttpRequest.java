@@ -10,31 +10,30 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.InputStream;
-
 import ru.aim.anotheryetbashclient.async.OkHttpSpiceRequest;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 
 import static ru.aim.anotheryetbashclient.helper.DbHelper.QUOTE_PUBLIC_ID;
 
-public abstract class AbstractOkHttpRequest extends OkHttpSpiceRequest<InputStream> {
+public abstract class AbstractOkHttpRequest extends OkHttpSpiceRequest<String> {
 
     public AbstractOkHttpRequest() {
-        super(InputStream.class);
+        super(String.class);
     }
 
     @Override
-    public InputStream loadDataFromNetwork() throws Exception {
+    public String loadDataFromNetwork() throws Exception {
         Response response = execRequest();
         Document document = Jsoup.parse(response.body().byteStream(), "windows-1251", getUrl());
         beforeParsing(document);
         parse(document);
         afterParsing();
-        return response.body().byteStream();
+        return "";
     }
 
     private Response execRequest() throws Exception {
-        return getOkHttpClient().newCall(new Request.Builder().url(getUrl()).build()).execute();
+        Request request = new Request.Builder().url(getUrl()).build();
+        return getOkHttpClient().newCall(request).execute();
     }
 
     protected void onEachElement(Element e, int flag) {
@@ -62,6 +61,16 @@ public abstract class AbstractOkHttpRequest extends OkHttpSpiceRequest<InputStre
     }
 
     void parse(Document document) {
+        Elements elements = document.select("div[id=body]").get(0).children();
+        int flag = 0;
+        for (Element element : elements) {
+            if (element.html().contains("недели")) {
+                flag = 1;
+            }
+            if (element.hasClass("quote")) {
+                onEachElement(element, flag);
+            }
+        }
     }
 
     Elements selectDate(Element e) {

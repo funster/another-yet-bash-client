@@ -15,17 +15,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.DatePicker;
-import android.widget.ListAdapter;
 
 import java.util.Calendar;
 
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
-import ru.aim.anotheryetbashclient.QuotesAdapter;
 import ru.aim.anotheryetbashclient.R;
+import ru.aim.anotheryetbashclient.RecycleQuotesAdapter;
 import ru.aim.anotheryetbashclient.ShareDialog;
-import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.loaders.AbyssBestLoader;
 import ru.aim.anotheryetbashclient.loaders.BestLoader;
 import ru.aim.anotheryetbashclient.loaders.SimpleLoaderCallbacks;
@@ -106,9 +103,9 @@ public class AbyssBestFragment extends AbstractFragment implements SimpleLoaderC
         if (data.containsError()) {
             showWarning(getActivity(), data.getError().getMessage());
         } else {
-            ListAdapter listAdapter;
-            listAdapter = new AbyssBestAdapter(getDbHelper(), getActivity(), data.getResult());
-            setListAdapter(listAdapter);
+            RecycleQuotesAdapter adapter;
+            adapter = new AbyssBestAdapter(getActivity(), data.getResult());
+            setAdapter(adapter);
             setMenuItemsVisibility(true);
         }
     }
@@ -167,24 +164,23 @@ public class AbyssBestFragment extends AbstractFragment implements SimpleLoaderC
         }
     }
 
-    static class AbyssBestAdapter extends QuotesAdapter {
+    static class AbyssBestAdapter extends RecycleQuotesAdapter {
 
-        public AbyssBestAdapter(DbHelper dbHelper, Context context, Cursor c) {
-            super(dbHelper, context, c);
+
+        public AbyssBestAdapter(Context context, Cursor cursor) {
+            super(context, cursor);
         }
 
         @Override
-        public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
-            View view = super.newView(context, cursor, viewGroup);
-            ViewHolder viewHolder = (ViewHolder) view.getTag();
+        public void onBindViewHolder(QuotesViewHolder viewHolder, Cursor cursor) {
+            super.onBindViewHolder(viewHolder, cursor);
             viewHolder.plus.setVisibility(View.GONE);
             viewHolder.minus.setVisibility(View.GONE);
             viewHolder.bayan.setVisibility(View.GONE);
-            return view;
         }
 
         @Override
-        protected void share(Context context, ViewHolder viewHolder) {
+        protected void share(Context context, QuotesViewHolder viewHolder) {
             Bitmap bitmap = buildQuoteBitmap(viewHolder);
             ShareDialog shareDialog = ShareDialog.newInstance(bitmap, null,
                     viewHolder.text.getText().toString());

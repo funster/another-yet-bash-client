@@ -3,12 +3,8 @@ package ru.aim.anotheryetbashclient.loaders;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.net.http.AndroidHttpClient;
+import android.support.v4.app.ActivityCompat;
 
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -16,15 +12,14 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.zip.GZIPInputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
-import ru.aim.anotheryetbashclient.BashApp;
 import ru.aim.anotheryetbashclient.R;
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.helper.Utils;
 
 import static ru.aim.anotheryetbashclient.helper.DbHelper.QUOTE_PUBLIC_ID;
-import static ru.aim.anotheryetbashclient.loaders.Package.getCharsetFromResponse;
 
 @SuppressWarnings("unused")
 public abstract class QuoteLoader extends AbstractLoader<Cursor> {
@@ -78,10 +73,22 @@ public abstract class QuoteLoader extends AbstractLoader<Cursor> {
     }
 
     protected Document prepareRequest() throws IOException {
-        HttpUriRequest httpRequest = getHttpRequest();
-        HttpResponse httpResponse = getHttpClient().execute(httpRequest);
-        String encoding = getCharsetFromResponse(httpResponse);
-        return Jsoup.parse(getInputStream(httpResponse), encoding, getUrl());
+        URLConnection connection = new URL(getUrl()).openConnection();
+        connection.connect();
+        try {
+            return Jsoup.parse(connection.getInputStream(), connection.getContentEncoding(), getUrl());
+        } finally {
+            close(connection.getInputStream());
+        }
+    }
+
+    static void close(InputStream inputStream) {
+        try {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        } catch (IOException ignored) {
+        }
     }
 
     protected void saveQuote(ContentValues values) {
@@ -94,31 +101,8 @@ public abstract class QuoteLoader extends AbstractLoader<Cursor> {
         getDbHelper().clearDefault();
     }
 
-    protected HttpUriRequest getHttpRequest() {
-        HttpGet httpGet = new HttpGet(getUrl());
-        AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpGet);
-        return httpGet;
-    }
-
-    public static InputStream getInputStream(HttpResponse httpResponse) throws IOException {
-        InputStream inputStream = httpResponse.getEntity().getContent();
-        Header contentEncoding = httpResponse.getFirstHeader("Content-Encoding");
-        if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
-            inputStream = new GZIPInputStream(inputStream);
-        }
-        return inputStream;
-    }
-
     protected abstract String getUrl();
 
     protected void afterParsing() {
-    }
-
-    public AndroidHttpClient getHttpClient() {
-        if (getContext() == null) {
-            return null;
-        }
-        BashApp app = (BashApp) getContext().getApplicationContext();
-        return app.getHttpClient();
     }
 }

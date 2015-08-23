@@ -4,13 +4,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.content.Loader;
-import android.view.*;
-import android.widget.ListAdapter;
-import android.widget.TextView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
-import ru.aim.anotheryetbashclient.QuotesAdapter;
 import ru.aim.anotheryetbashclient.R;
-import ru.aim.anotheryetbashclient.helper.DbHelper;
+import ru.aim.anotheryetbashclient.RecycleQuotesAdapter;
 import ru.aim.anotheryetbashclient.loaders.BestLoader;
 import ru.aim.anotheryetbashclient.loaders.RandomLoader;
 import ru.aim.anotheryetbashclient.loaders.SimpleLoaderCallbacks;
@@ -62,13 +62,13 @@ public class BestFragment extends AbstractFragment implements SimpleLoaderCallba
         if (data.containsError()) {
             showWarning(getActivity(), data.getError().getMessage());
         } else {
-            ListAdapter listAdapter;
+            RecycleQuotesAdapter listAdapter;
             if (dateResult.isToday()) {
-                listAdapter = new BestAdapter(getDbHelper(), getActivity(), data.getResult());
+                listAdapter = new BestAdapter(getActivity(), data.getResult());
             } else {
-                listAdapter = new QuotesAdapter(getDbHelper(), getActivity(), data.getResult());
+                listAdapter = new RecycleQuotesAdapter(getActivity(), data.getResult());
             }
-            setListAdapter(listAdapter);
+            setAdapter(listAdapter);
             setMenuItemsVisibility(true);
         }
     }
@@ -130,79 +130,79 @@ public class BestFragment extends AbstractFragment implements SimpleLoaderCallba
     /**
      * Adapter for first page.
      */
-    public static class BestAdapter extends QuotesAdapter {
+    public static class BestAdapter extends RecycleQuotesAdapter {
 
         int monthTitlePosition;
 
-        public BestAdapter(DbHelper dbHelper, Context context, Cursor cursor) {
-            super(dbHelper, context, cursor);
+        public BestAdapter(Context context, Cursor cursor) {
+            super(context, cursor);
             monthTitlePosition = 0;
-            initSecondTitle();
+//            initSecondTitle();
         }
 
-        void initSecondTitle() {
-            getCursor().moveToFirst();
-            while (getCursor().moveToNext()) {
-                int flag = getCursor().getInt(getCursor().getColumnIndex(DbHelper.QUOTE_FLAG));
-                if (flag == 1) {
-                    break;
-                }
-                monthTitlePosition++;
-            }
-        }
-
-        @Override
-        public int getCount() {
-            if (getCursor() == null) return 0;
-            return getCursor().getCount() + 2;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return position;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (position == 0) {
-                TextView textView = (TextView) View.inflate(mContext, R.layout.best_title_item, null);
-                textView.setText(R.string.best_of_day);
-                return textView;
-            } else if (position == monthTitlePosition) {
-                TextView textView = (TextView) View.inflate(mContext, R.layout.best_title_item, null);
-                textView.setText(R.string.best_of_week);
-                return textView;
-            } else {
-                if (monthTitlePosition == 0) {
-                    initSecondTitle();
-                }
-                if (position < monthTitlePosition) {
-                    position -= 1;
-                } else {
-                    position -= 2;
-                }
-                return super.getView(position, convertView, parent);
-            }
-        }
-
-        @Override
-        public boolean isEnabled(int position) {
-            return position != 0 && position != monthTitlePosition;
-        }
-
-        @Override
-        public int getViewTypeCount() {
-            return 2;
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            return position == 0 || position == monthTitlePosition ? 1 : 0;
-        }
+//        void initSecondTitle() {
+//            getCursor().moveToFirst();
+//            while (getCursor().moveToNext()) {
+//                int flag = getCursor().getInt(getCursor().getColumnIndex(DbHelper.QUOTE_FLAG));
+//                if (flag == 1) {
+//                    break;
+//                }
+//                monthTitlePosition++;
+//            }
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            if (getCursor() == null) return 0;
+//            return getCursor().getCount() + 2;
+//        }
+//
+//        @Override
+//        public Object getItem(int position) {
+//            return position;
+//        }
+//
+//        @Override
+//        public long getItemId(int position) {
+//            return position;
+//        }
+//
+//        @Override
+//        public View getView(int position, View convertView, ViewGroup parent) {
+//            if (position == 0) {
+//                TextView textView = (TextView) View.inflate(getContext(), R.layout.best_title_item, null);
+//                textView.setText(R.string.best_of_day);
+//                return textView;
+//            } else if (position == monthTitlePosition) {
+//                TextView textView = (TextView) View.inflate(getContext(), R.layout.best_title_item, null);
+//                textView.setText(R.string.best_of_week);
+//                return textView;
+//            } else {
+//                if (monthTitlePosition == 0) {
+//                    initSecondTitle();
+//                }
+//                if (position < monthTitlePosition) {
+//                    position -= 1;
+//                } else {
+//                    position -= 2;
+//                }
+//                return super.getView(position, convertView, parent);
+//            }
+//        }
+//
+//        @Override
+//        public boolean isEnabled(int position) {
+//            return position != 0 && position != monthTitlePosition;
+//        }
+//
+//        @Override
+//        public int getViewTypeCount() {
+//            return 2;
+//        }
+//
+//        @Override
+//        public int getItemViewType(int position) {
+//            return position == 0 || position == monthTitlePosition ? 1 : 0;
+//        }
     }
 }

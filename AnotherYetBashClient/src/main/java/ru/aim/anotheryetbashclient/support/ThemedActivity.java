@@ -18,12 +18,15 @@ public abstract class ThemedActivity extends OrientationActivity {
     BroadcastReceiver changeThemeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            submitAction(() -> {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-                    finish();
-                    startActivity(getIntent());
-                } else {
-                    recreate();
+            submitAction(new Runnable() {
+                @Override
+                public void run() {
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                        finish();
+                        startActivity(getIntent());
+                    } else {
+                        recreate();
+                    }
                 }
             });
         }

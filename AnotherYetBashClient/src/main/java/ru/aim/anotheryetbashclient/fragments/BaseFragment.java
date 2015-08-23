@@ -7,8 +7,6 @@ import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.ListFragment;
-import android.widget.ListAdapter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -18,13 +16,13 @@ import ru.aim.anotheryetbashclient.MainActivity;
 import ru.aim.anotheryetbashclient.helper.L;
 
 @SuppressWarnings("unused")
-public abstract class BaseFragment extends ListFragment {
+public abstract class BaseFragment extends RecycleFragment {
 
     static String TAG = "BaseFragment";
 
     private static final String LIST_VIEW_STATE = "listViewState";
 
-    private List<Runnable> mPausedActions = new ArrayList<Runnable>();
+    private List<Runnable> mPausedActions = new ArrayList<>();
     private Parcelable mListViewState;
 
     protected void run(Runnable runnable) {
@@ -43,14 +41,14 @@ public abstract class BaseFragment extends ListFragment {
         }
     }
 
-    @Override
-    public void setListAdapter(ListAdapter adapter) {
-        super.setListAdapter(adapter);
-        if (getListView() != null && mListViewState != null) {
-            getListView().onRestoreInstanceState(mListViewState);
-            mListViewState = null;
-        }
-    }
+//    @Override
+//    public void setListAdapter(ListAdapter adapter) {
+//        super.setAda(adapter);
+//        if (getRecyclerView() != null && mListViewState != null) {
+//            getListView().onRestoreInstanceState(mListViewState);
+//            mListViewState = null;
+//        }
+//    }
 
     @Override
     public void onResume() {
@@ -108,11 +106,11 @@ public abstract class BaseFragment extends ListFragment {
         });
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (getListView() != null) {
-            outState.putParcelable(LIST_VIEW_STATE, getListView().onSaveInstanceState());
-        }
-    }
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        if (getListView() != null) {
+//            outState.putParcelable(LIST_VIEW_STATE, getListView().onSaveInstanceState());
+//        }
+//    }
 }

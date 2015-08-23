@@ -2,10 +2,18 @@ package ru.aim.anotheryetbashclient;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 
+@Deprecated
 public class QuotesContentProvider extends ContentProvider {
+
+    private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+
+    static {
+//        uriMatcher.addURI();
+    }
 
     public QuotesContentProvider() {
     }

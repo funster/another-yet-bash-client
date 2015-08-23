@@ -11,6 +11,7 @@ public abstract class AbstractActivity extends SpiceActivity {
 
     boolean isResumed = false;
     List<Runnable> actions = new ArrayList<>();
+    private static List<Runnable> permActions = new ArrayList<>();
 
     @Override
     protected void onPause() {
@@ -46,5 +47,20 @@ public abstract class AbstractActivity extends SpiceActivity {
         } else {
             actions.add(runnable);
         }
+    }
+
+    public static void addPermAction(Runnable runnable) {
+        permActions.add(runnable);
+    }
+
+    public static void runPermActions() {
+        for (int i = 0; i < permActions.size(); i++) {
+            permActions.get(i).run();
+        }
+        clearPermAcitons();
+    }
+
+    public static void clearPermAcitons() {
+        permActions.clear();
     }
 }

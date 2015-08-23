@@ -1,6 +1,5 @@
 package ru.aim.anotheryetbashclient.loaders;
 
-import org.apache.http.HttpResponse;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
@@ -16,10 +15,6 @@ public final class Package {
 
     private Package() {
         throw new AssertionError();
-    }
-
-    public static String getCharsetFromResponse(HttpResponse httpResponse) {
-        return httpResponse.getEntity().getContentType().getValue().split("=")[1];
     }
 
     public static String findMore(Document document) {
