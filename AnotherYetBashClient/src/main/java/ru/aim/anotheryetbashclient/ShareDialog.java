@@ -1,5 +1,6 @@
 package ru.aim.anotheryetbashclient;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ClipData;
@@ -71,7 +72,7 @@ public class ShareDialog extends DialogFragment implements DialogInterface.OnCli
             case 0:
                 if (!PermissionsUtil.isWriteExternalAllowed(getContext())) {
                     ActivityCompat.requestPermissions(getActivity(),
-                            new String[]{PermissionsUtil.EXTERNAL_STORAGE},
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                             PermissionsUtil.EXTERNAL_STORAGE_REQUEST);
 //                    AbstractActivity.addPermAction(new Runnable() {
 //                        @Override
