@@ -73,14 +73,14 @@ public class ShareDialog extends DialogFragment implements DialogInterface.OnCli
                     ActivityCompat.requestPermissions(getActivity(),
                             new String[]{PermissionsUtil.EXTERNAL_STORAGE},
                             PermissionsUtil.EXTERNAL_STORAGE_REQUEST);
-                    AbstractActivity.addPermAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            shareImage(sharingIntent);
-                        }
-                    });
+//                    AbstractActivity.addPermAction(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            shareImage(sharingIntent);
+//                        }
+//                    });
                 } else {
-                    shareImage(sharingIntent);
+//                    shareImage(sharingIntent);
                 }
                 break;
             case 1:
@@ -101,7 +101,7 @@ public class ShareDialog extends DialogFragment implements DialogInterface.OnCli
         }
     }
 
-    static void shareImage(Activity activity, Intent sharingIntent) {
+    void shareImage(Activity activity, Intent sharingIntent) {
         try {
             sharingIntent.setType("image/jpeg");
             String fileName = getCleanId(publicId) + ".jpg";
@@ -144,13 +144,13 @@ public class ShareDialog extends DialogFragment implements DialogInterface.OnCli
         Toast.makeText(getActivity(), R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
     }
 
-    static File getFile(String fileName) {
+    File getFile(String fileName) {
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + File.separator + getString(R.string.app_name));
         return new File(myDir, fileName);
     }
 
-    static String saveBitmap(Bitmap bitmap, String fileName) {
+    String saveBitmap(Bitmap bitmap, String fileName) {
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + File.separator + getString(R.string.app_name));
         myDir.mkdirs();
@@ -179,7 +179,7 @@ public class ShareDialog extends DialogFragment implements DialogInterface.OnCli
         }
     }
 
-    static String insertImage(ContentResolver cr, Bitmap source,
+    String insertImage(ContentResolver cr, Bitmap source,
                        String title, String description) {
 
         String path = saveBitmap(source, title);
