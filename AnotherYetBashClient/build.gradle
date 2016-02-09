@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 repositories {
     mavenCentral()
@@ -20,10 +22,13 @@ dependencies {
     compile "com.daimajia.swipelayout:library:1.1.9@aar"
 
     // net
-    compile 'com.octo.android.robospice:robospice:1.4.14'
+    compile('com.octo.android.robospice:robospice:1.4.14') {
+        exclude group: 'commons-io', module: 'commons-io'
+    }
     compile 'com.squareup.okhttp:okhttp:2.3.0'
     compile "org.jsoup:jsoup:1.7.3"
     compile "com.google.android.gms:play-services-gcm:8.4.0"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
 def getReleaseKeyStore() { file(System.properties['user.home'] + "/.android/alpha.keystore") }
@@ -71,5 +76,17 @@ android {
         quiet true
         abortOnError false
         checkReleaseBuilds true
+    }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+}
+buildscript {
+    ext.kotlin_version = '1.0.0-rc-1036'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
