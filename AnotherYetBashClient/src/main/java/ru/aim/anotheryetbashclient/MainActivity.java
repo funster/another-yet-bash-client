@@ -32,7 +32,9 @@ import ru.aim.anotheryetbashclient.fragments.RefreshFragment;
 import ru.aim.anotheryetbashclient.helper.Utils;
 import ru.aim.anotheryetbashclient.settings.SettingsActivity;
 import ru.aim.anotheryetbashclient.settings.SettingsHelper;
+import ru.aim.anotheryetbashclient.support.DelegateActivity;
 import ru.aim.anotheryetbashclient.support.RulezActivity;
+import ru.aim.anotheryetbashclient.support.SampleActivity;
 
 import static ru.aim.anotheryetbashclient.Package.updateHeader;
 import static ru.aim.anotheryetbashclient.settings.SettingsHelper.saveType;
@@ -131,7 +133,7 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         if (menuItem.getItemId() == R.id.nav_settings) {
                             menuItem.setChecked(false);
-                            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                            startActivity(new Intent(MainActivity.this, SampleActivity.class));
                         } else {
                             currentTypeId = menuItem.getItemId();
                             setFragment();
@@ -238,7 +240,7 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
             if (mDrawerLayout != null) {
                 mDrawerLayout.closeDrawers();
             }
-            startActivity(new Intent(this, SettingsActivity.class));
+            startActivity(new Intent(this, DelegateActivity.class));
         }
     }
 
