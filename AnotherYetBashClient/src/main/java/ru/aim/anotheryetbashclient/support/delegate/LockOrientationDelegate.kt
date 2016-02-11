@@ -22,7 +22,7 @@ class LockOrientationDelegate(val delegate: ActivityDelegate) : ActivityDelegate
 
     protected fun lockScreen() {
         @SuppressWarnings("UnusedAssignment")
-        var orientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        var orientation: Int
         val rotation = (activity.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay.rotation
         when (rotation) {
             Surface.ROTATION_0 -> orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
