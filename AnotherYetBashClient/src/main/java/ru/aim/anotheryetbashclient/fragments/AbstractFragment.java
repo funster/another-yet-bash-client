@@ -33,7 +33,7 @@ public abstract class AbstractFragment extends RefreshFragment implements Adapte
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(getRootLayoutId(), container, false);
         setHasOptionsMenu(true);
-        mDbHelper = DbHelper.getInstance(getActivity());
+        mDbHelper = DbHelper.Companion.getInstance(getActivity());
 //        ListView listView = (ListView) root.findViewById(android.R.id.list);
 //        listView.setOnItemLongClickListener(this);
         return root;

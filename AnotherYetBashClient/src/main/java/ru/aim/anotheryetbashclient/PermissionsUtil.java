@@ -20,5 +20,4 @@ public class PermissionsUtil {
     public static boolean isAllowed(Context context, String permission) {
         return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
     }
-
 }

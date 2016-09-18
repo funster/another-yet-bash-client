@@ -14,7 +14,6 @@ import android.support.v4.content.Loader;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.DatePicker;
 
 import java.util.Calendar;
@@ -174,9 +173,9 @@ public class AbyssBestFragment extends AbstractFragment implements SimpleLoaderC
         @Override
         public void onBindViewHolder(QuotesViewHolder viewHolder, Cursor cursor) {
             super.onBindViewHolder(viewHolder, cursor);
-            viewHolder.plus.setVisibility(View.GONE);
-            viewHolder.minus.setVisibility(View.GONE);
-            viewHolder.bayan.setVisibility(View.GONE);
+//            viewHolder.plus.setVisibility(View.GONE);
+//            viewHolder.minus.setVisibility(View.GONE);
+//            viewHolder.bayan.setVisibility(View.GONE);
         }
 
         @Override

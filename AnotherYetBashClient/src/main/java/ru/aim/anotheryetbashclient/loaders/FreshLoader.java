@@ -21,7 +21,6 @@ import ru.aim.anotheryetbashclient.helper.L;
 import ru.aim.anotheryetbashclient.helper.Utils;
 import ru.aim.anotheryetbashclient.settings.SettingsHelper;
 
-import static ru.aim.anotheryetbashclient.helper.DbHelper.QUOTE_PUBLIC_ID;
 import static ru.aim.anotheryetbashclient.loaders.Package.wrapWithRoot;
 
 /**
@@ -89,7 +88,7 @@ public class FreshLoader extends AbstractLoader<FreshResult> {
             if (!textElements.isEmpty()) {
                 String id = idElements.html();
                 ContentValues values = new ContentValues();
-                values.put(QUOTE_PUBLIC_ID, idElements.html());
+                values.put(DbHelper.QUOTE_PUBLIC_ID, idElements.html());
                 values.put(DbHelper.QUOTE_DATE, dateElements.html());
                 values.put(DbHelper.QUOTE_IS_NEW, 1);
                 values.put(DbHelper.QUOTE_RATING, ratingElements.html().trim());

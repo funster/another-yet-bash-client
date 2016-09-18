@@ -5,9 +5,7 @@ import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.support.v7.widget.RecyclerView;
 
-import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
-
-public abstract class RecycleCursorAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerSwipeAdapter<VH> {
+public abstract class RecycleCursorAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
     private Context mContext;
 

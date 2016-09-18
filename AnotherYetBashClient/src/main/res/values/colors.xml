@@ -2,7 +2,7 @@
 <resources>
     <color name="app_colorPrimary">#3F51B5</color>
     <color name="app_colorPrimaryDark">#303F9F</color>
-    <color name="app_colorAccent">#ffffffff</color>
+    <color name="app_colorAccent">#FF5722</color>
     <color name="material_blue_500">#2196F3</color>
     <color name="material_blue_700">#1565C0</color>
     <color name="material_green_A200">#69F0AE</color>
@@ -14,5 +14,17 @@
          of either 12% black in light themes or 12% white in dark themes.  -->
     <color name="divider_black">#1effffff</color>
     <color name="divider_white">#1e000000</color>
+
+    <color name="default_gray">#848484</color>
+
+    <color name="light_primary">#C5CAE9</color>
+    <color name="text">#FFFFFF</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
+    <color name="divider_color">#B6B6B6</color>
+
+    <color name="immersive_bars">#99000000</color>
+
+    <color name="status_bar_back">#ff676767</color> <!-- this is blended with immersive_bars to produce the desired status bar color i.e. background_super_dark -->
 
 </resources>

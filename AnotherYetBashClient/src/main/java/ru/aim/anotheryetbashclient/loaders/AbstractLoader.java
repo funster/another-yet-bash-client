@@ -42,7 +42,7 @@ abstract class AbstractLoader<T> extends SimpleLoader<SimpleResult<T>> {
 
     @Override
     protected void onStartLoading() {
-        dbHelper = DbHelper.getInstance(getContext());
+        dbHelper = DbHelper.Companion.getInstance(getContext());
         super.onStartLoading();
     }
 

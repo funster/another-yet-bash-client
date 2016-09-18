@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -30,7 +31,6 @@ import ru.aim.anotheryetbashclient.fragments.FragmentsFactory;
 import ru.aim.anotheryetbashclient.fragments.RecycleFragment;
 import ru.aim.anotheryetbashclient.fragments.RefreshFragment;
 import ru.aim.anotheryetbashclient.helper.Utils;
-import ru.aim.anotheryetbashclient.settings.SettingsActivity;
 import ru.aim.anotheryetbashclient.settings.SettingsHelper;
 import ru.aim.anotheryetbashclient.support.DelegateActivity;
 import ru.aim.anotheryetbashclient.support.RulezActivity;
@@ -55,6 +55,7 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
     boolean mScrollByVolumeEnabled;
 
     private DrawerLayout mDrawerLayout;
+    private AppBarLayout appBarLayout;
 
     BroadcastReceiver notifyBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -71,7 +72,9 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
+        if (ab != null) {
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (mDrawerLayout != null) {
@@ -97,6 +100,8 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
         }
 
         mainFrame = (FrameLayout) findViewById(R.id.main_frame);
+
+        appBarLayout = (AppBarLayout) findViewById(R.id.boyan);
 
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter1 = new IntentFilter(ActionsAndIntents.NOTIFY);
@@ -185,6 +190,7 @@ public class MainActivity extends RulezActivity implements AdapterView.OnItemCli
         if (fragment instanceof RecycleFragment) {
             mListFragment = (RefreshFragment) fragment;
         }
+        appBarLayout.setExpanded(true, true);
         getSupportFragmentManager().beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .replace(R.id.main_frame, fragment, FRAGMENT_KEY)

@@ -77,9 +77,9 @@ public class FavoritesFragment extends AbstractFragment
         @Override
         public void onBindViewHolder(QuotesViewHolder viewHolder, Cursor cursor) {
             super.onBindViewHolder(viewHolder, cursor);
-            viewHolder.plus.setVisibility(View.GONE);
-            viewHolder.minus.setVisibility(View.GONE);
-            viewHolder.bayan.setVisibility(View.GONE);
+//            viewHolder.plus.setVisibility(View.GONE);
+//            viewHolder.minus.setVisibility(View.GONE);
+//            viewHolder.bayan.setVisibility(View.GONE);
         }
 
         @Override

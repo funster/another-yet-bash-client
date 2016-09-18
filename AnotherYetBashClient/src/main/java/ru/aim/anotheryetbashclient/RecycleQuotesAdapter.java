@@ -9,11 +9,9 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.daimajia.swipe.SwipeLayout;
 
 import ru.aim.anotheryetbashclient.helper.DbHelper;
 import ru.aim.anotheryetbashclient.loaders.RulezType;
@@ -42,39 +40,48 @@ public class RecycleQuotesAdapter extends RecycleCursorAdapter<RecycleQuotesAdap
         viewHolder.text.setText(Html.fromHtml(text));
         viewHolder.publicId = id;
         viewHolder.innerId = cursor.getLong(cursor.getColumnIndex(DbHelper.QUOTE_ID));
-        viewHolder.rating.setText(cursor.getString(cursor.getColumnIndex(DbHelper.QUOTE_RATING)));
-        if (dbHelper.isFavorite(id)) {
-            viewHolder.addFavorite.setImageResource(favoriteFill);
-        } else {
-            viewHolder.addFavorite.setImageResource(favoriteEmpty);
-        }
-        View.OnClickListener clickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.add_favorite:
-                        onFavoriteClick(id, viewHolder, getContext());
-                        break;
-                    case R.id.plus:
-                        sendRulez(viewHolder.publicId, RulezType.RULEZ);
-                        break;
-                    case R.id.minus:
-                        sendRulez(viewHolder.publicId, RulezType.SUX);
-                        break;
-                    case R.id.boyan:
-                        sendRulez(viewHolder.publicId, RulezType.BAYAN);
-                        break;
-                    case R.id.share:
-                        share(getContext(), viewHolder);
-                        break;
+        if (viewHolder.quoteActions != null) {
+            viewHolder.quoteActions.setImageResource(AttrUtils.resolveResource(getContext(), R.attr.more_icon));
+            viewHolder.quoteActions.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // QuoteOptionsMenu.INSTANCE.showPopMenu(getContext(), viewHolder.quoteActions);
                 }
-            }
-        };
-        viewHolder.addFavorite.setOnClickListener(clickListener);
-        viewHolder.plus.setOnClickListener(clickListener);
-        viewHolder.minus.setOnClickListener(clickListener);
-        viewHolder.bayan.setOnClickListener(clickListener);
-        viewHolder.share.setOnClickListener(clickListener);
+            });
+        }
+//        viewHolder.rating.setText(cursor.getString(cursor.getColumnIndex(DbHelper.QUOTE_RATING)));
+//        if (dbHelper.isFavorite(id)) {
+//            viewHolder.addFavorite.setImageResource(favoriteFill);
+//        } else {
+//            viewHolder.addFavorite.setImageResource(favoriteEmpty);
+//        }
+//        View.OnClickListener clickListener = new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                switch (v.getId()) {
+//                    case R.id.add_favorite:
+//                        onFavoriteClick(id, viewHolder, getContext());
+//                        break;
+//                    case R.id.plus:
+//                        sendRulez(viewHolder.publicId, RulezType.RULEZ);
+//                        break;
+//                    case R.id.minus:
+//                        sendRulez(viewHolder.publicId, RulezType.SUX);
+//                        break;
+//                    case R.id.boyan:
+//                        sendRulez(viewHolder.publicId, RulezType.BAYAN);
+//                        break;
+//                    case R.id.share:
+//                        share(getContext(), viewHolder);
+//                        break;
+//                }
+//            }
+//        };
+//        viewHolder.addFavorite.setOnClickListener(clickListener);
+//        viewHolder.plus.setOnClickListener(clickListener);
+//        viewHolder.minus.setOnClickListener(clickListener);
+//        viewHolder.bayan.setOnClickListener(clickListener);
+//        viewHolder.share.setOnClickListener(clickListener);
     }
 
     protected Bitmap buildQuoteBitmap(QuotesViewHolder viewHolder) {
@@ -106,21 +113,16 @@ public class RecycleQuotesAdapter extends RecycleCursorAdapter<RecycleQuotesAdap
         if (dbHelper.isFavorite(id)) {
             dbHelper.removeFromFavorite(viewHolder.publicId);
             Toast.makeText(context, R.string.removed_to_favorites, Toast.LENGTH_SHORT).show();
-            viewHolder.addFavorite.setImageResource(favoriteEmpty);
+//            viewHolder.addFavorite.setImageResource(favoriteEmpty);
         } else {
             dbHelper.addToFavorite(viewHolder.publicId);
             Toast.makeText(context, R.string.added_to_favorites, Toast.LENGTH_SHORT).show();
-            viewHolder.addFavorite.setImageResource(favoriteFill);
+//            viewHolder.addFavorite.setImageResource(favoriteFill);
         }
     }
 
     void sendRulez(String id, RulezType type) {
         // mContext.sendRulez(id, type);
-    }
-
-    @Override
-    public int getSwipeLayoutResourceId(int i) {
-        return R.id.swipe_layout;
     }
 
     @Override
@@ -131,18 +133,18 @@ public class RecycleQuotesAdapter extends RecycleCursorAdapter<RecycleQuotesAdap
 
     public static class QuotesViewHolder extends RecyclerView.ViewHolder {
 
-        public SwipeLayout swipeLayout;
         public TextView date;
         public TextView id;
         public TextView text;
         public TextView isNew;
-        public TextView rating;
-        public ImageButton addFavorite;
-        public View plus;
-        public View minus;
-        public View bayan;
-        public View share;
+        //        public TextView rating;
+//        public ImageButton addFavorite;
+//        public View plus;
+//        public View minus;
+//        public View bayan;
+//        public View share;
         public View quoteContainer;
+        public ImageView quoteActions;
 
         public String publicId;
         public long innerId;
@@ -153,14 +155,14 @@ public class RecycleQuotesAdapter extends RecycleCursorAdapter<RecycleQuotesAdap
             id = (TextView) view.findViewById(android.R.id.text2);
             text = (TextView) view.findViewById(R.id.text);
             isNew = (TextView) view.findViewById(R.id.newQuote);
-            rating = (TextView) view.findViewById(R.id.rating);
-            addFavorite = (ImageButton) view.findViewById(R.id.add_favorite);
-            plus = view.findViewById(R.id.plus);
-            minus = view.findViewById(R.id.minus);
-            bayan = view.findViewById(R.id.boyan);
-            share = view.findViewById(R.id.share);
+//            rating = (TextView) view.findViewById(R.id.rating);
+//            addFavorite = (ImageButton) view.findViewById(R.id.add_favorite);
+//            plus = view.findViewById(R.id.plus);
+//            minus = view.findViewById(R.id.minus);
+//            bayan = view.findViewById(R.id.boyan);
+//            share = view.findViewById(R.id.share);
             quoteContainer = view.findViewById(R.id.quote_container);
+            quoteActions = (ImageView) view.findViewById(R.id.quote_actions);
         }
     }
-
 }

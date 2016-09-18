@@ -1,58 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="6dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:layout_width="300dp"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:padding="6dp">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
-            android:textColor="@color/black"
-            android:gravity="left"
             android:id="@android:id/text2"
-            android:textAppearance="@style/listItemSubtitle"
-            android:text="@string/app_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="@string/app_name"
+            android:textAppearance="@style/listItemSubtitle"
+            android:textColor="@color/black" />
 
         <TextView
-            android:textColor="@color/black"
-            android:layout_weight="1"
-            android:gravity="left"
-            android:visibility="gone"
             android:id="@+id/newQuote"
-            android:paddingLeft="4dp"
-            android:paddingEnd="0dp"
-            android:paddingRight="0dp"
-            android:textAppearance="@style/listItemNew"
-            android:text="@string/new_quote"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold|italic" />
+            android:layout_weight="1"
+            android:gravity="left"
+            android:paddingEnd="0dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="0dp"
+            android:text="@string/new_quote"
+            android:textAppearance="@style/listItemNew"
+            android:textColor="@color/black"
+            android:textStyle="bold|italic"
+            android:visibility="gone" />
 
         <TextView
-            android:textColor="@color/black"
-            android:gravity="end"
-            android:layout_weight="1"
             android:id="@android:id/text1"
-            android:textAppearance="@style/listItemSubtitle"
-            android:text="@string/app_name"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:text="@string/app_name"
+            android:textAppearance="@style/listItemSubtitle"
+            android:textColor="@color/black" />
 
     </LinearLayout>
 
     <TextView
-        android:textColor="@color/black"
         android:id="@+id/text"
-        android:textAppearance="@style/listItemText"
-        android:text="@string/app_name"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textAppearance="@style/listItemText"
+        android:textColor="@color/black" />
 
 </LinearLayout>

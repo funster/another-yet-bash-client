@@ -2,7 +2,6 @@ package ru.aim.anotheryetbashclient.support
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.octo.android.robospice.SpiceManager
 import ru.aim.anotheryetbashclient.support.delegate.*
 
 abstract class DelegateActivity : AppCompatActivity() {
@@ -25,7 +24,6 @@ abstract class DelegateActivity : AppCompatActivity() {
         aggregator.addDelegate(onScreenDelegate)
         aggregator.addDelegate(resumedActionDelegate)
         aggregator.addDelegate(ThemedDelegate(resumedActionDelegate))
-        aggregator.addDelegate(SpiceDelegate(defaultDelegate))
         aggregator.addDelegate(LockOrientationDelegate(defaultDelegate))
     }
 
@@ -64,7 +62,4 @@ abstract class DelegateActivity : AppCompatActivity() {
 
     val DelegateActivity.isResumed: Boolean
         get() = getDelegate(OnScreenDelegate::class.java)?.isResumed ?: false
-
-    val DelegateActivity.spiceManager: SpiceManager?
-        get() = getDelegate(SpiceDelegate::class.java)?.spiceManager
 }

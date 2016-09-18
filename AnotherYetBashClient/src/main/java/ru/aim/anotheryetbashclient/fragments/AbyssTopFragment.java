@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.content.Loader;
-import android.view.View;
 
 import ru.aim.anotheryetbashclient.ActionsAndIntents;
 import ru.aim.anotheryetbashclient.RecycleQuotesAdapter;
@@ -69,9 +68,9 @@ public class AbyssTopFragment extends AbstractFragment implements SimpleLoaderCa
         @Override
         public void onBindViewHolder(QuotesViewHolder viewHolder, Cursor cursor) {
             super.onBindViewHolder(viewHolder, cursor);
-            viewHolder.plus.setVisibility(View.GONE);
-            viewHolder.minus.setVisibility(View.GONE);
-            viewHolder.bayan.setVisibility(View.GONE);
+//            viewHolder.plus.setVisibility(View.GONE);
+//            viewHolder.minus.setVisibility(View.GONE);
+//            viewHolder.bayan.setVisibility(View.GONE);
             String position = "#" + (cursor.getPosition() + 1);
             viewHolder.id.setText(position);
         }

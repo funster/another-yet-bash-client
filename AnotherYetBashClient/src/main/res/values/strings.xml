@@ -105,7 +105,7 @@
     <string name="error_no_connection">При загрузке данных произошла ошибка. Проверьте Ваше подключение к сети</string>
     <string name="data_refreshing">Данные обновляются…</string>
     <string name="about_rights">Правообладатель контента: <u>bash.im</u></string>
-    <string name="about_support">Предложения или замечания: <u>anotheryetandroidbashclient@gmail.com</u></string>
+    <string name="about_support">Предложения или замечания</string>
     <string name="support_email">anotheryetandroidbashclient@gmail.com</string>
     <string name="support_email_subject">Поддержка клиента Bash.im для Android</string>
     <string name="bash_url">http://bash.im</string>
@@ -121,6 +121,12 @@
         <item>Ссылкой</item>
         <item>Буфер обмена</item>
     </string-array>
+
+    <string name="share_image">Изображением</string>
+    <string name="share_text">Текстом</string>
+    <string name="share_link">Ссылкой</string>
+    <string name="share_buffer">Буфер обмена</string>
+
     <string-array name="share_types_short">
         <item>Изображением</item>
         <item>Текстом</item>
@@ -147,4 +153,7 @@
         <item>Тёмная</item>
         <item>Светлая</item>
     </string-array>
+
+    <string name="like_it">Нравится</string>
+    <string name="dislike_it">Не нравится</string>
 </resources>

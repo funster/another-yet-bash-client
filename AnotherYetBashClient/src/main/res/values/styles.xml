@@ -30,11 +30,13 @@
         <item name="favorite_full_icon">@drawable/ic_star_white_38dp</item>
         <item name="btn_borderless">@drawable/btn_borderless</item>
         <item name="ripple">@color/ripple_material_dark</item>
+        <item name="android:popupMenuStyle">@style/Widget.AppCompat.PopupMenu.Overflow</item>
 
         <!-- ab -->
         <item name="actionBarStyle">@style/AppActionBar</item>
 
         <item name="colorAccent">@android:color/white</item>
+
     </style>
 
 
@@ -57,6 +59,8 @@
         <item name="favorite_full_icon">@drawable/ic_star_black_38dp</item>
         <item name="btn_borderless">@drawable/btn_borderless_light</item>
         <item name="ripple">@color/ripple_material_light</item>
+        <item name="more_icon">@drawable/ic_more_vert_black_48px</item>
+        <item name="android:popupMenuStyle">@style/Widget.AppCompat.PopupMenu</item>
         <!-- customize the color palette -->
 
         <!-- ab -->
@@ -81,6 +85,7 @@
         <attr name="back_arrow_icon" format="reference" />
         <attr name="forward_arrow_icon" format="reference" />
         <attr name="search_icon" format="reference" />
+        <attr name="more_icon" format="reference" />
     </declare-styleable>
 
     <style name="AppActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">

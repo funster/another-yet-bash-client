@@ -11,7 +11,9 @@ public class SwipeRefreshUtils {
 
     public static void applyStyle(SwipeRefreshLayout refreshLayout) {
         int color = resolveResource(refreshLayout.getContext(), R.attr.colorPrimary);
-        refreshLayout.setColorSchemeResources(
-                color, color, color, color);
+        if (color != 0) {
+            refreshLayout.setColorSchemeResources(
+                    color, color, color, color);
+        }
     }
 }

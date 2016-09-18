@@ -1,16 +1,15 @@
 package ru.aim.anotheryetbashclient;
 
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.aim.anotheryetbashclient.async.SpiceActivity;
+public abstract class AbstractActivity extends AppCompatActivity {
 
-public abstract class AbstractActivity extends SpiceActivity {
-
-    boolean isResumed = false;
-    List<Runnable> actions = new ArrayList<>();
+    private boolean isResumed = false;
+    private List<Runnable> actions = new ArrayList<>();
     private static List<Runnable> permActions = new ArrayList<>();
 
     @Override
