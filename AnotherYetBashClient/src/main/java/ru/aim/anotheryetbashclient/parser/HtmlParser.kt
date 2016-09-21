@@ -1,7 +1,7 @@
 package ru.aim.anotheryetbashclient.parser
 
 import ru.aim.anotheryetbashclient.data.Quote
-import ru.aim.anotheryetbashclient.data.remote.NetworkRequestResult
+import ru.aim.anotheryetbashclient.data.source.remote.NetworkRequestResult
 import rx.Observable
 
 interface HtmlParser {

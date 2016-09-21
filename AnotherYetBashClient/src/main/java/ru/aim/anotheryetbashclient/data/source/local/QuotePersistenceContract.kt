@@ -1,17 +1,8 @@
-package ru.aim.anotheryetbashclient.data.local
+package ru.aim.anotheryetbashclient.data.source.local
 
 import android.provider.BaseColumns
 
-/**
- * Const
- */
-const val DB_VERSION = 1
-const val DB_NAME = "quotes-db2"
-
-/**
- * Fields
- */
-const val QUOTE_ID = BaseColumns._ID
+const val _ID = BaseColumns._ID
 const val QUOTE_PUBLIC_ID = "quote_public_id"
 const val QUOTE_DATE = "quote_date"
 const val QUOTE_IS_NEW = "quote_is_new"

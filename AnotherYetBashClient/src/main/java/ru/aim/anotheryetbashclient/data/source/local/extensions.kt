@@ -1,8 +1,9 @@
-package ru.aim.anotheryetbashclient.data.local
+package ru.aim.anotheryetbashclient.data.source.local
 
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import com.squareup.sqlbrite.BriteDatabase
 import java.io.Closeable
 import java.util.*
 
@@ -28,7 +29,7 @@ inline fun <T> Cursor?.firstOrNull(f: Cursor.() -> T): T? {
     }
 }
 
-inline fun <T> Cursor?.mapWithClose(f: Cursor.() -> T): List<T> {
+inline fun <T> Cursor?.map(f: Cursor.() -> T): List<T> {
     val list = ArrayList<T>()
     if (this == null) {
         return list
@@ -60,8 +61,20 @@ inline fun contentValues(f: ContentValues.() -> Unit): ContentValues {
     return values
 }
 
+inline fun BriteDatabase.inTransaction(f: BriteDatabase.() -> Unit) {
+    val tx = this.newTransaction()
+    try {
+        f(this)
+        tx.markSuccessful()
+    } finally {
+        tx.end()
+    }
+}
+
 fun Cursor?.getString(row: String) = this?.getString(getColumnIndex(row))
 
 fun Cursor?.getLong(row: String) = this?.getLong(getColumnIndex(row))
 
 fun Cursor?.getInt(row: String) = this?.getInt(getColumnIndex(row))
+
+fun Cursor.getInt(row: String) = this.getInt(getColumnIndex(row))

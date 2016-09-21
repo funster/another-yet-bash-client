@@ -1,10 +1,15 @@
-package ru.aim.anotheryetbashclient.data.local
+package ru.aim.anotheryetbashclient.data.source.local
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
 class QuotesSQLiteHelper(context: Context?, private val tables: List<String>) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
+
+    companion object {
+        const val DB_VERSION = 1
+        const val DB_NAME = "quotes-kdb"
+    }
 
     override fun onCreate(db: SQLiteDatabase?) {
         createTables(db)
@@ -30,18 +35,18 @@ class QuotesSQLiteHelper(context: Context?, private val tables: List<String>) : 
 
     private fun createTableSql(tableName: String) = """
             CREATE TABLE $tableName
-            (${QUOTE_ID} INTEGER PRIMARY KEY AUTOINCREMENT,
-            ${QUOTE_PUBLIC_ID} TEXT,
-            ${QUOTE_DATE} TEXT,
-            ${QUOTE_IS_NEW} INTEGER,
-            ${QUOTE_FLAG} INTEGER,
-            ${QUOTE_TYPE} INTEGER,
-            ${QUOTE_RATING} TEXT,
-            ${QUOTE_PAGE} INTEGER,
-            ${QUOTE_TEXT} TEXT,
-            ${QUOTE_EXTRA1} TEXT,
-            ${QUOTE_EXTRA2} TEXT,
-            ${QUOTE_EXTRA3} TEXT)
+            ($_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            $QUOTE_PUBLIC_ID TEXT,
+            $QUOTE_DATE TEXT,
+            $QUOTE_IS_NEW INTEGER,
+            $QUOTE_FLAG INTEGER,
+            $QUOTE_TYPE INTEGER,
+            $QUOTE_RATING TEXT,
+            $QUOTE_PAGE INTEGER,
+            $QUOTE_TEXT TEXT,
+            $QUOTE_EXTRA1 TEXT,
+            $QUOTE_EXTRA2 TEXT,
+            $QUOTE_EXTRA3 TEXT)
             """
 
     private fun dropTable(tableName: String) = "drop table if exists $tableName"

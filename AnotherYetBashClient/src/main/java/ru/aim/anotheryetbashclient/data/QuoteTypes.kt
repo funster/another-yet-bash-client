@@ -8,9 +8,8 @@ enum class QuoteTypes {
     TYPE_ABYSS,
     TYPE_TOP_ABYSS,
     TYPE_BEST_ABYSS,
-    TYPE_OFFLINE,
     TYPE_FAVORITES,
-    TYPE_RULEZ,
-    TYPE_SUX,
+    TYPE_LIKE,
+    TYPE_DISLIKE,
     TYPE_SEARCH;
 }

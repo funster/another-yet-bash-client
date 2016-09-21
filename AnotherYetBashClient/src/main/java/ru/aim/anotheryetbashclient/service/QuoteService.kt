@@ -1,8 +1,8 @@
 package ru.aim.anotheryetbashclient.service
 
 import okhttp3.Request
-import ru.aim.anotheryetbashclient.data.local.QuoteDao
-import ru.aim.anotheryetbashclient.data.remote.*
+import ru.aim.anotheryetbashclient.data.source.local.QuoteDao
+import ru.aim.anotheryetbashclient.data.source.remote.*
 import ru.aim.anotheryetbashclient.parser.HtmlParser
 import rx.Observable
 
