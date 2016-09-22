@@ -1,6 +1,6 @@
 package ru.aim.anotheryetbashclient.data
 
-data class Quote(
+sealed class Quote(
         var id: Long? = null,
         var text: String? = null,
         var publicId: String? = null,
@@ -12,4 +12,10 @@ data class Quote(
         var extra1: String? = null,
         var extra2: String? = null,
         var extra3: String? = null
-)
+) {
+
+    class Indexed : Quote()
+    class Shuffled : Quote()
+
+}
+

@@ -1,5 +1,6 @@
 package ru.aim.anotheryetbashclient.data
 
+@Deprecated("should be removed after Quote sealed classes will be completed")
 enum class QuoteTypes {
     TYPE_NEW,
     TYPE_RANDOM,

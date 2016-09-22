@@ -10,7 +10,7 @@ import rx.schedulers.Schedulers
 import java.util.*
 import javax.inject.Inject
 
-class QuoteLocalDao @Inject constructor(context: Context) {
+class LocalDataSource111 @Inject constructor(context: Context) {
 
     private val tables: List<String>
     private val sqlHelper: SQLiteOpenHelper
@@ -25,8 +25,4 @@ class QuoteLocalDao @Inject constructor(context: Context) {
     }
 
     private fun generateTableName(name: String): String = "${name.toLowerCase()}_table"
-
-    fun getDaoForType(type: QuoteTypes): QuoteDataSource {
-        return daoList.getOrPut(type, { QuoteSqlDao(generateTableName(type.name), briteDatabase) })
-    }
 }
