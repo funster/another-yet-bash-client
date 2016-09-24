@@ -1,4 +1,4 @@
-package ru.aim.anotheryetbashclient.view
+package ru.aim.anotheryetbashclient.ui.common
 
 import android.support.v7.widget.RecyclerView
 import android.view.View

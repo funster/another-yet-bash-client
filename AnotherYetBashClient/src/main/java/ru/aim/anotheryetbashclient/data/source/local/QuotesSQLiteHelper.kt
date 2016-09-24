@@ -3,8 +3,15 @@ package ru.aim.anotheryetbashclient.data.source.local
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import javax.inject.Inject
 
-class QuotesSQLiteHelper(context: Context?, private val tables: List<String>) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
+class QuotesSQLiteHelper @Inject constructor(context: Context?, sources: List<LocalDataSource<*>>) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
+
+    private val tables: List<String>
+
+    init {
+        tables = sources.map { it.tableName }
+    }
 
     companion object {
         const val DB_VERSION = 1

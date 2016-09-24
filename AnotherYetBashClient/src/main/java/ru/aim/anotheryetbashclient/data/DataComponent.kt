@@ -1,13 +1,21 @@
 package ru.aim.anotheryetbashclient.data
 
 import dagger.Component
-import ru.aim.anotheryetbashclient.ApplicationModule
-import ru.aim.anotheryetbashclient.data.source.QuoteRepository
-import javax.inject.Singleton
+import ru.aim.anotheryetbashclient.data.source.IndexedRepository
+import ru.aim.anotheryetbashclient.data.source.ShuffleRepository
+import ru.aim.anotheryetbashclient.data.source.local.LocalDataSourcesModule
+import ru.aim.anotheryetbashclient.data.source.remote.RemoteDataSourceModule
+import ru.aim.anotheryetbashclient.data.source.remote.parser.ParserModule
 
-@Singleton
-@Component(dependencies = arrayOf(ApplicationModule::class))
+@Component(modules =
+arrayOf(
+        LocalDataSourcesModule::class,
+        RemoteDataSourceModule::class,
+        ParserModule::class
+))
 interface DataComponent {
 
-    val quoteRepository: QuoteRepository
+    val indexedRepository: IndexedRepository
+
+    val shuffleRepository: ShuffleRepository
 }

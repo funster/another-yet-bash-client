@@ -1,4 +1,4 @@
-package ru.aim.anotheryetbashclient.view
+package ru.aim.anotheryetbashclient.ui
 
 import android.support.annotation.LayoutRes
 import android.view.LayoutInflater

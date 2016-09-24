@@ -1,4 +1,4 @@
-package ru.aim.anotheryetbashclient.view
+package ru.aim.anotheryetbashclient.ui.common
 
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
@@ -14,6 +14,9 @@ import org.simplepresenter.LcePresenterFragment
 import org.simplepresenter.ViewCommand
 import ru.aim.anotheryetbashclient.R
 import ru.aim.anotheryetbashclient.support.view.BottomListBuilder
+import ru.aim.anotheryetbashclient.ui.ShareCommand
+import ru.aim.anotheryetbashclient.ui.ShareType
+import ru.aim.anotheryetbashclient.ui.inflate
 
 abstract class AbstractFragment<D, P : AbstractPresenter> : LcePresenterFragment<D, P>() {
 

@@ -16,6 +16,5 @@ sealed class Quote(
 
     class Indexed : Quote()
     class Shuffled : Quote()
-
 }
 

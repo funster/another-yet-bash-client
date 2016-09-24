@@ -3,22 +3,29 @@ package ru.aim.anotheryetbashclient.data.source.local.impls
 import android.database.Cursor
 import com.squareup.sqlbrite.BriteDatabase
 import ru.aim.anotheryetbashclient.data.Quote
-import ru.aim.anotheryetbashclient.data.source.local.*
+import ru.aim.anotheryetbashclient.data.source.local.LocalDataSource
+import ru.aim.anotheryetbashclient.data.source.local.QUOTE_PAGE
+import ru.aim.anotheryetbashclient.data.source.local._ID
+import ru.aim.anotheryetbashclient.data.source.local.inTransaction
 import ru.aim.anotheryetbashclient.data.source.local.mapper.CursorMapper
 import rx.Observable
 import rx.functions.Func1
 
-abstract class AbstractLocalDataSource<T>(private val tableName: String,
-                                          private val cursorMapper: CursorMapper<T>,
-                                          override val db: BriteDatabase)
-: LocalDataSource<T>, SQLiteAware where T : Quote {
+abstract class AbstractLocalDataSource<T>(final override val tableName: String,
+                                          private val cursorMapper: CursorMapper<T>)
+: LocalDataSource<T> where T : Quote {
 
-    private val defaultWhereClause = "${_ID} = ?"
+    companion object {
+        private const val defaultWhereClause = "$_ID = ?"
+    }
+
     private val selectAll = "select * from $tableName"
     private val selectById = "select * from $tableName where $defaultWhereClause"
-    private val selectByPage = "select * from $tableName where ${QUOTE_PAGE} = ?"
+    private val selectByPage = "select * from $tableName where $QUOTE_PAGE = ?"
 
     private val mapper: Func1<Cursor, T> = Func1 { cursorMapper.fromCursor(it) }
+
+    override lateinit var db: BriteDatabase
 
     override fun findByPage(page: Int): Observable<List<T>> {
         return db.createQuery(tableName, selectByPage, page.toString()).mapToList(mapper)
@@ -55,7 +62,7 @@ abstract class AbstractLocalDataSource<T>(private val tableName: String,
         val isUpdate = q.id != null
         val cv = cursorMapper.toContentValues(q)
         if (isUpdate) {
-            database.update(tableName, cv, "${_ID} = ?", q.id?.toString())
+            database.update(tableName, cv, defaultWhereClause, q.id?.toString())
         } else {
             database.insert(tableName, cv)
         }

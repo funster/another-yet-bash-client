@@ -1,4 +1,4 @@
-package ru.aim.anotheryetbashclient.view
+package ru.aim.anotheryetbashclient.ui
 
 import org.simplepresenter.commands.DistinctViewCommand
 import ru.aim.anotheryetbashclient.data.Quote

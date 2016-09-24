@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package ru.aim.anotheryetbashclient.view;
+package ru.aim.anotheryetbashclient.ui.utils;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -25,10 +24,7 @@ import android.graphics.Outline;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
-import android.support.annotation.ColorInt;
-import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.text.TextPaint;
 import android.util.DisplayMetrics;
@@ -38,6 +34,8 @@ import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.view.Window;
 import android.widget.ImageView;
+
+import ru.aim.anotheryetbashclient.ui.utils.AnimUtils;
 
 /**
  * Utility methods for working with Views.

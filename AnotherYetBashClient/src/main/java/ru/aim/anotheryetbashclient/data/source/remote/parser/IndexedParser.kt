@@ -4,11 +4,10 @@ import org.jsoup.Jsoup
 import ru.aim.anotheryetbashclient.data.Quote
 import ru.aim.anotheryetbashclient.data.source.remote.NetworkRequestResult
 import rx.Observable
-import java.util.*
-import javax.inject.Singleton
 
-@Singleton
-class IndexedParser : HtmlParser<Quote.Indexed> {
+class IndexedParser : AbstractParser<Quote.Indexed>() {
+
+    override fun newInstance(): Quote.Indexed = Quote.Indexed()
 
     override fun parsePageCount(result: NetworkRequestResult): Observable<Int> {
         return Observable.create {
@@ -23,35 +22,6 @@ class IndexedParser : HtmlParser<Quote.Indexed> {
                         break
                     }
                 }
-                it.onCompleted()
-            } catch(t: Throwable) {
-                it.onError(t)
-            }
-        }
-    }
-
-    override fun parseQuotes(result: NetworkRequestResult): Observable<List<Quote.Indexed>> {
-        return Observable.create {
-            try {
-                val document = Jsoup.parse(result.stream, result.encoding, result.url)
-                val quotesElements = document.select("div[class=quote]")
-                val result = ArrayList<Quote.Indexed>()
-                for (e in quotesElements) {
-                    val idElements = e.select("a[class=id]")
-                    val dateElements = e.select("span[class=date]")
-                    val textElements = e.select("div[class=text]")
-                    val ratingElements = e.select("span[class=rating]")
-                    if (!textElements.isEmpty()) {
-                        val tmp = Quote.Indexed()
-                        tmp.text = textElements.html().trim { it <= ' ' }
-                        tmp.publicId = idElements.html()
-                        tmp.rating = ratingElements.html().trim { it <= ' ' }
-                        tmp.date = dateElements.html()
-                        tmp.isNew = true
-                        result.add(tmp)
-                    }
-                }
-                it.onNext(result)
                 it.onCompleted()
             } catch(t: Throwable) {
                 it.onError(t)

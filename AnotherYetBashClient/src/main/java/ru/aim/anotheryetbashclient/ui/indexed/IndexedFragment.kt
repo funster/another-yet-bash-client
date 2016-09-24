@@ -1,15 +1,18 @@
-package ru.aim.anotheryetbashclient.view
+package ru.aim.anotheryetbashclient.ui.indexed
 
 import android.view.View
 import android.widget.PopupMenu
 import org.simplepresenter.ViewCommand
 import ru.aim.anotheryetbashclient.R
 import ru.aim.anotheryetbashclient.data.Quote
+import ru.aim.anotheryetbashclient.ui.QuoteOptionsMenu
+import ru.aim.anotheryetbashclient.ui.common.AbstractFragment
+import ru.aim.anotheryetbashclient.ui.common.QuotesAdapterKt
 import java.util.*
 
-class NewFragment : AbstractFragment<List<Quote>, NewPresenter>() {
+class IndexedFragment : AbstractFragment<List<Quote>, IndexedPresenter>() {
 
-    override fun createPresenter(): NewPresenter = NewPresenter()
+    override fun createPresenter(): IndexedPresenter = IndexedPresenter(activity)
 
     var adapter: QuotesAdapterKt? = null
 

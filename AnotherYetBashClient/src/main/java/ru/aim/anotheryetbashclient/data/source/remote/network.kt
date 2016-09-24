@@ -6,7 +6,6 @@ import okhttp3.Response
 import ru.aim.anotheryetbashclient.BuildConfig
 import ru.aim.anotheryetbashclient.helper.L
 import java.io.InputStream
-import javax.inject.Singleton
 
 private const val TAG = "network"
 
@@ -25,7 +24,6 @@ interface NetworkClient {
     fun getNetworkRequest(url: String): NetworkRequestResult
 }
 
-@Singleton
 class SimpleNetworkClient : NetworkClient {
 
     override fun getNetworkRequest(url: String): NetworkRequestResult {

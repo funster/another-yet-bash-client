@@ -3,7 +3,7 @@ package ru.aim.anotheryetbashclient.data.source.local
 import ru.aim.anotheryetbashclient.data.Quote
 import rx.Observable
 
-interface LocalDataSource<T> where T : Quote {
+interface LocalDataSource<T> : SQLiteAware where T : Quote {
 
     fun save(q: T)
 
@@ -20,4 +20,6 @@ interface LocalDataSource<T> where T : Quote {
     fun deleteById(id: Long)
 
     fun delete(list: List<T>)
+
+    val tableName: String
 }

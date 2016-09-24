@@ -4,5 +4,5 @@ import com.squareup.sqlbrite.BriteDatabase
 
 interface SQLiteAware {
 
-    val db: BriteDatabase?
+    var db: BriteDatabase
 }

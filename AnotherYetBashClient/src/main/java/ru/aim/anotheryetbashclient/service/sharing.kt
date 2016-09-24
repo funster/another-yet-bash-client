@@ -11,7 +11,7 @@ import android.widget.Toast
 import ru.aim.anotheryetbashclient.R
 import ru.aim.anotheryetbashclient.helper.L
 import ru.aim.anotheryetbashclient.data.Quote
-import ru.aim.anotheryetbashclient.view.ShareType
+import ru.aim.anotheryetbashclient.ui.ShareType
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.aim.anotheryetbashclient.view;
+package ru.aim.anotheryetbashclient.ui.utils;
 
 import android.animation.Animator;
 import android.animation.TimeInterpolator;

@@ -1,10 +1,11 @@
-package ru.aim.anotheryetbashclient.view
+package ru.aim.anotheryetbashclient.ui.common
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import ru.aim.anotheryetbashclient.R
 import ru.aim.anotheryetbashclient.data.Quote
+import ru.aim.anotheryetbashclient.ui.inflate
 
 class QuotesAdapterKt(val f: ((View?, Quote) -> Unit)? = null) : RecyclerView.Adapter<QuotesViewHolder>() {
 

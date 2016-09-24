@@ -1,4 +1,4 @@
-package ru.aim.anotheryetbashclient.view
+package ru.aim.anotheryetbashclient.ui
 
 import android.os.Bundle
 import android.support.v4.widget.DrawerLayout
@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import ru.aim.anotheryetbashclient.R
+import ru.aim.anotheryetbashclient.ui.indexed.IndexedFragment
 
 class HomeActivity : AppCompatActivity() {
 
@@ -74,7 +75,7 @@ class HomeActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             supportFragmentManager.
                     beginTransaction().
-                    add(R.id.main_frame, NewFragment()).
+                    add(R.id.main_frame, IndexedFragment()).
                     commit()
         }
     }

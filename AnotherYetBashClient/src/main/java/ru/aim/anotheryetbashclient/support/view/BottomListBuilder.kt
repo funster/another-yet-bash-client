@@ -19,8 +19,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import ru.aim.anotheryetbashclient.R
 import ru.aim.anotheryetbashclient.helper.L
-import ru.aim.anotheryetbashclient.view.inflate
-import ru.aim.anotheryetbashclient.view.setTextOrGone
+import ru.aim.anotheryetbashclient.ui.inflate
+import ru.aim.anotheryetbashclient.ui.setTextOrGone
 import java.util.*
 
 class BottomListBuilder(val context: Context) {

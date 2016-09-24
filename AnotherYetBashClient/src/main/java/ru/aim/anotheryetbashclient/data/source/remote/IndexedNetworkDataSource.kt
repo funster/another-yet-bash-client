@@ -4,9 +4,7 @@ import ru.aim.anotheryetbashclient.data.Quote
 import ru.aim.anotheryetbashclient.data.source.remote.parser.IndexedParser
 import rx.Observable
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class IndexedNetworkDataSource @Inject constructor(private val networkClient: NetworkClient, private val parser: IndexedParser) {
 
     private val rootPage = wrapWithRoot()
